@@ -1,9 +1,12 @@
+using Cysharp.Net.Http;
 using Cysharp.Threading.Tasks;
+using Grpc.Net.Client;
+using MagicOnion.Unity;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace SlopSquad.Infrastructure
+namespace TradeArea.Infrastructure
 {
     public class EntryPoint
     {
@@ -30,6 +33,15 @@ namespace SlopSquad.Infrastructure
 
             async UniTaskVoid RunAsync()
             {
+                GrpcChannelProviderHost.Initialize(new DefaultGrpcChannelProvider(() => new GrpcChannelOptions()
+                {
+                    HttpHandler = new YetAnotherHttpHandler()
+                    {
+                        Http2Only = true,
+                    },
+                    DisposeHttpClient = true,
+                }));
+
                 var vContainerSettings = Resources.Load<VContainerSettings>("vcontainer_settings");
                 var instanceProperty = typeof(VContainerSettings).GetProperty("Instance");
                 instanceProperty.SetValue(null, vContainerSettings);

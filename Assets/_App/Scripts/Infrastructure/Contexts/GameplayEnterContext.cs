@@ -1,5 +1,5 @@
-using SlopSquad.Shared;
-namespace SlopSquad.Infrastructure.Contexts
+using TradeArea.Shared;
+namespace TradeArea.Infrastructure.Contexts
 {
     public class GameplayEnterContext : SceneContext
     {

@@ -3,11 +3,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using R3;
 using Cysharp.Threading.Tasks;
-using SlopSquad.Infrastructure.Contexts;
-using SlopSquad.Infrastructure.Bootstraps;
-using SlopSquad.Shared;
+using TradeArea.Infrastructure.Contexts;
+using TradeArea.Infrastructure.Bootstraps;
+using TradeArea.Shared;
 
-namespace SlopSquad.Infrastructure
+namespace TradeArea.Infrastructure
 {
     public class SceneLoader
     {

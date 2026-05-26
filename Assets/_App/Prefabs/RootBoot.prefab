@@ -48,3 +48,4 @@ MonoBehaviour:
     TypeName: 
   autoRun: 0
   autoInjectGameObjects: []
+  _rootUIBinderPrefab: {fileID: 3869474568227320264, guid: f315d6952b8d85e489c82bd444f18ba2, type: 3}

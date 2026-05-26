@@ -1,10 +1,10 @@
 using Cysharp.Threading.Tasks;
 using R3;
-using SlopSquad.Infrastructure.Contexts;
-using SlopSquad.Shared;
+using TradeArea.Infrastructure.Contexts;
+using TradeArea.Shared;
 using VContainer;
 
-namespace SlopSquad.Infrastructure.Bootstraps
+namespace TradeArea.Infrastructure.Bootstraps
 {
     public class MainMenuBoot : Bootstrap
     {

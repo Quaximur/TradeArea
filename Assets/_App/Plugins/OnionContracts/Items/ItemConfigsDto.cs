@@ -1,0 +1,16 @@
+﻿using System.Collections.Generic;
+using MessagePack;
+
+namespace Aucy.Contracts.OnionContracts
+{
+    [MessagePackObject]
+    public class ItemConfigsDto
+    {
+        [Key(0)] public List<ItemConfigDto> ItemConfigs { get; set; }
+
+        public ItemConfigsDto(List<ItemConfigDto> itemConfigs)
+        {
+            ItemConfigs = itemConfigs;
+        }
+    }
+}

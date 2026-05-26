@@ -6,7 +6,7 @@ using UnityEditor.SceneManagement;
 using UnityEditor.Toolbars;
 using UnityEngine;
 
-namespace SlopSquad.Editor
+namespace TradeArea.Editor
 {
     internal static class ScenesMenu
     {

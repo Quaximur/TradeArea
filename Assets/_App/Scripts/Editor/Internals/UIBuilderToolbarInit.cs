@@ -1,9 +1,9 @@
 #if UNITY_EDITOR
-using SlopSquad.Editor.UIInternals;
+using TradeArea.Editor.UIInternals;
 using UnityEditor;
 using UnityEngine;
 
-namespace SlopSquad.Editor.Internals
+namespace TradeArea.Editor.Internals
 {
     internal class UIBuilderToolbarInit
     {

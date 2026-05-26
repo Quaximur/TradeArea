@@ -1,7 +1,9 @@
 ﻿<Solution>
-  <Project Path="SlopSquad.Infrastructure.csproj" />
+  <Project Path="TradeArea.UI.csproj" />
+  <Project Path="TradeArea.Infrastructure.csproj" />
   <Project Path="UnityEngine.UI.csproj" />
-  <Project Path="SlopSquad.Editor.csproj" />
-  <Project Path="SlopSquad.Shared.csproj" />
-  <Project Path="SlopSquad.Editor.Internals.csproj" />
+  <Project Path="Aucy.OnionContracts.csproj" />
+  <Project Path="TradeArea.Editor.csproj" />
+  <Project Path="TradeArea.Shared.csproj" />
+  <Project Path="TradeArea.Editor.Internals.csproj" />
 </Solution>

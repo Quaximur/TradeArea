@@ -1,6 +1,6 @@
-using SlopSquad.Shared;
+using TradeArea.Shared;
 
-namespace SlopSquad.Infrastructure.Contexts
+namespace TradeArea.Infrastructure.Contexts
 {
     public class MainMenuEnterContext : SceneContext
     {

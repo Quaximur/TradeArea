@@ -1,4 +1,4 @@
-namespace SlopSquad.Infrastructure.Contexts
+namespace TradeArea.Infrastructure.Contexts
 {
     /// <summary>
     /// Info to enter the Gameplay scene from the Main menu. Exiting the Main menu leads to the Gameplay.

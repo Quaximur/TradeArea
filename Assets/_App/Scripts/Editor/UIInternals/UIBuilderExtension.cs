@@ -2,7 +2,7 @@
 using Unity.UI.Builder;
 using UnityEditor;
 
-namespace SlopSquad.Editor.UIInternals
+namespace TradeArea.Editor.UIInternals
 {
     internal class UIBuilderExtension
     {

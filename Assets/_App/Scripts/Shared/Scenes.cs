@@ -1,4 +1,4 @@
-namespace SlopSquad.Shared
+namespace TradeArea.Shared
 {
     public static class Scenes
     {

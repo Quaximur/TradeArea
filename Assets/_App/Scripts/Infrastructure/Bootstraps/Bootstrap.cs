@@ -1,7 +1,7 @@
 using R3;
 using VContainer.Unity;
 
-namespace SlopSquad.Infrastructure.Bootstraps
+namespace TradeArea.Infrastructure.Bootstraps
 {
     public class Bootstrap : LifetimeScope
     {

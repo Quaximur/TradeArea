@@ -1,4 +1,4 @@
-namespace SlopSquad.Infrastructure.Contexts
+namespace TradeArea.Infrastructure.Contexts
 {
     public abstract class SceneContext
     {

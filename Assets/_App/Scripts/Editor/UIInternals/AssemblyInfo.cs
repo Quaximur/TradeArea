@@ -1,3 +1,3 @@
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("SlopSquad.Editor.Internals")]
+[assembly: InternalsVisibleTo("TradeArea.Editor.Internals")]

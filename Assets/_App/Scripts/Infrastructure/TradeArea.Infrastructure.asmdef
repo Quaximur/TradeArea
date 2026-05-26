@@ -1,11 +1,16 @@
 {
-    "name": "SlopSquad.Infrastructure",
+    "name": "TradeArea.Infrastructure",
     "rootNamespace": "",
     "references": [
         "GUID:f51ebe6a0ceec4240a699833d6309b23",
         "GUID:77221876cc6b8244180b96e320b1bcd4",
         "GUID:b0214a6008ed146ff8f122a6a9c2f6cc",
-        "GUID:8df849c1535de434aac23c92e1f09319"
+        "GUID:8df849c1535de434aac23c92e1f09319",
+        "GUID:bb20bf276543ec54fbbdee4bd3bc61e4",
+        "GUID:c3bc0afe4a069b54aa23296f3c18a871",
+        "GUID:350d0af80fb7b7947a59de66ab477547",
+        "GUID:04a88fc4b30c6444294d10e1fa853539",
+        "GUID:6daa00dfd44180d4ebc8a88ecee5d64a"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

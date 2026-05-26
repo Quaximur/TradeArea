@@ -1,13 +1,18 @@
 using Cysharp.Threading.Tasks;
+using DevKit.UI.MVVM;
 using R3;
-using SlopSquad.Infrastructure.Contexts;
-using SlopSquad.Shared;
+using TradeArea.Infrastructure.Contexts;
+using TradeArea.Shared;
+using TradeArea.UI.Auction;
+using UnityEngine;
 using VContainer;
 
-namespace SlopSquad.Infrastructure.Bootstraps
+namespace TradeArea.Infrastructure.Bootstraps
 {
     public class GameplayBoot : Bootstrap
     {
+        [SerializeField] private AuctionView _auctionViewPrefab;
+
         private GameplayEnterContext _gameplayEnterContext;
 
         protected override void Configure(IContainerBuilder builder)
@@ -19,6 +24,7 @@ namespace SlopSquad.Infrastructure.Bootstraps
             builder.Register<Subject<Unit>>(Lifetime.Singleton)
                 .Keyed(Constants.GAMEPLAY_RESTART_SIGNAL);
 
+            builder.RegisterMVVM<AuctionView, AuctionViewModel>(_auctionViewPrefab);
             ////
         }
 
@@ -29,7 +35,7 @@ namespace SlopSquad.Infrastructure.Bootstraps
             Build();
 
             //// INITIALIZATION
-
+            Container.Resolve<IViewBinder<AuctionViewModel>>().Open();
             ////
 
             var exitSignal = Container.Resolve<Subject<Unit>>(Constants.GAMEPLAY_EXIT_SIGNAL);
