@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.cysharp.magiconion.client.unity": {
+      "version": "https://github.com/Cysharp/MagicOnion.git?path=src/MagicOnion.Client.Unity/Assets/Scripts/MagicOnion.Client.Unity#7.10.0",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "8aa0e001c88ead7ffcf1d453386f9e4bb05905ae"
+    },
     "com.cysharp.r3": {
       "version": "https://github.com/Cysharp/R3.git?path=src/R3.Unity/Assets/R3.Unity#1.3.0",
       "depth": 0,
