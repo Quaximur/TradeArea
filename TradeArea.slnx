@@ -1,0 +1,7 @@
+﻿<Solution>
+  <Project Path="SlopSquad.Infrastructure.csproj" />
+  <Project Path="UnityEngine.UI.csproj" />
+  <Project Path="SlopSquad.Editor.csproj" />
+  <Project Path="SlopSquad.Shared.csproj" />
+  <Project Path="SlopSquad.Editor.Internals.csproj" />
+</Solution>
