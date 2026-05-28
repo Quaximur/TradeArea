@@ -4,35 +4,39 @@ using MagicOnion.Client;
 using Aucy.Contracts.OnionContracts;
 using Cysharp.Threading.Tasks;
 using Grpc.Core;
+using System;
+using Random = UnityEngine.Random;
 
 namespace TradeArea.UI.Auction
 {
     public class AuctionViewModel : ScreenViewModel
     {
-        private const string token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMmMyZjJmNzEtYWEwZi00NmYxLTgzOWYtOTc2NGEzNGI0Zjc2In0.6jLzRRfzdWSd4oSCqzA-OiSrEUH95VsZFoTtB60BR9Q";
-        
+        // 28.05.26
+        private const string TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMmMyZjJmNzEtYWEwZi00NmYxLTgzOWYtOTc2NGEzNGI0Zjc2IiwiZXhwIjoxNzgwMDAxNjQzfQ.In6Aa41w8SV7EX4YPU2UrJBXr1u78kgNFc_iOh8vR-A";
+        private const string USER_ID_1 = "2c2f2f71-aa0f-46f1-839f-9764a34b4f76";
+
         public async UniTask CreateLotTest()
         {
             var channel = GrpcChannelx.ForAddress("http://localhost:8765");
             var serviceClient = MagicOnionClient.Create<IAuctionService>(channel)
-                .WithHeaders(new Metadata { { "authorization", $"Bearer {token}" } });
+                .WithHeaders(new Metadata { { "authorization", $"Bearer {TOKEN}" } });
 
             await serviceClient.CreateLot(new CreateLotDto
             (
-                ownerUserId: "2c2f2f71-aa0f-46f1-839f-9764a34b4f76",
-                itemConfig: new ItemConfigDto(id: "eeea4815-64fc-4370-8081-97adbcf0dab3", definition: "egg", name: "egg"),
-                unitPrice: 700,
-                itemQuantity: 2
+                ownerUserId: USER_ID_1,
+                itemConfig: new ItemConfigDto(id: Guid.NewGuid().ToString(), definition: $"stats_{Guid.NewGuid()}", name: "TaintedWeapon"),
+                unitPrice: Random.Range(1_000_000, 2_000_001),
+                itemQuantity: 1
             ));
 
             channel.Dispose();
         }
 
-        public async UniTask RefreshListingTest()
+        public async UniTask RefreshOwnLotsTest()
         {
             var channel = GrpcChannelx.ForAddress("http://localhost:8765");
             var serviceClient = MagicOnionClient.Create<IAuctionService>(channel)
-                .WithHeaders(new Metadata { { "authorization", $"Bearer {token}" } });
+                .WithHeaders(new Metadata { { "authorization", $"Bearer {TOKEN}" } });
 
             var lots = await serviceClient.GetOwnLots();
             if (lots != null && lots.Lots != null && lots.Lots.Count > 0)
@@ -45,6 +49,27 @@ namespace TradeArea.UI.Auction
             else
             {
                 UnityEngine.Debug.Log("No lots found.");
+            }
+            channel.Dispose();
+        }
+
+        public async UniTask RefreshListingTest()
+        {
+            var channel = GrpcChannelx.ForAddress("http://localhost:8765");
+            var serviceClient = MagicOnionClient.Create<IAuctionService>(channel)
+                .WithHeaders(new Metadata { { "authorization", $"Bearer {TOKEN}" } });
+
+            var itemConfigs = await serviceClient.GetItemConfigs(new GetItemConfigsDto(null, null, 1, 100));
+            if (itemConfigs != null && itemConfigs.ItemConfigs != null && itemConfigs.ItemConfigs.Count > 0)
+            {
+                foreach (var item in itemConfigs.ItemConfigs)
+                {
+                    UnityEngine.Debug.Log($"ItemConfigId: {item.Id}, Definition: {item.Definition}, ItemName: {item.Name}");
+                }
+            }
+            else
+            {
+                UnityEngine.Debug.Log("No items found.");
             }
             channel.Dispose();
         }
