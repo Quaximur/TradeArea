@@ -12,8 +12,8 @@ namespace TradeArea.UI.Auction
 {
     public class AuctionViewModel : ScreenViewModel
     {
-        // 31.05.26
-        private const string TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMmMyZjJmNzEtYWEwZi00NmYxLTgzOWYtOTc2NGEzNGI0Zjc2IiwiZXhwIjoxNzgwMjcwOTg1fQ.bzEzlsxktqxDTTdt5dvhTUM837Hx5adq9YSYwTIqWME";
+        // 01.06.26
+        private const string TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMmMyZjJmNzEtYWEwZi00NmYxLTgzOWYtOTc2NGEzNGI0Zjc2IiwiZXhwIjoxNzgwMzg5OTE1fQ.seo9IpoTKsYPTSFPZKJJUnNvTG9_43A-e0Nu2pCigvs";
         // private const string USER_ID_1 = "2c2f2f71-aa0f-46f1-839f-9764a34b4f76";
 
         public AuctionViewModel()
