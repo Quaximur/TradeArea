@@ -12,10 +12,12 @@ namespace TradeArea.UI.Auction
         [SerializeField] private string _createLotButtonName = "CreateLot";
         [SerializeField] private string _refreshListingButtonName = "RefreshListing";
         [SerializeField] private string _refreshOwnLotsButtonName = "RefreshOwnLots";
+        [SerializeField] private string _getInventoryButtonName = "GetInventory";
 
         private Button _createLotButton;
         private Button _refreshListingButton;
         private Button _refreshOwnLotsButton;
+        private Button _getInventoryButton;
 
         private CompositeDisposable _disposables;
 
@@ -26,6 +28,7 @@ namespace TradeArea.UI.Auction
             _createLotButton = Root.Q<Button>(name: _createLotButtonName);
             _refreshListingButton = Root.Q<Button>(name: _refreshListingButtonName);
             _refreshOwnLotsButton = Root.Q<Button>(name: _refreshOwnLotsButtonName);
+            _getInventoryButton = Root.Q<Button>(name: _getInventoryButtonName);
         }
 
         protected override void OnBind(AuctionViewModel viewModel)
@@ -39,6 +42,8 @@ namespace TradeArea.UI.Auction
             _refreshListingButton.SubscribeCallback<ClickEvent>(_ => viewModel.RefreshListingTest().Forget())
                 .AddTo(_disposables);
             _refreshOwnLotsButton.SubscribeCallback<ClickEvent>(_ => viewModel.RefreshOwnLotsTest().Forget())
+                .AddTo(_disposables);
+            _getInventoryButton.SubscribeCallback<ClickEvent>(_ => viewModel.GetOwnInventoryTest().Forget())
                 .AddTo(_disposables);
         }
 

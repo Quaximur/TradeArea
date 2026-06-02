@@ -4,6 +4,7 @@
             <ui:Button text="Create Lot" name="CreateLot" style="border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px;"/>
             <ui:Button text="Refresh Listing" name="RefreshListing" style="border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px;"/>
             <ui:Button text="Refresh Own Lots" name="RefreshOwnLots" style="border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px;"/>
+            <ui:Button text="Inventory" name="GetInventory" style="border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px;"/>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
