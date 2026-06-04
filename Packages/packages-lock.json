@@ -45,7 +45,7 @@
       "hash": "4a144e6b7409d001211b2682cab7691562a693d6"
     },
     "com.quaximur.devkit.ui": {
-      "version": "https://github.com/Quaximur/DevKit.UI.git",
+      "version": "https://github.com/Quaximur/DevKit.UI.git#0.1.0",
       "depth": 0,
       "source": "git",
       "dependencies": {},
