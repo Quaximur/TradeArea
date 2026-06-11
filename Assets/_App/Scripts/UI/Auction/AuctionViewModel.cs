@@ -1,7 +1,8 @@
 using DevKit.UI.MVVM.Bases;
 using MagicOnion;
 using MagicOnion.Client;
-using Aucy.Contracts.OnionContracts;
+using Aucy.Contracts.OnionClient;
+using Aucy.Contracts.OnionServer;
 using Cysharp.Threading.Tasks;
 using Grpc.Core;
 using System;
@@ -12,9 +13,12 @@ namespace TradeArea.UI.Auction
 {
     public class AuctionViewModel : ScreenViewModel
     {
-        // 04.06.26
-        private const string TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMmMyZjJmNzEtYWEwZi00NmYxLTgzOWYtOTc2NGEzNGI0Zjc2IiwiZXhwIjoxNzgwNjQ4MzMxfQ.diPj51AMe4WEBjGCOXwf_vtFLzmDxELWdlgML8oek6I";
-        // private const string USER_ID_1 = "2c2f2f71-aa0f-46f1-839f-9764a34b4f76";
+        private string _currentToken = TOKEN_USER_1;
+
+        private const string TOKEN_USER_1 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWMyZjJmNzEtYWEwZi00NmYxLTgzOWYtOTc2NGEzNGI0Zjc2IiwiZXhwIjoxNzgxMjQyNjc3fQ.G26PPDCuDCSslvtuk-q7Sozgr8tXL6UANsWNl8mSJnc";
+        private const string TOKEN_USER_2 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMmMyZjJmNzEtYWEwZi00NmYxLTgzOWYtOTc2NGEzNGI0Zjc2IiwiZXhwIjoxNzgxMjQyNjYyfQ.iRtv1P-ZgUH-UK0Z9dXw39AtkwKkPEepS7IGYNizUpE";
+        private const string USER_ID_1 = "1c2f2f71-aa0f-46f1-839f-9764a34b4f76";
+        private const string USER_ID_2 = "2c2f2f71-aa0f-46f1-839f-9764a34b4f76";
 
         public AuctionViewModel()
         {
@@ -27,10 +31,10 @@ namespace TradeArea.UI.Auction
             {
                 using var channel = GrpcChannelx.ForAddress("http://localhost:8765");
 
-                var inventoryClient = MagicOnionClient.Create<IInventoryService>(channel)
-                    .WithHeaders(new Metadata { { "authorization", $"Bearer {TOKEN}" } });
+                var itemSearchClient = MagicOnionClient.Create<IItemSearchService>(channel)
+                    .WithHeaders(new Metadata { { "authorization", $"Bearer {_currentToken}" } });
 
-                var inventoryDto = await inventoryClient.GetOwnInventory(new GetInventoryDto()
+                var inventoryDto = await itemSearchClient.GetOwnInventory(new GetInventoryDto()
                 {
                     Page = 1,
                     PageSize = 1000
@@ -52,7 +56,7 @@ namespace TradeArea.UI.Auction
                 return;
             }
         }
-        
+
         public async UniTask CreateInventoryTest()
         {
             try
@@ -60,7 +64,7 @@ namespace TradeArea.UI.Auction
                 using var channel = GrpcChannelx.ForAddress("http://localhost:8765");
 
                 var inventoryClient = MagicOnionClient.Create<IInventoryService>(channel)
-                    .WithHeaders(new Metadata { { "authorization", $"Bearer {TOKEN}" } });
+                    .WithHeaders(new Metadata { { "authorization", $"Bearer {_currentToken}" } });
 
                 var inventoryDto = await inventoryClient.CreateInventory(new CreateInventoryDto()
                 {
@@ -109,12 +113,12 @@ namespace TradeArea.UI.Auction
                 using var channel = GrpcChannelx.ForAddress("http://localhost:8765");
 
                 var auctionClient = MagicOnionClient.Create<IOrderBookService>(channel)
-                    .WithHeaders(new Metadata { { "authorization", $"Bearer {TOKEN}" } });
+                    .WithHeaders(new Metadata { { "authorization", $"Bearer {_currentToken}" } });
 
-                var inventoryClient = MagicOnionClient.Create<IInventoryService>(channel)
-                    .WithHeaders(new Metadata { { "authorization", $"Bearer {TOKEN}" } });
+                var itemSearchClient = MagicOnionClient.Create<IItemSearchService>(channel)
+                    .WithHeaders(new Metadata { { "authorization", $"Bearer {_currentToken}" } });
 
-                var inventoryDto = await inventoryClient.GetOwnInventory(new GetInventoryDto()
+                var inventoryDto = await itemSearchClient.GetOwnInventory(new GetInventoryDto()
                 {
                     Page = 1,
                     PageSize = 1000
@@ -133,7 +137,7 @@ namespace TradeArea.UI.Auction
 
                 var lotDto = await auctionClient.CreateLot(new CreateLotDto
                 (
-                    itemConfig: randomItemStack.ItemConfig,
+                    itemConfigId: randomItemStack.ItemConfig.Id,
                     unitPrice: Random.Range(1_000, 1_000_001),
                     totalQuantity: Random.Range(1, randomItemStack.Quantity + 1)
                 ));
@@ -152,7 +156,7 @@ namespace TradeArea.UI.Auction
             using var channel = GrpcChannelx.ForAddress("http://localhost:8765");
 
             var auctionClient = MagicOnionClient.Create<IOrderBookService>(channel)
-                .WithHeaders(new Metadata { { "authorization", $"Bearer {TOKEN}" } });
+                .WithHeaders(new Metadata { { "authorization", $"Bearer {_currentToken}" } });
 
             var lots = await auctionClient.GetOwnLots();
             if (lots != null && lots.Lots != null && lots.Lots.Count > 0)
@@ -170,7 +174,7 @@ namespace TradeArea.UI.Auction
         {
             using var channel = GrpcChannelx.ForAddress("http://localhost:8765");
             var searchClient = MagicOnionClient.Create<IItemSearchService>(channel)
-                .WithHeaders(new Metadata { { "authorization", $"Bearer {TOKEN}" } });
+                .WithHeaders(new Metadata { { "authorization", $"Bearer {_currentToken}" } });
 
             try
             {
