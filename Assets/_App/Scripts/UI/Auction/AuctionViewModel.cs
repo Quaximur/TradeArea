@@ -22,7 +22,15 @@ namespace TradeArea.UI.Auction
 
         public AuctionViewModel()
         {
-            CreateInventoryTest().Forget();
+            InitAsync().Forget();
+        }
+
+        private async UniTask InitAsync()
+        {
+            var userInitTask1 = CreateInventoryTest(TOKEN_USER_1);
+            var userInitTask2 = CreateInventoryTest(TOKEN_USER_2);
+
+            await UniTask.WhenAll(userInitTask1, userInitTask2);
         }
 
         public async UniTask GetOwnInventoryTest()
@@ -57,14 +65,14 @@ namespace TradeArea.UI.Auction
             }
         }
 
-        public async UniTask CreateInventoryTest()
+        public async UniTask CreateInventoryTest(string token)
         {
             try
             {
                 using var channel = GrpcChannelx.ForAddress("http://localhost:8765");
 
                 var inventoryClient = MagicOnionClient.Create<IInventoryService>(channel)
-                    .WithHeaders(new Metadata { { "authorization", $"Bearer {_currentToken}" } });
+                    .WithHeaders(new Metadata { { "authorization", $"Bearer {token}" } });
 
                 var inventoryDto = await inventoryClient.CreateInventory(new CreateInventoryDto()
                 {
@@ -72,30 +80,45 @@ namespace TradeArea.UI.Auction
                     WeightLimit = 10000,
                 });
 
-                for (var i = 0; i < 10; i++)
+                // for (var i = 0; i < 10; i++)
+                // {
+                //     var isUnary = Random.Range(0, 2) == 0;
+                //     var itemStackDto = new AddItemStackDto()
+                //     {
+                //         ItemConfig = new ItemConfigDto(
+                //             id: Guid.NewGuid(),
+                //             name: isUnary ? $"Item_{i + 1}_Unary" : $"Item_{i + 1}",
+                //             isUnary: isUnary,
+                //             icon: $"item_icon_{i + 1}",
+                //             grade: Random.Range(0, 5),
+                //             rarity: Random.Range(0, 5),
+                //             weight: Random.Range(1, 20),
+                //             baseType: isUnary ? "weapon" : Random.Range(0, 2) == 0 ? "material" : "consumable",
+                //             extra: null,
+                //             categoryPath: "common"
+                //         ),
+                //         Quantity = isUnary ? 1 : Random.Range(1, 101)
+                //     };
+                //    FLogger.LogGood($"Added item to inventory (ItemId: {itemStackDto.ItemConfig.Id}, Name: {itemStackDto.ItemConfig.Name}, Quantity: {itemStackDto.Quantity})");
+                // }
+                var itemStackDto = new AddItemStackDto()
                 {
-                    var isUnary = Random.Range(0, 2) == 0;
-                    var itemStackDto = new AddItemStackDto()
-                    {
-                        ItemConfig = new ItemConfigDto(
-                            id: Guid.NewGuid(),
-                            name: isUnary ? $"Item_{i + 1}_Unary" : $"Item_{i + 1}",
-                            isUnary: isUnary,
-                            icon: $"item_icon_{i + 1}",
-                            grade: Random.Range(0, 5),
-                            rarity: Random.Range(0, 5),
-                            weight: Random.Range(1, 20),
-                            baseType: isUnary ? "weapon" : Random.Range(0, 2) == 0 ? "material" : "consumable",
-                            extra: null,
-                            categoryPath: "common"
-                        ),
-                        Quantity = isUnary ? 1 : Random.Range(1, 101)
-                    };
+                    ItemConfig = new ItemConfigDto(
+                        id: new Guid(1, 0, 0, new byte[8]),
+                        name: "bread",
+                        isUnary: false,
+                        icon: $"bread",
+                        grade: null,
+                        rarity: 0,
+                        weight: 0.1f,
+                        baseType: "consumable",
+                        extra: null,
+                        categoryPath: "food"
+                    ),
+                    Quantity = Random.Range(500, 1001)
+                };
 
-                    await inventoryClient.AddItemStack(itemStackDto);
-
-                    FLogger.LogGood($"Added item to inventory (ItemId: {itemStackDto.ItemConfig.Id}, Name: {itemStackDto.ItemConfig.Name}, Quantity: {itemStackDto.Quantity})");
-                }
+                await inventoryClient.AddItemStack(itemStackDto);
 
                 FLogger.LogGood($"Inventory created successfully (Capacity: {inventoryDto.Capacity}, WeightLimit: {inventoryDto.WeightLimit})");
             }
