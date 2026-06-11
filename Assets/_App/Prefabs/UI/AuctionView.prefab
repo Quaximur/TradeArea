@@ -48,5 +48,5 @@ MonoBehaviour:
   _layer: 0
   _closeButtonName: CloseButton
   _closeBackgroundName: CloseBackground
-  _createLotButtonName: CreateLot
-  _refreshListingButtonName: RefreshListing
+  _statusLabelName: StatusLabel
+  _refreshAllButtonName: RefreshAllButton

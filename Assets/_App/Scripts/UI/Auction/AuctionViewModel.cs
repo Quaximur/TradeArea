@@ -1,230 +1,262 @@
-using DevKit.UI.MVVM.Bases;
-using MagicOnion;
-using MagicOnion.Client;
+using System;
+using System.Collections.Generic;
 using Aucy.Contracts.OnionClient;
 using Aucy.Contracts.OnionServer;
 using Cysharp.Threading.Tasks;
-using Grpc.Core;
-using System;
-using Random = UnityEngine.Random;
+using DevKit.UI.MVVM.Bases;
 using DevKit.Utils;
+using Grpc.Core;
+using MagicOnion;
+using MagicOnion.Client;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace TradeArea.UI.Auction
 {
     public class AuctionViewModel : ScreenViewModel
     {
-        private string _currentToken = TOKEN_USER_1;
+        public const int User1Index = 0;
+        public const int User2Index = 1;
 
-        private const string TOKEN_USER_1 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWMyZjJmNzEtYWEwZi00NmYxLTgzOWYtOTc2NGEzNGI0Zjc2IiwiZXhwIjoxNzgxMjQyNjc3fQ.G26PPDCuDCSslvtuk-q7Sozgr8tXL6UANsWNl8mSJnc";
-        private const string TOKEN_USER_2 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMmMyZjJmNzEtYWEwZi00NmYxLTgzOWYtOTc2NGEzNGI0Zjc2IiwiZXhwIjoxNzgxMjQyNjYyfQ.iRtv1P-ZgUH-UK0Z9dXw39AtkwKkPEepS7IGYNizUpE";
-        private const string USER_ID_1 = "1c2f2f71-aa0f-46f1-839f-9764a34b4f76";
-        private const string USER_ID_2 = "2c2f2f71-aa0f-46f1-839f-9764a34b4f76";
+        private const string TokenUser1 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWMyZjJmNzEtYWEwZi00NmYxLTgzOWYtOTc2NGEzNGI0Zjc2IiwiZXhwIjoxNzgxMjQ1MjEzfQ.8JeaYba-Tphlhl-W0lPQWczjsSb21XZ7SE7DGzzMcrk";
+        private const string TokenUser2 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMmMyZjJmNzEtYWEwZi00NmYxLTgzOWYtOTc2NGEzNGI0Zjc2IiwiZXhwIjoxNzgxMjQ1MjMxfQ.2uX07jRLRns9g3cvXrMO5_jtmU1zzaKakRbEyhTSOS8";
+        private const string UserId1 = "1c2f2f71-aa0f-46f1-839f-9764a34b4f76";
+        private const string UserId2 = "2c2f2f71-aa0f-46f1-839f-9764a34b4f76";
+
+        private readonly UserProfile[] _users =
+        {
+            new("User 1", TokenUser1, Guid.Parse(UserId1)),
+            new("User 2", TokenUser2, Guid.Parse(UserId2))
+        };
+
+        public IReadOnlyList<UserProfile> Users => _users;
+
+        public event Action<string> StatusChanged;
+        public event Action DataChanged;
+        private bool _isInitialized;
+        private bool _isInitializing;
 
         public AuctionViewModel()
         {
             InitAsync().Forget();
         }
 
-        private async UniTask InitAsync()
+        public async UniTask EnsureReady()
         {
-            var userInitTask1 = CreateInventoryTest(TOKEN_USER_1);
-            var userInitTask2 = CreateInventoryTest(TOKEN_USER_2);
-
-            await UniTask.WhenAll(userInitTask1, userInitTask2);
+            await InitAsync();
         }
 
-        public async UniTask GetOwnInventoryTest()
-        {
-            try
-            {
-                using var channel = GrpcChannelx.ForAddress("http://localhost:8765");
-
-                var itemSearchClient = MagicOnionClient.Create<IItemSearchService>(channel)
-                    .WithHeaders(new Metadata { { "authorization", $"Bearer {_currentToken}" } });
-
-                var inventoryDto = await itemSearchClient.GetOwnInventory(new GetInventoryDto()
-                {
-                    Page = 1,
-                    PageSize = 1000
-                });
-
-                if (inventoryDto != null && inventoryDto.ItemStacks != null && inventoryDto.ItemStacks.Length > 0)
-                {
-                    foreach (var itemStack in inventoryDto.ItemStacks)
-                        FLogger.LogGood($"ItemConfigId: {itemStack.ItemConfig.Id}, ItemName: {itemStack.ItemConfig.Name}, Quantity: {itemStack.Quantity}");
-                }
-                else
-                {
-                    FLogger.LogGood("No items found in inventory.");
-                }
-            }
-            catch (Exception ex)
-            {
-                FLogger.LogError($"Failed to fetch inventory: {ex}");
-                return;
-            }
-        }
-
-        public async UniTask CreateInventoryTest(string token)
-        {
-            try
-            {
-                using var channel = GrpcChannelx.ForAddress("http://localhost:8765");
-
-                var inventoryClient = MagicOnionClient.Create<IInventoryService>(channel)
-                    .WithHeaders(new Metadata { { "authorization", $"Bearer {token}" } });
-
-                var inventoryDto = await inventoryClient.CreateInventory(new CreateInventoryDto()
-                {
-                    Capacity = 1000,
-                    WeightLimit = 10000,
-                });
-
-                // for (var i = 0; i < 10; i++)
-                // {
-                //     var isUnary = Random.Range(0, 2) == 0;
-                //     var itemStackDto = new AddItemStackDto()
-                //     {
-                //         ItemConfig = new ItemConfigDto(
-                //             id: Guid.NewGuid(),
-                //             name: isUnary ? $"Item_{i + 1}_Unary" : $"Item_{i + 1}",
-                //             isUnary: isUnary,
-                //             icon: $"item_icon_{i + 1}",
-                //             grade: Random.Range(0, 5),
-                //             rarity: Random.Range(0, 5),
-                //             weight: Random.Range(1, 20),
-                //             baseType: isUnary ? "weapon" : Random.Range(0, 2) == 0 ? "material" : "consumable",
-                //             extra: null,
-                //             categoryPath: "common"
-                //         ),
-                //         Quantity = isUnary ? 1 : Random.Range(1, 101)
-                //     };
-                //    FLogger.LogGood($"Added item to inventory (ItemId: {itemStackDto.ItemConfig.Id}, Name: {itemStackDto.ItemConfig.Name}, Quantity: {itemStackDto.Quantity})");
-                // }
-                var itemStackDto = new AddItemStackDto()
-                {
-                    ItemConfig = new ItemConfigDto(
-                        id: new Guid(1, 0, 0, new byte[8]),
-                        name: "bread",
-                        isUnary: false,
-                        icon: $"bread",
-                        grade: null,
-                        rarity: 0,
-                        weight: 0.1f,
-                        baseType: "consumable",
-                        extra: null,
-                        categoryPath: "food"
-                    ),
-                    Quantity = Random.Range(500, 1001)
-                };
-
-                await inventoryClient.AddItemStack(itemStackDto);
-
-                FLogger.LogGood($"Inventory created successfully (Capacity: {inventoryDto.Capacity}, WeightLimit: {inventoryDto.WeightLimit})");
-            }
-            catch (Exception ex)
-            {
-                FLogger.LogError($"Failed to create inventory: {ex}");
-                return;
-            }
-        }
-
-        public async UniTask CreateLotTest()
-        {
-            try
-            {
-                using var channel = GrpcChannelx.ForAddress("http://localhost:8765");
-
-                var auctionClient = MagicOnionClient.Create<IOrderBookService>(channel)
-                    .WithHeaders(new Metadata { { "authorization", $"Bearer {_currentToken}" } });
-
-                var itemSearchClient = MagicOnionClient.Create<IItemSearchService>(channel)
-                    .WithHeaders(new Metadata { { "authorization", $"Bearer {_currentToken}" } });
-
-                var inventoryDto = await itemSearchClient.GetOwnInventory(new GetInventoryDto()
-                {
-                    Page = 1,
-                    PageSize = 1000
-                });
-
-
-                if (inventoryDto == null || inventoryDto.ItemStacks == null && inventoryDto.ItemStacks.Length <= 0)
-                {
-                    FLogger.LogWarning("No items found in inventory.");
-                    return;
-                }
-
-                FLogger.Log($"Paginated items count: {inventoryDto.ItemStacks.Length}");
-
-                var randomItemStack = inventoryDto.ItemStacks[Random.Range(0, inventoryDto.ItemStacks.Length)];
-
-                var lotDto = await auctionClient.CreateLot(new CreateLotDto
-                (
-                    itemConfigId: randomItemStack.ItemConfig.Id,
-                    unitPrice: Random.Range(1_000, 1_000_001),
-                    totalQuantity: Random.Range(1, randomItemStack.Quantity + 1)
-                ));
-
-                FLogger.LogGood($"Lot created successfully (LotId: {lotDto.Id}, ItemConfigId: {lotDto.ItemConfigId}, UnitPrice: {lotDto.UnitPrice}, RemainingQuantity: {lotDto.RemainingQuantity})");
-            }
-            catch (Exception ex)
-            {
-                FLogger.LogError($"Failed to create lot: {ex}");
-                return;
-            }
-        }
-
-        public async UniTask RefreshOwnLotsTest()
+        public async UniTask<InventoryDto> GetInventory(int userIndex)
         {
             using var channel = GrpcChannelx.ForAddress("http://localhost:8765");
+            var itemSearchClient = MagicOnionClient.Create<IItemSearchService>(channel)
+                .WithHeaders(Headers(userIndex));
 
-            var auctionClient = MagicOnionClient.Create<IOrderBookService>(channel)
-                .WithHeaders(new Metadata { { "authorization", $"Bearer {_currentToken}" } });
-
-            var lots = await auctionClient.GetOwnLots();
-            if (lots != null && lots.Lots != null && lots.Lots.Count > 0)
+            return await itemSearchClient.GetOwnInventory(new GetInventoryDto
             {
-                foreach (var lot in lots.Lots)
-                    FLogger.LogGood($"LotId: {lot.Id}, ItemName: {lot.ItemConfig.Name}, UnitPrice: {lot.UnitPrice}, Quantity: {lot.RemainingQuantity}/{lot.TotalQuantity}");
-            }
-            else
-            {
-                FLogger.LogGood("No lots found.");
-            }
+                Page = 1,
+                PageSize = 1000
+            });
         }
 
-        public async UniTask RefreshListingTest()
+        public async UniTask<List<ItemConfigWithRichListing>> GetMarketItems()
         {
             using var channel = GrpcChannelx.ForAddress("http://localhost:8765");
             var searchClient = MagicOnionClient.Create<IItemSearchService>(channel)
-                .WithHeaders(new Metadata { { "authorization", $"Bearer {_currentToken}" } });
+                .WithHeaders(Headers(User1Index));
 
-            try
-            {
-                var itemConfigs = await searchClient.GetItemConfigs(new GetItemConfigsDto(
+            var configs = await searchClient.GetItemConfigs(new GetItemConfigsDto(
                 categoryPathFilter: null,
                 nameFilter: null,
                 rarity: null,
                 minGrade: null,
                 maxGrade: null,
                 page: 1,
-                pageSize: 100
-            ));
+                pageSize: 100));
 
-                if (itemConfigs != null && itemConfigs.ItemConfigs != null && itemConfigs.ItemConfigs.Count > 0)
+            var result = new List<ItemConfigWithRichListing>();
+            if (configs?.ItemConfigs == null)
+                return result;
+
+            foreach (var config in configs.ItemConfigs)
+            {
+                try
                 {
-                    foreach (var item in itemConfigs.ItemConfigs)
-                        FLogger.LogGood($"ItemConfigId: {item.Id}, ItemName: {item.Name}");
+                    var richConfig = await searchClient.GetRichItemConfig(new GetItemConfigDto(config.Id));
+                    if (richConfig != null)
+                        result.Add(richConfig);
                 }
-                else
+                catch (Exception ex)
                 {
-                    FLogger.LogGood("No items found.");
+                    FLogger.LogWarning($"Failed to fetch rich item config for {config.Name}: {ex.Message}");
                 }
+            }
+
+            return result;
+        }
+
+        public async UniTask<OwnLotsDto> GetOwnLots(int userIndex)
+        {
+            using var channel = GrpcChannelx.ForAddress("http://localhost:8765");
+            var auctionClient = MagicOnionClient.Create<IOrderBookService>(channel)
+                .WithHeaders(Headers(userIndex));
+
+            return await auctionClient.GetOwnLots();
+        }
+
+        public async UniTask CreateLot(int userIndex, Guid itemConfigId, long unitPrice, int quantity)
+        {
+            if (unitPrice <= 0 || quantity <= 0)
+            {
+                SetStatus("Unit price and quantity must be greater than zero.");
+                return;
+            }
+
+            using var channel = GrpcChannelx.ForAddress("http://localhost:8765");
+            var auctionClient = MagicOnionClient.Create<IOrderBookService>(channel)
+                .WithHeaders(Headers(userIndex));
+
+            var lot = await auctionClient.CreateLot(new CreateLotDto(itemConfigId, unitPrice, quantity));
+            SetStatus($"{_users[userIndex].Name} listed {lot.RemainingQuantity} item(s) at {lot.UnitPrice}.");
+            DataChanged?.Invoke();
+        }
+
+        public async UniTask BuyLot(int buyerUserIndex, Guid lotId, int quantity)
+        {
+            if (quantity <= 0)
+            {
+                SetStatus("Purchase quantity must be greater than zero.");
+                return;
+            }
+
+            using var channel = GrpcChannelx.ForAddress("http://localhost:8765");
+            var auctionClient = MagicOnionClient.Create<IOrderBookService>(channel)
+                .WithHeaders(Headers(buyerUserIndex));
+
+            await auctionClient.CollectLot(new CollectLotDto(lotId, quantity));
+            SetStatus($"{_users[buyerUserIndex].Name} purchased {quantity} item(s).");
+            DataChanged?.Invoke();
+        }
+
+        public async UniTask AddFunds(int userIndex, long amount)
+        {
+            if (amount <= 0)
+            {
+                SetStatus("Funds amount must be greater than zero.");
+                return;
+            }
+
+            using var channel = GrpcChannelx.ForAddress("http://localhost:8765");
+            var inventoryClient = MagicOnionClient.Create<IInventoryService>(channel)
+                .WithHeaders(Headers(userIndex));
+
+            await inventoryClient.AddMoney(amount);
+            SetStatus($"Added {amount} funds to {_users[userIndex].Name}.");
+            DataChanged?.Invoke();
+        }
+
+        public async UniTask WithdrawFunds(int userIndex, long amount)
+        {
+            if (amount <= 0)
+            {
+                SetStatus("Funds amount must be greater than zero.");
+                return;
+            }
+
+            using var channel = GrpcChannelx.ForAddress("http://localhost:8765");
+            var inventoryClient = MagicOnionClient.Create<IInventoryService>(channel)
+                .WithHeaders(Headers(userIndex));
+
+            await inventoryClient.RemoveMoney(amount);
+            SetStatus($"Withdrew {amount} funds from {_users[userIndex].Name}.");
+            DataChanged?.Invoke();
+        }
+
+        private async UniTask InitAsync()
+        {
+            if (_isInitialized)
+                return;
+
+            if (_isInitializing)
+            {
+                while (_isInitializing)
+                    await UniTask.Yield();
+
+                return;
+            }
+
+            _isInitializing = true;
+            try
+            {
+                await UniTask.WhenAll(CreateInventory(User1Index), CreateInventory(User2Index));
+                _isInitialized = true;
+                SetStatus("Auction tester ready.");
+                DataChanged?.Invoke();
             }
             catch (Exception ex)
             {
-                FLogger.LogError($"Failed to fetch item configs: {ex}");
-                return;
+                SetStatus($"Initialization failed: {ex.Message}");
+                FLogger.LogError($"Auction tester initialization failed: {ex}");
+            }
+            finally
+            {
+                _isInitializing = false;
+            }
+        }
+
+        private async UniTask CreateInventory(int userIndex)
+        {
+            using var channel = GrpcChannelx.ForAddress("http://localhost:8765");
+            var inventoryClient = MagicOnionClient.Create<IInventoryService>(channel)
+                .WithHeaders(Headers(userIndex));
+
+            var inventoryDto = await inventoryClient.CreateInventory(new CreateInventoryDto
+            {
+                Capacity = 1000,
+                WeightLimit = 10000
+            });
+
+            await inventoryClient.AddItemStack(new AddItemStackDto
+            {
+                ItemConfig = new ItemConfigDto(
+                id: Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                name: "bread",
+                isUnary: false,
+                icon: "bread",
+                grade: null,
+                rarity: 0,
+                weight: 0.1f,
+                baseType: "consumable",
+                extra: null,
+                categoryPath: "food"),
+                Quantity = Random.Range(500, 1001)
+            });
+
+            FLogger.LogGood($"{_users[userIndex].Name} inventory ready (Capacity: {inventoryDto.Capacity}, WeightLimit: {inventoryDto.WeightLimit}).");
+        }
+
+        private Metadata Headers(int userIndex)
+        {
+            return new Metadata { { "authorization", $"Bearer {_users[userIndex].Token}" } };
+        }
+
+        private void SetStatus(string message)
+        {
+            StatusChanged?.Invoke(message);
+            FLogger.Log(message);
+        }
+
+        public readonly struct UserProfile
+        {
+            public string Name { get; }
+            public string Token { get; }
+            public Guid UserId { get; }
+
+            public UserProfile(string name, string token, Guid userId)
+            {
+                Name = name;
+                Token = token;
+                UserId = userId;
             }
         }
     }

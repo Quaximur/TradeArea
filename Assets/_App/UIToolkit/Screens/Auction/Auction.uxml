@@ -1,10 +1,64 @@
-<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement name="AuctionWrapper" style="flex-grow: 1; justify-content: center; align-items: center;">
-        <ui:VisualElement name="AuctionPanel" style="flex-grow: 0; justify-content: center; align-items: center; width: 1800px; height: 960px; background-color: rgb(38, 43, 55); border-top-left-radius: 12px; border-top-right-radius: 12px; border-bottom-right-radius: 12px; border-bottom-left-radius: 12px;">
-            <ui:Button text="Create Lot" name="CreateLot" style="border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px;"/>
-            <ui:Button text="Refresh Listing" name="RefreshListing" style="border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px;"/>
-            <ui:Button text="Refresh Own Lots" name="RefreshOwnLots" style="border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px;"/>
-            <ui:Button text="Inventory" name="GetInventory" style="border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px;"/>
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/_App/UIToolkit/Screens/Auction/Auction.uss" />
+    <ui:VisualElement name="AuctionWrapper" class="auction-wrapper">
+        <ui:VisualElement name="AuctionPanel" class="auction-panel">
+            <ui:VisualElement class="auction-header">
+                <ui:VisualElement class="auction-title-block">
+                    <ui:Label text="Auction Tester" class="auction-title" />
+                    <ui:Label name="StatusLabel" text="Ready" class="auction-status" />
+                </ui:VisualElement>
+                <ui:Button name="RefreshAllButton" text="Refresh All" class="auction-button auction-button-primary" />
+            </ui:VisualElement>
+
+            <ui:VisualElement class="auction-body">
+                <ui:VisualElement class="auction-user-column">
+                    <ui:VisualElement class="auction-user-header">
+                        <ui:Label name="User1NameLabel" text="User 1" class="auction-user-title" />
+                        <ui:Label name="User1MetaLabel" text="Inventory" class="auction-user-meta" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="auction-funds-row">
+                        <ui:TextField name="User1FundsAmount" value="1000" class="auction-input auction-funds-input" />
+                        <ui:Button name="User1AddFundsButton" text="Add Funds" class="auction-button" />
+                        <ui:Button name="User1WithdrawFundsButton" text="Withdraw" class="auction-button" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="auction-section">
+                        <ui:Label text="Inventory" class="auction-section-title" />
+                        <ui:ScrollView name="User1InventoryList" class="auction-list auction-inventory-list" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="auction-section auction-listing-section">
+                        <ui:Label text="Own Lots" class="auction-section-title" />
+                        <ui:ScrollView name="User1OwnLotsList" class="auction-list auction-own-lots-list" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+
+                <ui:VisualElement class="auction-market-column">
+                    <ui:VisualElement class="auction-market-header">
+                        <ui:Label text="ItemConfig Items For Sale" class="auction-user-title" />
+                        <ui:Label text="Each row shows current lot prices and buy controls for both users." class="auction-user-meta" />
+                    </ui:VisualElement>
+                    <ui:ScrollView name="MarketList" class="auction-list auction-market-list" />
+                </ui:VisualElement>
+
+                <ui:VisualElement class="auction-user-column">
+                    <ui:VisualElement class="auction-user-header">
+                        <ui:Label name="User2NameLabel" text="User 2" class="auction-user-title" />
+                        <ui:Label name="User2MetaLabel" text="Inventory" class="auction-user-meta" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="auction-funds-row">
+                        <ui:TextField name="User2FundsAmount" value="1000" class="auction-input auction-funds-input" />
+                        <ui:Button name="User2AddFundsButton" text="Add Funds" class="auction-button" />
+                        <ui:Button name="User2WithdrawFundsButton" text="Withdraw" class="auction-button" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="auction-section">
+                        <ui:Label text="Inventory" class="auction-section-title" />
+                        <ui:ScrollView name="User2InventoryList" class="auction-list auction-inventory-list" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="auction-section auction-listing-section">
+                        <ui:Label text="Own Lots" class="auction-section-title" />
+                        <ui:ScrollView name="User2OwnLotsList" class="auction-list auction-own-lots-list" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
