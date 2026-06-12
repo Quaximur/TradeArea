@@ -11,6 +11,9 @@ using MagicOnion.Client;
 using R3;
 using TradeArea.Data;
 using TradeArea.Shared;
+using TradeArea.UI.AuctionInventory;
+using TradeArea.UI.AuctionSearch;
+using TradeArea.UI.AuctionOrders;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -18,6 +21,10 @@ namespace TradeArea.UI.Auction
 {
     public class AuctionViewModel : ScreenViewModel
     {
+        public AuctionSearchViewModel AuctionSearchViewModel { get; private set; }
+        public AuctionInventoryViewModel AuctionInventoryViewModel { get; private set; }
+        public AuctionOrdersViewModel AuctionOrdersViewModel { get; private set; }
+
         public Observable<IList<ItemConfigDto>> OnMarketListChanged => _onMarketListChanged;
         public Observable<LoadingFlag> OnMarketLoading => _marketLoading;
 
@@ -28,9 +35,15 @@ namespace TradeArea.UI.Auction
 
         private CancellationTokenSource _cts = new();
 
-        public AuctionViewModel(UserModel userModel)
+        public AuctionViewModel(UserModel userModel,
+            AuctionSearchViewModel auctionSearchViewModel,
+            AuctionInventoryViewModel auctionInventoryViewModel,
+            AuctionOrdersViewModel auctionOrdersViewModel)
         {
             _userModel = userModel;
+            AuctionOrdersViewModel = auctionOrdersViewModel;
+            AuctionInventoryViewModel = auctionInventoryViewModel;
+            AuctionSearchViewModel = auctionSearchViewModel;
         }
 
         public void UpdateMarketItems()
@@ -142,6 +155,11 @@ namespace TradeArea.UI.Auction
         public override void Dispose()
         {
             Disposes.ClearCts(ref _cts);
+
+            AuctionSearchViewModel?.Dispose();
+            AuctionInventoryViewModel?.Dispose();
+            AuctionOrdersViewModel?.Dispose();
+            
             base.Dispose();
         }
     }

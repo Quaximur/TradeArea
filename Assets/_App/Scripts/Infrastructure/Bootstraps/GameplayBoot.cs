@@ -13,6 +13,9 @@ using TradeArea.Data;
 using TradeArea.Infrastructure.Contexts;
 using TradeArea.Shared;
 using TradeArea.UI.Auction;
+using TradeArea.UI.AuctionInventory;
+using TradeArea.UI.AuctionOrders;
+using TradeArea.UI.AuctionSearch;
 using UnityEngine;
 using VContainer;
 using Random = UnityEngine.Random;
@@ -35,6 +38,10 @@ namespace TradeArea.Infrastructure.Bootstraps
 
             builder.Register<Subject<Unit>>(Lifetime.Singleton)
                 .Keyed(Constants.GAMEPLAY_RESTART_SIGNAL);
+                
+            builder.Register<AuctionInventoryViewModel>(Lifetime.Transient);
+            builder.Register<AuctionSearchViewModel>(Lifetime.Transient);
+            builder.Register<AuctionOrdersViewModel>(Lifetime.Transient);
 
             builder.RegisterMVVM<AuctionView, AuctionViewModel>(_auctionViewPrefab);
 

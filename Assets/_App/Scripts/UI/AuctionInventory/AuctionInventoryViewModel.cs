@@ -3,7 +3,7 @@ using System.Threading;
 using Aucy.Contracts.OnionClient;
 using Aucy.Contracts.OnionServer;
 using Cysharp.Threading.Tasks;
-using DevKit.UI.MVVM.Bases;
+using DevKit.UI.MVVM;
 using DevKit.Utils;
 using Grpc.Core;
 using MagicOnion;
@@ -15,7 +15,7 @@ using TradeArea.Shared;
 
 namespace TradeArea.UI.AuctionInventory
 {
-    public class AuctionInventoryViewModel : ScreenViewModel
+    public class AuctionInventoryViewModel : BaseViewModel
     {
         public IObservableCollection<ItemStackDto> ItemStacks => _itemStacks;
 
