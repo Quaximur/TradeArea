@@ -134,8 +134,6 @@ namespace TradeArea.UI.Auction
             }
         }
 
-        
-
         private Metadata GetAuthHeader()
         {
             return new Metadata { { "authorization", $"Bearer {_userModel.OnTokenChanged.Value}" } };

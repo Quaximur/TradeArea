@@ -12,8 +12,6 @@ using ObservableCollections;
 using R3;
 using TradeArea.Data;
 using TradeArea.Shared;
-using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace TradeArea.UI.AuctionInventory
 {
