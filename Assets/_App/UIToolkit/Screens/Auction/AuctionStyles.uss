@@ -448,7 +448,7 @@
 }
 
 .auction-sidebar {
-    width: 420px;
+    width: 600px;
     margin-left: 12px;
 }
 
