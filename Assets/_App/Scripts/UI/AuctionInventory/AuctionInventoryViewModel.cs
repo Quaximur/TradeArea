@@ -18,14 +18,19 @@ namespace TradeArea.UI.AuctionInventory
     public class AuctionInventoryViewModel : BaseViewModel
     {
         public IObservableCollection<ItemStackDto> ItemStacks => _itemStacks;
-
         public Observable<LoadingFlag> OnInventoryLoading => _inventoryLoading;
+
         private readonly UserModel _userModel;
 
         private readonly ObservableList<ItemStackDto> _itemStacks = new();
         private readonly ReactiveProperty<LoadingFlag> _inventoryLoading = new(LoadingFlag.Loading);
 
         private CancellationTokenSource _cts = new();
+
+        public AuctionInventoryViewModel(UserModel userModel)
+        {
+            _userModel = userModel;
+        }
 
         public void RefreshInventory()
         {
@@ -75,6 +80,8 @@ namespace TradeArea.UI.AuctionInventory
                 }
             }
         }
+
+        
 
         public async UniTask AddMoneyAsync(long amount)
         {
