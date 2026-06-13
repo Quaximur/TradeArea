@@ -23,7 +23,7 @@ namespace TradeArea.UI.AuctionInventory
         private readonly UserModel _userModel;
 
         private readonly ObservableList<ItemStackDto> _itemStacks = new();
-        private readonly ReactiveProperty<LoadingFlag> _inventoryLoading = new(LoadingFlag.Loading);
+        private readonly ReactiveProperty<LoadingFlag> _inventoryLoading = new(LoadingFlag.Null);
 
         private CancellationTokenSource _cts = new();
 
@@ -80,8 +80,6 @@ namespace TradeArea.UI.AuctionInventory
                 }
             }
         }
-
-        
 
         public async UniTask AddMoneyAsync(long amount)
         {

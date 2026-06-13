@@ -73,5 +73,11 @@ namespace TradeArea.UI.AuctionSearch
         {
             return new Metadata { { "authorization", $"Bearer {_userModel.OnTokenChanged.Value}" } };
         }
+
+        public override void Dispose()
+        {
+            Disposes.ClearCts(ref _cts);
+            base.Dispose();
+        }
     }
 }

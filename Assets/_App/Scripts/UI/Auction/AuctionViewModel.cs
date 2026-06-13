@@ -1,21 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using Aucy.Contracts.OnionClient;
-using Cysharp.Threading.Tasks;
 using DevKit.UI.MVVM.Bases;
-using DevKit.Utils;
-using Grpc.Core;
-using MagicOnion;
-using MagicOnion.Client;
-using R3;
-using TradeArea.Data;
-using TradeArea.Shared;
 using TradeArea.UI.AuctionInventory;
 using TradeArea.UI.AuctionSearch;
 using TradeArea.UI.AuctionOrders;
-using UnityEngine;
-using Random = UnityEngine.Random;
+using TradeArea.UI.AuctionLots;
+using TradeArea.UI.AuctionBids;
 
 namespace TradeArea.UI.Auction
 {
@@ -24,26 +12,28 @@ namespace TradeArea.UI.Auction
         public AuctionSearchViewModel AuctionSearchViewModel { get; private set; }
         public AuctionInventoryViewModel AuctionInventoryViewModel { get; private set; }
         public AuctionOrdersViewModel AuctionOrdersViewModel { get; private set; }
-
-        private CancellationTokenSource _cts = new();
+        public AuctionLotsViewModel AuctionLotsViewModel { get; private set; }
+        public AuctionBidsViewModel AuctionBidsViewModel { get; private set; }
 
         public AuctionViewModel(AuctionSearchViewModel auctionSearchViewModel,
             AuctionInventoryViewModel auctionInventoryViewModel,
-            AuctionOrdersViewModel auctionOrdersViewModel)
+            AuctionOrdersViewModel auctionOrdersViewModel,
+            AuctionLotsViewModel auctionLotsViewModel,
+            AuctionBidsViewModel auctionBidsViewModel)
         {
             AuctionOrdersViewModel = auctionOrdersViewModel;
             AuctionInventoryViewModel = auctionInventoryViewModel;
             AuctionSearchViewModel = auctionSearchViewModel;
+            AuctionLotsViewModel = auctionLotsViewModel;
+            AuctionBidsViewModel = auctionBidsViewModel;
         }
 
         public override void Dispose()
         {
-            Disposes.ClearCts(ref _cts);
-
             AuctionSearchViewModel?.Dispose();
             AuctionInventoryViewModel?.Dispose();
             AuctionOrdersViewModel?.Dispose();
-            
+
             base.Dispose();
         }
     }

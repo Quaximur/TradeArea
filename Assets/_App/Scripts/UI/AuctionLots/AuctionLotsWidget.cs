@@ -1,8 +1,10 @@
 using DevKit.UI.MVVM;
+using UnityEngine.UIElements;
 
 namespace TradeArea.UI.AuctionLots
 {
-    public class AuctionLotsWidget : ToolkitWidget<AuctionLotsViewModel>
+    [UxmlElement]
+    public partial class AuctionLotsWidget : ToolkitWidget<AuctionLotsViewModel>
     {
         protected override void OnBind(AuctionLotsViewModel viewModel)
         {

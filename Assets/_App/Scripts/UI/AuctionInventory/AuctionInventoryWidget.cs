@@ -17,6 +17,7 @@ namespace TradeArea.UI.AuctionInventory
 
         protected override void OnBind(AuctionInventoryViewModel viewModel)
         {
+            viewModel.RefreshInventory();
         }
     }
 }
