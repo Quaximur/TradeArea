@@ -1,69 +1,69 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/_App/UIToolkit/Screens/Auction/AuctionStyles.uss?fileID=7433441132597879392&amp;guid=654d3c2fc88cc6f4ea822268e7d374d5&amp;type=3#AuctionStyles"/>
-    <ui:VisualElement name="AuctionWrapper" class="auction-wrapper">
-        <ui:VisualElement name="AuctionPanel" class="auction-panel">
-            <ui:VisualElement name="AuctionHeader" class="auction-header">
-                <ui:VisualElement class="auction-title-block">
-                    <ui:Label text="The Best Auction in the World" class="auction-title"/>
+    <ui:VisualElement name="AuctionWrapper" class="auction__wrapper">
+        <ui:VisualElement name="AuctionPanel" class="auction__panel">
+            <ui:VisualElement name="AuctionHeader" class="auction__header">
+                <ui:VisualElement class="auction__title-block">
+                    <ui:Label text="The Best Auction in the World" class="auction__title"/>
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="AuctionBody" class="auction-body">
+            <ui:VisualElement name="AuctionBody" class="auction__body">
                 <ui:TabView name="AuctionTabView" class="auction__tab-view" style="flex-grow: 1;">
                     <ui:Tab label="Market" name="SearchTab" class="auction__tab">
                         <TradeArea.UI.AuctionSearch.AuctionSearchWidget class="auction__search-panel">
-                            <ui:VisualElement name="CategoriesPanel" class="auction-panel-main" style="width: 400px; background-color: rgb(17, 21, 28); margin-right: 12px;"/>
+                            <ui:VisualElement name="CategoriesPanel" class="auction__panel-main" style="width: 400px; background-color: rgb(17, 21, 28); margin-right: 12px;"/>
                             <ui:VisualElement name="MarketPanel" style="flex-grow: 1;">
-                                <ui:VisualElement name="SearchHeader" class="auction-market-header">
-                                    <ui:Label text="ItemConfig Items For Sale" class="auction-user-title"/>
-                                    <ui:Button name="RefreshMarket" text="Refresh" class="auction-button auction-button-primary" style="position: absolute; right: 0; top: 0;"/>
+                                <ui:VisualElement name="SearchHeader" class="auction__market-header">
+                                    <ui:Label text="ItemConfig Items For Sale" class="auction__user-title"/>
+                                    <ui:Button name="RefreshMarket" text="Refresh" class="auction__button auction__button-primary" style="position: absolute; right: 0; top: 0;"/>
                                 </ui:VisualElement>
-                                <ui:ScrollView name="MarketList" class="auction-list auction-market-list"/>
+                                <ui:ScrollView name="MarketList" class="auction__list auction__market-list"/>
                             </ui:VisualElement>
                         </TradeArea.UI.AuctionSearch.AuctionSearchWidget>
                     </ui:Tab>
                     <ui:Tab label="Inventory" name="InventoryTab" class="auction__tab">
-                        <ui:VisualElement name="InventoryRoot" class="auction-inventory-root">
-                            <ui:VisualElement class="auction-orders-container">
-                                <ui:TabView name="OrdersTabView" class="auction-orders-tab-view">
-                                    <ui:Tab label="Sell" name="LotsTab" class="auction-orders-tab">
-                                        <TradeArea.UI.AuctionLots.AuctionLotsWidget class="auction-orders-widget">
-                                            <ui:VisualElement class="auction-content-header">
-                                                <ui:Label text="Active Sell Orders" class="auction-content-title"/>
-                                                <ui:Label text="Items currently listed on the market" class="auction-content-subtitle"/>
+                        <ui:VisualElement name="InventoryRoot" class="auction__inventory-root">
+                            <ui:VisualElement class="auction__orders-container">
+                                <ui:TabView name="OrdersTabView" class="auction__orders-tab-view">
+                                    <ui:Tab label="Sell" name="LotsTab" class="auction__orders-tab">
+                                        <TradeArea.UI.AuctionLots.AuctionLotsWidget class="auction__orders-widget">
+                                            <ui:VisualElement class="auction__content-header">
+                                                <ui:Label text="Active Sell Orders" class="auction__content-title"/>
+                                                <ui:Label text="Items currently listed on the market" class="auction__content-subtitle"/>
                                             </ui:VisualElement>
-                                            <ui:VisualElement class="auction-placeholder-panel">
-                                                <ui:Label text="No Sell Orders" class="auction-placeholder-label"/>
+                                            <ui:VisualElement class="auction__placeholder-panel">
+                                                <ui:Label text="No Sell Orders" class="auction__placeholder-label"/>
                                             </ui:VisualElement>
                                         </TradeArea.UI.AuctionLots.AuctionLotsWidget>
                                     </ui:Tab>
-                                    <ui:Tab label="Buy" name="BidsTab" class="auction-orders-tab">
-                                        <TradeArea.UI.AuctionBids.AuctionBidsWidget class="auction-orders-widget">
-                                            <ui:VisualElement class="auction-content-header">
-                                                <ui:Label text="Active Buy Orders" class="auction-content-title"/>
-                                                <ui:Label text="Items you are bidding for" class="auction-content-subtitle"/>
+                                    <ui:Tab label="Buy" name="BidsTab" class="auction__orders-tab">
+                                        <TradeArea.UI.AuctionBids.AuctionBidsWidget class="auction__orders-widget">
+                                            <ui:VisualElement class="auction__content-header">
+                                                <ui:Label text="Active Buy Orders" class="auction__content-title"/>
+                                                <ui:Label text="Items you are bidding for" class="auction__content-subtitle"/>
                                             </ui:VisualElement>
-                                            <ui:VisualElement class="auction-placeholder-panel">
-                                                <ui:Label text="No Buy Orders" class="auction-placeholder-label"/>
+                                            <ui:VisualElement class="auction__placeholder-panel">
+                                                <ui:Label text="No Buy Orders" class="auction__placeholder-label"/>
                                             </ui:VisualElement>
                                         </TradeArea.UI.AuctionBids.AuctionBidsWidget>
                                     </ui:Tab>
                                 </ui:TabView>
                             </ui:VisualElement>
-                            <TradeArea.UI.AuctionInventory.AuctionInventoryWidget class="auction-sidebar">
-                                <ui:VisualElement name="InventoryPanel" class="auction-sidebar-card">
-                                    <ui:VisualElement class="auction-content-header">
-                                        <ui:Label text="Inventory" class="auction-content-title"/>
-                                        <ui:Label text="Available Items" class="auction-content-subtitle"/>
+                            <TradeArea.UI.AuctionInventory.AuctionInventoryWidget class="auction__sidebar">
+                                <ui:VisualElement name="InventoryPanel" class="auction__sidebar-card">
+                                    <ui:VisualElement class="auction__content-header">
+                                        <ui:Label text="Inventory" class="auction__content-title"/>
+                                        <ui:Label text="Available Items" class="auction__content-subtitle"/>
                                     </ui:VisualElement>
-                                    <ui:VisualElement class="auction-wallet-panel">
-                                        <ui:Label text="Silver" class="auction-wallet-label"/>
-                                        <ui:TextField name="User1FundsAmount" value="1000" class="auction-input auction-wallet-input"/>
-                                        <ui:VisualElement class="auction-wallet-buttons">
-                                            <ui:Button name="AddMoney" text="Add Money" class="auction-button"/>
-                                            <ui:Button name="RemoveMoney" text="Remove Money" class="auction-button auction-wallet-button-right"/>
+                                    <ui:VisualElement class="auction__wallet-panel">
+                                        <ui:Label text="Silver" class="auction__wallet-label"/>
+                                        <ui:TextField name="User1FundsAmount" value="1000" class="auction__input auction__wallet-input"/>
+                                        <ui:VisualElement class="auction__wallet-buttons">
+                                            <ui:Button name="AddMoney" text="Add Money" class="auction__button"/>
+                                            <ui:Button name="RemoveMoney" text="Remove Money" class="auction__button auction__wallet-button-right"/>
                                         </ui:VisualElement>
                                     </ui:VisualElement>
-                                    <ui:ScrollView name="ItemStackContainer" class="auction-inventory-list auction-panel-main"/>
+                                    <ui:ScrollView name="ItemStackContainer" class="auction__inventory-list auction__panel-main"/>
                                 </ui:VisualElement>
                             </TradeArea.UI.AuctionInventory.AuctionInventoryWidget>
                         </ui:VisualElement>
