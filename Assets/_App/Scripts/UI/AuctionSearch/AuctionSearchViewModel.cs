@@ -36,7 +36,7 @@ namespace TradeArea.UI.AuctionSearch
 
             async UniTaskVoid GetMarketItemsAsync()
             {
-                _onMarketListChanged.Value = LoadingState<List<ItemConfigDto>>.Loading();
+                _onMarketListChanged.Value = LoadingState.Loading<List<ItemConfigDto>>();
 
                 try
                 {
@@ -55,15 +55,15 @@ namespace TradeArea.UI.AuctionSearch
                         pageSize: 100));
 
                     if (configs != null && configs.ItemConfigs != null)
-                        _onMarketListChanged.Value = LoadingState<List<ItemConfigDto>>.Success(configs.ItemConfigs);
+                        _onMarketListChanged.Value = LoadingState.Success(configs.ItemConfigs);
                     else
-                        _onMarketListChanged.Value = LoadingState<List<ItemConfigDto>>.Success(new List<ItemConfigDto>());
+                        _onMarketListChanged.Value = LoadingState.Success<List<ItemConfigDto>>(null);
                 }
                 catch (Exception ex)
                 {
                     FLogger.LogError<AuctionSearchViewModel>($"{nameof(GetMarketItemsAsync)}: {ex.Message}");
 
-                    _onMarketListChanged.Value = LoadingState<List<ItemConfigDto>>.Fail();
+                    _onMarketListChanged.Value = LoadingState.Fail<List<ItemConfigDto>>();
                 }
             }
         }

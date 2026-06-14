@@ -46,6 +46,43 @@ namespace TradeArea.Shared
                 LoadingFlag = code
             };
         }
+
+        public static LoadingState<T> Loading<T>()
+        {
+            return new LoadingState<T>
+            {
+                LoadingFlag = LoadingFlag.Loading
+            };
+        }
+
+        public static LoadingState<T> Success<T>(T value, LoadingFlag code = LoadingFlag.Success)
+        {
+            return new LoadingState<T>
+            {
+                IsSuccess = true,
+                Value = value,
+                LoadingFlag = code
+            };
+        }
+
+        public static LoadingState<T> Fail<T>(LoadingFlag code = LoadingFlag.Fail)
+        {
+            return new LoadingState<T>
+            {
+                IsSuccess = false,
+                LoadingFlag = code
+            };
+        }
+
+        public static LoadingState<T> Fail<T>(string message, LoadingFlag code = LoadingFlag.Fail)
+        {
+            return new LoadingState<T>
+            {
+                IsSuccess = false,
+                ErrorMessage = message,
+                LoadingFlag = code
+            };
+        }
     }
 
     /// <summary>
@@ -56,10 +93,10 @@ namespace TradeArea.Shared
     /// </summary>
     public struct LoadingState<T>
     {
-        public T Value { get; private set; }
-        public bool IsSuccess { get; private set; }
-        public string ErrorMessage { get; private set; }
-        public LoadingFlag LoadingFlag { get; private set; }
+        public T Value { get; internal set; }
+        public bool IsSuccess { get; internal set; }
+        public string ErrorMessage { get; internal set; }
+        public LoadingFlag LoadingFlag { get; internal set; }
 
         public static LoadingState<T> Loading()
         {
