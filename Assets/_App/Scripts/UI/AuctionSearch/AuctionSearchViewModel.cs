@@ -16,24 +16,27 @@ namespace TradeArea.UI.AuctionSearch
 {
     public class AuctionSearchViewModel : BaseViewModel
     {
-        public Observable<IList<ItemConfigDto>> OnMarketListChanged => _onMarketListChanged;
-        public Observable<LoadingFlag> OnMarketLoading => _marketLoading;
+        public Observable<LoadingState<List<ItemConfigDto>>> OnMarketListChanged => _onMarketListChanged;
 
         private readonly UserModel _userModel;
 
-        private readonly ReactiveProperty<IList<ItemConfigDto>> _onMarketListChanged = new();
-        private readonly ReactiveProperty<LoadingFlag> _marketLoading = new(LoadingFlag.Loading);
+        private readonly ReactiveProperty<LoadingState<List<ItemConfigDto>>> _onMarketListChanged = new();
 
         private CancellationTokenSource _cts = new();
+
+        public AuctionSearchViewModel(UserModel userModel)
+        {
+            _userModel = userModel;
+        }
         
         public void UpdateMarketItems()
         {
-            if (_marketLoading.Value != LoadingFlag.Loading)
+            if (_onMarketListChanged.Value.LoadingFlag != LoadingFlag.Loading)
                 GetMarketItemsAsync().Forget();
 
             async UniTaskVoid GetMarketItemsAsync()
             {
-                _marketLoading.Value = LoadingFlag.Loading;
+                _onMarketListChanged.Value = LoadingState<List<ItemConfigDto>>.Loading();
 
                 try
                 {
@@ -52,19 +55,15 @@ namespace TradeArea.UI.AuctionSearch
                         pageSize: 100));
 
                     if (configs != null && configs.ItemConfigs != null)
-                        _onMarketListChanged.Value = configs.ItemConfigs;
+                        _onMarketListChanged.Value = LoadingState<List<ItemConfigDto>>.Success(configs.ItemConfigs);
                     else
-                        _onMarketListChanged.Value = Array.Empty<ItemConfigDto>();
-
-                    _marketLoading.Value = LoadingFlag.Success;
+                        _onMarketListChanged.Value = LoadingState<List<ItemConfigDto>>.Success(new List<ItemConfigDto>());
                 }
                 catch (Exception ex)
                 {
                     FLogger.LogError<AuctionSearchViewModel>($"{nameof(GetMarketItemsAsync)}: {ex.Message}");
 
-                    _onMarketListChanged.Value = Array.Empty<ItemConfigDto>();
-
-                    _marketLoading.Value = LoadingFlag.Fail;
+                    _onMarketListChanged.Value = LoadingState<List<ItemConfigDto>>.Fail();
                 }
             }
         }

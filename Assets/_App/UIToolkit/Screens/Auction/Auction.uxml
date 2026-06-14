@@ -17,7 +17,18 @@
                                     <ui:Label text="ItemConfig Items For Sale" class="auction__user-title"/>
                                     <ui:Button name="RefreshMarket" text="Refresh" class="auction__button auction__button-primary" style="position: absolute; right: 0; top: 0;"/>
                                 </ui:VisualElement>
-                                <ui:ListView name="MarketList" allow-add="false" allow-remove="false" selection-type="None" show-bound-collection-size="false" class="auction__market-list"/>
+                                <ui:VisualElement name="MarketContent" style="flex-grow: 1;">
+                                    <ui:ListView name="MarketList" allow-add="false" allow-remove="false" selection-type="None" show-bound-collection-size="false" item-template="project://database/Assets/_App/UIToolkit/Components/ItemConfigRow/ItemConfigRow.uxml?fileID=9197481963319205126&amp;guid=bc9bf92e06cc9164ab7a60b8824f9616&amp;type=3#ItemConfigRow" virtualization-method="DynamicHeight" class="auction__market-list"/>
+                                    <ui:VisualElement name="NoItemsContainer" class="auction__state-container">
+                                        <ui:Label text="No items found"/>
+                                    </ui:VisualElement>
+                                    <ui:VisualElement name="ErrorContainer" class="auction__state-container">
+                                        <ui:Label text="Something went wrong..."/>
+                                    </ui:VisualElement>
+                                    <ui:VisualElement name="LoadingContainer" class="auction__state-container">
+                                        <ui:Label text="Loading"/>
+                                    </ui:VisualElement>
+                                </ui:VisualElement>
                             </ui:VisualElement>
                         </TradeArea.UI.AuctionSearch.AuctionSearchWidget>
                     </ui:Tab>
