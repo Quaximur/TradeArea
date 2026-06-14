@@ -17,7 +17,7 @@
                                     <ui:Label text="ItemConfig Items For Sale" class="auction__user-title"/>
                                     <ui:Button name="RefreshMarket" text="Refresh" class="auction__button auction__button-primary" style="position: absolute; right: 0; top: 0;"/>
                                 </ui:VisualElement>
-                                <ui:ScrollView name="MarketList" class="auction__list auction__market-list"/>
+                                <ui:ListView name="MarketList" allow-add="false" allow-remove="false" selection-type="None" show-bound-collection-size="false" class="auction__market-list"/>
                             </ui:VisualElement>
                         </TradeArea.UI.AuctionSearch.AuctionSearchWidget>
                     </ui:Tab>
@@ -25,27 +25,27 @@
                         <ui:VisualElement name="InventoryRoot" class="auction__inventory-root">
                             <ui:VisualElement class="auction__orders-container">
                                 <ui:TabView name="OrdersTabView" class="auction__orders-tab-view">
-                                    <ui:Tab label="Sell" name="LotsTab" class="auction__orders-tab">
-                                        <TradeArea.UI.AuctionLots.AuctionLotsWidget class="auction__orders-widget">
-                                            <ui:VisualElement class="auction__content-header">
-                                                <ui:Label text="Active Sell Orders" class="auction__content-title"/>
-                                                <ui:Label text="Items currently listed on the market" class="auction__content-subtitle"/>
-                                            </ui:VisualElement>
-                                            <ui:VisualElement class="auction__placeholder-panel">
-                                                <ui:Label text="No Sell Orders" class="auction__placeholder-label"/>
-                                            </ui:VisualElement>
-                                        </TradeArea.UI.AuctionLots.AuctionLotsWidget>
-                                    </ui:Tab>
                                     <ui:Tab label="Buy" name="BidsTab" class="auction__orders-tab">
                                         <TradeArea.UI.AuctionBids.AuctionBidsWidget class="auction__orders-widget">
-                                            <ui:VisualElement class="auction__content-header">
-                                                <ui:Label text="Active Buy Orders" class="auction__content-title"/>
-                                                <ui:Label text="Items you are bidding for" class="auction__content-subtitle"/>
+                                            <ui:VisualElement name="BidsHeader" class="auction__content-header">
+                                                <ui:Label text="Active Buy Orders" name="BidsTabTitle" class="auction__content-title"/>
+                                                <ui:Label text="Items you are bidding for" name="BidsDesc" class="auction__content-subtitle"/>
                                             </ui:VisualElement>
-                                            <ui:VisualElement class="auction__placeholder-panel">
-                                                <ui:Label text="No Buy Orders" class="auction__placeholder-label"/>
+                                            <ui:VisualElement name="BidsContainer" class="auction__placeholder-panel">
+                                                <ui:Label text="No Buy Orders" name="NoBidsLabel" class="auction__placeholder-label"/>
                                             </ui:VisualElement>
                                         </TradeArea.UI.AuctionBids.AuctionBidsWidget>
+                                    </ui:Tab>
+                                    <ui:Tab label="Sell" name="LotsTab" class="auction__orders-tab">
+                                        <TradeArea.UI.AuctionLots.AuctionLotsWidget class="auction__orders-widget">
+                                            <ui:VisualElement name="LotsHeader" class="auction__content-header">
+                                                <ui:Label text="Active Sell Orders" name="LotsTitle" class="auction__content-title"/>
+                                                <ui:Label text="Items currently listed on the market" name="LotsDesc" class="auction__content-subtitle"/>
+                                            </ui:VisualElement>
+                                            <ui:VisualElement name="LotsContainer" class="auction__placeholder-panel">
+                                                <ui:Label text="No Sell Orders" name="NoLotsLabel" class="auction__placeholder-label"/>
+                                            </ui:VisualElement>
+                                        </TradeArea.UI.AuctionLots.AuctionLotsWidget>
                                     </ui:Tab>
                                 </ui:TabView>
                             </ui:VisualElement>
