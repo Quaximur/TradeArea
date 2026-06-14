@@ -38,6 +38,11 @@ namespace TradeArea.UI.AuctionSearch
                 var itemRow = x.Q<ItemConfigRow>();
                 itemRow.ItemName = ((ItemConfigDto)_marketList.itemsSource[i]).Name;
             };
+
+            _marketList.SetEnabled(false);
+            USSUtil.Hide(_loadingContainer);
+            USSUtil.Hide(_errorContainer);
+            USSUtil.Hide(_noItemsContainer);
         }
 
         protected override void OnBind(AuctionSearchViewModel viewModel)
@@ -45,23 +50,42 @@ namespace TradeArea.UI.AuctionSearch
             _disposables = new();
 
             viewModel.UpdateMarketItems();
+            
+            _refreshMarketButton.SubscribeCallback<ClickEvent>(_ => viewModel.UpdateMarketItems())
+                .AddTo(_disposables);
+
             viewModel.OnMarketListChanged.Subscribe(x =>
             {
                 switch (x.LoadingFlag)
                 {
                     case LoadingFlag.Null:
+                        _marketList.SetEnabled(false);
+                        USSUtil.Hide(_loadingContainer);
+                        USSUtil.Hide(_errorContainer);
+                        USSUtil.Hide(_noItemsContainer);
+                        break;
+
                     case LoadingFlag.Loading:
+                        _marketList.SetEnabled(false);
                         USSUtil.Show(_loadingContainer);
                         USSUtil.Hide(_errorContainer);
+                        USSUtil.Hide(_noItemsContainer);
                         break;
 
                     case LoadingFlag.Success:
+
                         _marketList.itemsSource = x.Value;
 
                         if (x.Value == null || x.Value.Count == 0)
+                        {
+                            _marketList.SetEnabled(false);
                             USSUtil.Show(_noItemsContainer);
+                        }
                         else
+                        {
+                            _marketList.SetEnabled(true);
                             USSUtil.Hide(_noItemsContainer);
+                        }
 
                         USSUtil.Hide(_loadingContainer);
                         USSUtil.Hide(_errorContainer);
@@ -69,6 +93,7 @@ namespace TradeArea.UI.AuctionSearch
 
                     case LoadingFlag.Fail:
                         _marketList.itemsSource = null;
+                        _marketList.SetEnabled(false);
                         USSUtil.Hide(_loadingContainer);
                         USSUtil.Hide(_noItemsContainer);
                         USSUtil.Show(_errorContainer);
