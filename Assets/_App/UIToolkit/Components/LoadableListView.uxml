@@ -1,0 +1,14 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <TradeArea.UI.Custom.LoadableListViewWidget name="LoadableListView" style="flex-grow: 1;">
+        <ui:ListView name="ListView" allow-add="false" allow-remove="false" selection-type="None" show-bound-collection-size="false" item-template="project://database/Assets/_App/UIToolkit/Components/ItemConfigRow/ItemConfigRow.uxml?fileID=9197481963319205126&amp;guid=bc9bf92e06cc9164ab7a60b8824f9616&amp;type=3#ItemConfigRow" virtualization-method="DynamicHeight" class="auction__market-list"/>
+        <ui:VisualElement name="LoadingContainer" class="auction__state-container">
+            <ui:Label text="Loading..." name="LoadingLabel"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="ErrorContainer" class="auction__state-container">
+            <ui:Label text="Something went wrong." name="ErrorLabel"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="NoItemsContainer" class="auction__state-container">
+            <ui:Label text="No items found." name="NoItemsLabel"/>
+        </ui:VisualElement>
+    </TradeArea.UI.Custom.LoadableListViewWidget>
+</ui:UXML>

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using Aucy.Contracts.OnionClient;
 using Aucy.Contracts.OnionServer;
@@ -17,13 +18,14 @@ namespace TradeArea.UI.AuctionInventory
 {
     public class AuctionInventoryViewModel : BaseViewModel
     {
-        public IObservableCollection<ItemStackDto> ItemStacks => _itemStacks;
-        public Observable<LoadingFlag> OnInventoryLoading => _inventoryLoading;
+        /// <summary>
+        /// Inventory items. After full collection loading starts diffs streaming.
+        /// </summary>
+        public Observable<LoadingState<List<ItemStackDto>>> ItemStacks => _itemStacks;
 
         private readonly UserModel _userModel;
 
-        private readonly ObservableList<ItemStackDto> _itemStacks = new();
-        private readonly ReactiveProperty<LoadingFlag> _inventoryLoading = new(LoadingFlag.Null);
+        private readonly ReactiveProperty<LoadingState<List<ItemStackDto>>> _itemStacks = new();
 
         private CancellationTokenSource _cts = new();
 
@@ -34,14 +36,14 @@ namespace TradeArea.UI.AuctionInventory
 
         public void RefreshInventory()
         {
-            if (_inventoryLoading.Value != LoadingFlag.Loading)
+            if (_itemStacks.Value.LoadingFlag != LoadingFlag.Loading)
                 RefreshInventoryAsync().Forget();
 
             async UniTask RefreshInventoryAsync()
             {
                 try
                 {
-                    _inventoryLoading.Value = LoadingFlag.Loading;
+                    _itemStacks.Value = LoadingState.Loading<List<ItemStackDto>>();
 
                     using var channel = GrpcChannelx.ForAddress(Constants.AUCY_URL);
                     var inventoryLayoutClient = MagicOnionClient.Create<IInventoryLayoutService>(channel)
@@ -54,29 +56,31 @@ namespace TradeArea.UI.AuctionInventory
                         PageSize = 1000
                     });
 
-                    _itemStacks.Clear();
                     if (inventoryDto != null && inventoryDto.ItemStacks != null)
                     {
+                        var itemsCollection = new List<ItemStackDto>();
+
                         foreach (var itemStack in inventoryDto.ItemStacks)
                         {
                             if (itemStack != null)
-                                _itemStacks.Add(itemStack);
+                                itemsCollection.Add(itemStack);
                             else
                                 FLogger.LogWarning<AuctionInventoryViewModel>("Null itemStack");
                         }
+
+                        _itemStacks.Value = LoadingState.Success(itemsCollection);
                     }
                     else
                     {
                         FLogger.LogWarning<AuctionInventoryViewModel>("Null inventory");
+                        _itemStacks.Value = LoadingState.Success<List<ItemStackDto>>(null);
                     }
-
-                    _inventoryLoading.Value = LoadingFlag.Success;
                 }
                 catch (Exception ex)
                 {
                     FLogger.LogError<AuctionInventoryViewModel>($"{nameof(RefreshInventoryAsync)}: {ex.Message}");
 
-                    _inventoryLoading.Value = LoadingFlag.Fail;
+                    _itemStacks.Value = LoadingState.Fail<List<ItemStackDto>>();
                 }
             }
         }
