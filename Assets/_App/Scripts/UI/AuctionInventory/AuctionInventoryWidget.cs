@@ -26,12 +26,12 @@ namespace TradeArea.UI.AuctionInventory
         {
             _disposables = new();
 
-            viewModel.RefreshInventory();
-
             _loadableList.ListView.bindItem = (x, i) =>
             {
                 var itemRow = x.Q<ItemConfigRow>(); // TODO: Replace with Element for ItemStack
-                itemRow.ItemName = ((ItemStackDto)_loadableList.ListView.itemsSource[i]).ItemConfig.Name;
+                var itemStack = (ItemStackDto)_loadableList.ListView.itemsSource[i];
+                
+                itemRow.ItemName = $"{itemStack.ItemConfig.Name} {itemStack.Quantity}";
             };
 
             viewModel.ItemStacks.Subscribe(_loadableList.OnLoadingStateChanged)

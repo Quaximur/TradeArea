@@ -56,6 +56,7 @@ namespace TradeArea.UI.Custom
                 case LoadingFlag.Success:
 
                     _listView.itemsSource = x.Value;
+                    _listView.Rebuild();
 
                     if (x.Value == null || x.Value.Count == 0)
                     {

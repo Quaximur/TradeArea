@@ -44,6 +44,8 @@ namespace TradeArea.UI.Auction
         {
             base.OnBind(viewModel);
 
+            viewModel.StartPolling();
+
             _disposables = new();
 
             _auctionSearchWidget.Bind(viewModel.AuctionSearchViewModel);
@@ -51,8 +53,6 @@ namespace TradeArea.UI.Auction
             _auctionLotsWidget.Bind(viewModel.AuctionLotsViewModel);
             _auctionBidsWidget.Bind(viewModel.AuctionBidsViewModel);
             // _auctionOrdersWidget.Bind(viewModel.AuctionOrdersViewModel);
-            
-            viewModel.StartPolling();
         }
 
         public override void Dispose()

@@ -7,7 +7,8 @@ namespace TradeArea.Data
 {
     public class AuctionModel
     {
-        public readonly ReactiveProperty<LoadingState<List<ItemConfigDto>>> OnMarketListChanged = new();
         public readonly ReactiveProperty<LoadingState<List<ItemStackDto>>> OnInventoryChanged = new();
+        public readonly ReactiveProperty<LoadingState<List<OwnLotDto>>> OnOwnLotsChanged = new();
+        public readonly ReactiveProperty<LoadingState<List<OwnBidDto>>> OnOwnBidsChanged = new();
     }
 }

@@ -1,14 +1,9 @@
-using System;
+using System.Collections.Generic;
 using System.Threading;
 using Aucy.Contracts.OnionClient;
-using Aucy.Contracts.OnionServer;
-using Cysharp.Threading.Tasks;
 using DevKit.UI.MVVM;
 using DevKit.Utils;
 using Grpc.Core;
-using MagicOnion;
-using MagicOnion.Client;
-using ObservableCollections;
 using R3;
 using TradeArea.Data;
 using TradeArea.Shared;
@@ -17,72 +12,76 @@ namespace TradeArea.UI.AuctionLots
 {
     public class AuctionLotsViewModel : BaseViewModel
     {
+        public Observable<LoadingState<List<OwnLotDto>>> OwnLots => _auctionModel.OnOwnLotsChanged;
+
+        private readonly AuctionModel _auctionModel;
         private readonly UserModel _userModel;
 
         private CancellationTokenSource _cts = new();
 
-        public AuctionLotsViewModel(UserModel userModel)
+        public AuctionLotsViewModel(UserModel userModel, AuctionModel auctionModel)
         {
             _userModel = userModel;
+            _auctionModel = auctionModel;
         }
 
-        public async UniTask<OwnLotsDto> GetOwnLotsAsync()
-        {
-            using var channel = GrpcChannelx.ForAddress(Constants.AUCY_URL);
-            var auctionClient = MagicOnionClient.Create<IOrderBookService>(channel)
-                .WithHeaders(GetAuthHeader())
-                .WithCancellationToken(_cts.Token);
+        // public async UniTask<OwnLotsDto> GetOwnLotsAsync()
+        // {
+        //     using var channel = GrpcChannelx.ForAddress(Constants.AUCY_URL);
+        //     var auctionClient = MagicOnionClient.Create<IOrderBookService>(channel)
+        //         .WithHeaders(GetAuthHeader())
+        //         .WithCancellationToken(_cts.Token);
 
-            return await auctionClient.GetOwnLots();
-        }
+        //     return await auctionClient.GetOwnLots();
+        // }
 
-        public async UniTask CreateLotAsync(Guid itemConfigId, long unitPrice, int quantity)
-        {
-            if (unitPrice <= 0 || quantity <= 0)
-            {
-                FLogger.Log<AuctionLotsViewModel>("Unit price and quantity must be greater than zero.");
-                return;
-            }
+        // public async UniTask CreateLotAsync(Guid itemConfigId, long unitPrice, int quantity)
+        // {
+        //     if (unitPrice <= 0 || quantity <= 0)
+        //     {
+        //         FLogger.Log<AuctionLotsViewModel>("Unit price and quantity must be greater than zero.");
+        //         return;
+        //     }
 
-            try
-            {
-                using var channel = GrpcChannelx.ForAddress(Constants.AUCY_URL);
-                var auctionClient = MagicOnionClient.Create<IOrderBookService>(channel)
-                    .WithHeaders(GetAuthHeader())
-                    .WithCancellationToken(_cts.Token);
+        //     try
+        //     {
+        //         using var channel = GrpcChannelx.ForAddress(Constants.AUCY_URL);
+        //         var auctionClient = MagicOnionClient.Create<IOrderBookService>(channel)
+        //             .WithHeaders(GetAuthHeader())
+        //             .WithCancellationToken(_cts.Token);
 
-                var lot = await auctionClient.CreateLot(new CreateLotDto(itemConfigId, unitPrice, quantity));
-                FLogger.Log<AuctionLotsViewModel>($"{_userModel.OnNameChanged.Value} listed {lot.RemainingQuantity} item(s) at {lot.UnitPrice}.");
-            }
-            catch (Exception ex)
-            {
-                FLogger.LogError<AuctionLotsViewModel>($"{nameof(CreateLotAsync)}: {ex.Message}");
-            }
-        }
+        //         var lot = await auctionClient.CreateLot(new CreateLotDto(itemConfigId, unitPrice, quantity));
+        //         FLogger.Log<AuctionLotsViewModel>($"{_userModel.OnNameChanged.Value} listed {lot.RemainingQuantity} item(s) at {lot.UnitPrice}.");
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         FLogger.LogError<AuctionLotsViewModel>($"{nameof(CreateLotAsync)}: {ex.Message}");
+        //     }
+        // }
 
-        public async UniTask CollectLotAsync(Guid lotId, int quantity)
-        {
-            if (quantity <= 0)
-            {
-                FLogger.Log<AuctionLotsViewModel>("Purchase quantity must be greater than zero.");
-                return;
-            }
+        // public async UniTask CollectLotAsync(Guid lotId, int quantity)
+        // {
+        //     if (quantity <= 0)
+        //     {
+        //         FLogger.Log<AuctionLotsViewModel>("Purchase quantity must be greater than zero.");
+        //         return;
+        //     }
 
-            try
-            {
-                using var channel = GrpcChannelx.ForAddress(Constants.AUCY_URL);
-                var auctionClient = MagicOnionClient.Create<IOrderBookService>(channel)
-                    .WithHeaders(GetAuthHeader())
-                    .WithCancellationToken(_cts.Token);
+        //     try
+        //     {
+        //         using var channel = GrpcChannelx.ForAddress(Constants.AUCY_URL);
+        //         var auctionClient = MagicOnionClient.Create<IOrderBookService>(channel)
+        //             .WithHeaders(GetAuthHeader())
+        //             .WithCancellationToken(_cts.Token);
 
-                await auctionClient.CollectLot(new CollectLotDto(lotId, quantity));
-                FLogger.Log<AuctionLotsViewModel>($"{_userModel.OnNameChanged.Value} purchased {quantity} item(s).");
-            }
-            catch (Exception ex)
-            {
-                FLogger.LogError<AuctionLotsViewModel>($"{nameof(CollectLotAsync)}: {ex.Message}");
-            }
-        }
+        //         await auctionClient.CollectLot(new CollectLotDto(lotId, quantity));
+        //         FLogger.Log<AuctionLotsViewModel>($"{_userModel.OnNameChanged.Value} purchased {quantity} item(s).");
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         FLogger.LogError<AuctionLotsViewModel>($"{nameof(CollectLotAsync)}: {ex.Message}");
+        //     }
+        // }
 
         private Metadata GetAuthHeader()
         {

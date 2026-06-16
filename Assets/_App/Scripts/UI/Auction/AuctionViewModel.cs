@@ -15,58 +15,9 @@ using Grpc.Core;
 using DevKit.Utils;
 using System.Threading;
 using System;
-using UnityEngine;
 
 namespace TradeArea.UI.Auction
 {
-    public class OrderHubReceiver : IOrderHubReceiver
-    {
-        public void OnBidCollected(BidCollectedDto bidCollected)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnBidCreated(BidCreatedDto bidCreated)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnBidRemoved(BidRemovedDto bidRemoved)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnBought(Guid bidId, int boughtQuantity, long extraMoney)
-        {
-            FLogger.Log("OnBought");
-        }
-
-        public void OnJoin(OwnLotsDto ownLots, OwnBidsDto ownBids, InventoryDto inventory)
-        {
-            FLogger.LogGood($"Auction pulled: {JsonUtility.ToJson(ownLots)} {JsonUtility.ToJson(ownBids)} {JsonUtility.ToJson(inventory)}");
-        }
-
-        public void OnLotCollected(LotCollectedDto lotCollected)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnLotCreated(LotCreatedDto lotCreated)
-        {
-            FLogger.LogGood($"Lot created: {lotCreated.LotId} {lotCreated.ItemConfig.Name}");
-        }
-
-        public void OnLotRemoved(LotRemovedDto lotRemoved)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnSold(Guid lotId, int soldQuantity, long extraMoney)
-        {
-            FLogger.Log("OnSold");
-        }
-    }
-
     public class AuctionViewModel : ScreenViewModel
     {
         public AuctionSearchViewModel AuctionSearchViewModel { get; private set; }
@@ -101,45 +52,43 @@ namespace TradeArea.UI.Auction
 
         public void StartPolling()
         {
-            GetMarketItemsAsync().Forget();
+            PollAuctionStateAsync().Forget();
 
-            async UniTaskVoid GetMarketItemsAsync()
+            async UniTaskVoid PollAuctionStateAsync()
             {
-                _auctionModel.OnMarketListChanged.Value = LoadingState.Loading<List<ItemConfigDto>>();
                 _auctionModel.OnInventoryChanged.Value = LoadingState.Loading<List<ItemStackDto>>();
+                _auctionModel.OnOwnLotsChanged.Value = LoadingState.Loading<List<OwnLotDto>>();
+                _auctionModel.OnOwnBidsChanged.Value = LoadingState.Loading<List<OwnBidDto>>();
 
                 try
                 {
                     _channel = GrpcChannelx.ForAddress(Constants.AUCY_URL);
-                    var receiver = new OrderHubReceiver();
-                    var client = await StreamingHubClient.ConnectAsync<IOrderHub, IOrderHubReceiver>(_channel, receiver, 
-                        cancellationToken: _cts.Token, 
+                    var receiver = new OrderHubReceiver(_auctionModel);
+                    var client = await StreamingHubClient.ConnectAsync<IOrderHub, IOrderHubReceiver>(_channel, receiver,
+                        cancellationToken: _cts.Token,
                         option: new CallOptions().WithHeaders(GetAuthHeader())).AsUniTask();
 
-                    // var searchClient = MagicOnionClient.Create<IItemSearchService>(channel)
-                    //     .WithHeaders(GetAuthHeader())
-                    //     .WithCancellationToken(_cts.Token);
-
-                    // var configs = await searchClient.GetItemConfigs(new GetItemConfigsDto(
-                    //     categoryPathFilter: null,
-                    //     nameFilter: null,
-                    //     rarity: null,
-                    //     minGrade: null,
-                    //     maxGrade: null,
-                    //     page: 1,
-                    //     pageSize: 100));
-
-                    // if (configs != null && configs.ItemConfigs != null)
-                    //     _auctionModel.OnMarketListChanged.Value = LoadingState.Success(configs.ItemConfigs);
-                    // else
-                    //     _auctionModel.OnMarketListChanged.Value = LoadingState.Success<List<ItemConfigDto>>(null);
+                    // TEST: create lot for bread after 5s
+                    UniTask.Create(async (_) =>
+                    {
+                        try
+                        {
+                            await UniTask.Delay(5000);
+                            await client.CreateLot(new CreateLotDto(Guid.Parse("00000000-0000-0000-0000-000000000001"), 3, 1));
+                        }
+                        catch (Exception ex)
+                        {
+                            FLogger.LogWarning($"Failed to create test lot. {ex.Message}");
+                        }
+                    }, cancellationToken: _cts.Token).Forget();
                 }
                 catch (Exception ex)
                 {
-                    FLogger.LogError<AuctionSearchViewModel>($"{nameof(GetMarketItemsAsync)}: {ex.Message}");
+                    FLogger.LogError<AuctionSearchViewModel>($"{nameof(PollAuctionStateAsync)}: {ex.Message}");
 
-                    _auctionModel.OnMarketListChanged.Value = LoadingState.Fail<List<ItemConfigDto>>();
                     _auctionModel.OnInventoryChanged.Value = LoadingState.Fail<List<ItemStackDto>>();
+                    _auctionModel.OnOwnLotsChanged.Value = LoadingState.Fail<List<OwnLotDto>>();
+                    _auctionModel.OnOwnBidsChanged.Value = LoadingState.Fail<List<OwnBidDto>>();
                 }
             }
         }
@@ -156,6 +105,7 @@ namespace TradeArea.UI.Auction
             AuctionOrdersViewModel?.Dispose();
 
             Disposes.ClearDispose(ref _channel);
+            Disposes.ClearDispose(ref _cts);
 
             base.Dispose();
         }
