@@ -51,6 +51,8 @@ namespace TradeArea.UI.Auction
             _auctionLotsWidget.Bind(viewModel.AuctionLotsViewModel);
             _auctionBidsWidget.Bind(viewModel.AuctionBidsViewModel);
             // _auctionOrdersWidget.Bind(viewModel.AuctionOrdersViewModel);
+            
+            viewModel.StartPolling();
         }
 
         public override void Dispose()

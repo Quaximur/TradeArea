@@ -1,3 +1,20 @@
 {
-	"name": "TradeArea.Gameplay"
+    "name": "TradeArea.Gameplay",
+    "rootNamespace": "",
+    "references": [
+        "GUID:8df849c1535de434aac23c92e1f09319",
+        "GUID:b0214a6008ed146ff8f122a6a9c2f6cc",
+        "GUID:77221876cc6b8244180b96e320b1bcd4",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:a63190350b668ee46863abba8e22716b"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

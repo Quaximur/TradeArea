@@ -46,6 +46,7 @@ namespace TradeArea.Infrastructure.Bootstraps
             builder.Register<AuctionLotsViewModel>(Lifetime.Transient);
             builder.Register<AuctionBidsViewModel>(Lifetime.Transient);
             builder.Register<AuctionOrdersViewModel>(Lifetime.Transient);
+            builder.Register<AuctionModel>(Lifetime.Singleton);
 
             builder.RegisterMVVM<AuctionView, AuctionViewModel>(_auctionViewPrefab);
 

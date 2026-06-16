@@ -16,56 +16,58 @@ namespace TradeArea.UI.AuctionSearch
 {
     public class AuctionSearchViewModel : BaseViewModel
     {
-        public Observable<LoadingState<List<ItemConfigDto>>> OnMarketListChanged => _onMarketListChanged;
+        public Observable<LoadingState<List<ItemConfigDto>>> OnMarketListChanged => _auctionModel.OnMarketListChanged;
 
+        private readonly AuctionModel _auctionModel;
         private readonly UserModel _userModel;
 
-        private readonly ReactiveProperty<LoadingState<List<ItemConfigDto>>> _onMarketListChanged = new();
+        // private readonly ReactiveProperty<LoadingState<List<ItemConfigDto>>> _onMarketListChanged = new();
 
         private CancellationTokenSource _cts = new();
 
-        public AuctionSearchViewModel(UserModel userModel)
+        public AuctionSearchViewModel(AuctionModel auctionModel, UserModel userModel)
         {
+            _auctionModel = auctionModel;
             _userModel = userModel;
         }
         
         public void UpdateMarketItems()
         {
-            if (_onMarketListChanged.Value.LoadingFlag != LoadingFlag.Loading)
-                GetMarketItemsAsync().Forget();
+            // if (_onMarketListChanged.Value.LoadingFlag != LoadingFlag.Loading)
+            //     GetMarketItemsAsync().Forget();
 
-            async UniTaskVoid GetMarketItemsAsync()
-            {
-                _onMarketListChanged.Value = LoadingState.Loading<List<ItemConfigDto>>();
+            // async UniTaskVoid GetMarketItemsAsync()
+            // {
+            //     _onMarketListChanged.Value = LoadingState.Loading<List<ItemConfigDto>>();
 
-                try
-                {
-                    using var channel = GrpcChannelx.ForAddress(Constants.AUCY_URL);
-                    var searchClient = MagicOnionClient.Create<IItemSearchService>(channel)
-                        .WithHeaders(GetAuthHeader())
-                        .WithCancellationToken(_cts.Token);
+            //     try
+            //     {
+            //         using var channel = GrpcChannelx.ForAddress(Constants.AUCY_URL);
+            //         var searchClient = MagicOnionClient.Create<IItemSearchService>(channel)
+            //             .WithHeaders(GetAuthHeader())
+            //             .WithCancellationToken(_cts.Token);
 
-                    var configs = await searchClient.GetItemConfigs(new GetItemConfigsDto(
-                        categoryPathFilter: null,
-                        nameFilter: null,
-                        rarity: null,
-                        minGrade: null,
-                        maxGrade: null,
-                        page: 1,
-                        pageSize: 100));
+            //         var configs = await searchClient.GetItemConfigs(new GetItemConfigsDto(
+            //             categoryPathFilter: null,
+            //             nameFilter: null,
+            //             rarity: null,
+            //             minGrade: null,
+            //             maxGrade: null,
+            //             page: 1,
+            //             pageSize: 100));
 
-                    if (configs != null && configs.ItemConfigs != null)
-                        _onMarketListChanged.Value = LoadingState.Success(configs.ItemConfigs);
-                    else
-                        _onMarketListChanged.Value = LoadingState.Success<List<ItemConfigDto>>(null);
-                }
-                catch (Exception ex)
-                {
-                    FLogger.LogError<AuctionSearchViewModel>($"{nameof(GetMarketItemsAsync)}: {ex.Message}");
+            //         if (configs != null && configs.ItemConfigs != null)
+            //             _onMarketListChanged.Value = LoadingState.Success(configs.ItemConfigs);
+            //         else
+            //             _onMarketListChanged.Value = LoadingState.Success<List<ItemConfigDto>>(null);
+            //     }
+            //     catch (Exception ex)
+            //     {
+            //         FLogger.LogError<AuctionSearchViewModel>($"{nameof(GetMarketItemsAsync)}: {ex.Message}");
 
-                    _onMarketListChanged.Value = LoadingState.Fail<List<ItemConfigDto>>();
-                }
-            }
+            //         _onMarketListChanged.Value = LoadingState.Fail<List<ItemConfigDto>>();
+            //     }
+            // }
         }
 
         private Metadata GetAuthHeader()
