@@ -28,7 +28,10 @@ namespace TradeArea.UI.AuctionBids
             _loadableList.ListView.bindItem = (x, i) =>
             {
                 var itemRow = x.Q<ItemConfigRow>(); // TODO: Replace with Element for ItemStack
-                itemRow.ItemName = ((OwnBidDto)_loadableList.ListView.itemsSource[i]).ItemConfig.Name;
+                var ownBid = (OwnBidDto)_loadableList.ListView.itemsSource[i];
+                var boughtQuantity = ownBid.BoughtQuantity;
+                itemRow.ItemName = $"{ownBid.ItemConfig.Name} | Bought: {boughtQuantity} | Orders: {ownBid.TotalQuantity}) | Fund: {ownBid.RemainingQuantity * ownBid.BidPrice}$";
+
             };
 
             viewModel.OwnBids.Subscribe(_loadableList.OnLoadingStateChanged)

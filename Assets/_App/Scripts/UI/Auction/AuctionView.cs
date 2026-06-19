@@ -44,7 +44,7 @@ namespace TradeArea.UI.Auction
         {
             base.OnBind(viewModel);
 
-            viewModel.StartPolling();
+            viewModel.StartMessaging();
 
             _disposables = new();
 

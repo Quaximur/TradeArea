@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using Aucy.Contracts.OnionClient;
+using Cysharp.Threading.Tasks;
 using DevKit.UI.MVVM;
 using DevKit.Utils;
 using Grpc.Core;
@@ -16,15 +18,55 @@ namespace TradeArea.UI.AuctionLots
 
         private readonly AuctionModel _auctionModel;
         private readonly UserModel _userModel;
+        private readonly OrderHubService _orderHubService;
 
         private CancellationTokenSource _cts = new();
 
-        public AuctionLotsViewModel(UserModel userModel, AuctionModel auctionModel)
+        public AuctionLotsViewModel(UserModel userModel, AuctionModel auctionModel, 
+            OrderHubService orderHubService)
         {
             _userModel = userModel;
             _auctionModel = auctionModel;
+            _orderHubService = orderHubService;
         }
 
+        public async UniTask TestRemoveLot(Guid lotId)
+        {
+            if (_orderHubService.OrderHub == null)
+            {
+                FLogger.LogWarning<AuctionLotsViewModel>("Order hub is null");
+                return;
+            }
+
+            try
+            {
+                await _orderHubService.OrderHub.RemoveLot(new RemoveLotDto(lotId))
+                    .AsUniTask()
+                    .AttachExternalCancellation(_cts.Token);
+            }
+            catch (Exception ex)
+            {
+                FLogger.LogWarning<AuctionLotsViewModel>($"Failed to test remove lot: {ex.Message} {ex.InnerException?.Message}");
+            }
+        }
+
+        public void CreateLot()
+        {
+
+            // TEST: create lot for bread after 5s
+            // UniTask.Create(async (_) =>
+            // {
+            //     try
+            //     {
+            //         await UniTask.Delay(5000);
+            //         await client.CreateBid(new CreateBidDto(Guid.Parse("00000000-0000-0000-0000-000000000001"), 4, 2));
+            //     }
+            //     catch (Exception ex)
+            //     {
+            //         FLogger.LogWarning($"Failed to create test lot. {ex.Message}");
+            //     }
+            // }, cancellationToken: _cts.Token).Forget();
+        }
         // public async UniTask<OwnLotsDto> GetOwnLotsAsync()
         // {
         //     using var channel = GrpcChannelx.ForAddress(Constants.AUCY_URL);

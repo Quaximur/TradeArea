@@ -1,4 +1,6 @@
+using System;
 using Aucy.Contracts.OnionClient;
+using Cysharp.Threading.Tasks;
 using DevKit.UI.MVVM;
 using DevKit.Utils;
 using R3;
@@ -16,6 +18,7 @@ namespace TradeArea.UI.AuctionInventory
 
         private CompositeDisposable _disposables;
 
+
         protected override void OnInit()
         {
             _loadableList = Root.Q<LoadableListViewWidget>(_loadableListViewWidgetName);
@@ -26,16 +29,29 @@ namespace TradeArea.UI.AuctionInventory
         {
             _disposables = new();
 
-            _loadableList.ListView.bindItem = (x, i) =>
+            _loadableList.ListView.bindItem = (e, i) =>
             {
-                var itemRow = x.Q<ItemConfigRow>(); // TODO: Replace with Element for ItemStack
+                var itemRow = e.Q<ItemConfigRow>(); // TODO: Replace with Element for ItemStack
                 var itemStack = (ItemStackDto)_loadableList.ListView.itemsSource[i];
-                
+
+                e.RegisterCallback<ClickEvent, Guid>(OnItemClicked, itemStack.ItemConfig.Id);
+
                 itemRow.ItemName = $"{itemStack.ItemConfig.Name} {itemStack.Quantity}";
+            };
+
+            _loadableList.ListView.unbindItem = (e, i) =>
+            {
+                e.UnregisterCallback<ClickEvent, Guid>(OnItemClicked);
             };
 
             viewModel.ItemStacks.Subscribe(_loadableList.OnLoadingStateChanged)
                 .AddTo(_disposables);
+        }
+
+        private void OnItemClicked(ClickEvent _, Guid itemId)
+        {
+            // Получаем ViewModel через поле класса или другим способом
+            ViewModel.TestSell(itemId).Forget();
         }
 
         public override void Dispose()

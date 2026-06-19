@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using Aucy.Contracts.OnionClient;
 using Aucy.Contracts.OnionServer;
 using Cysharp.Threading.Tasks;
@@ -24,13 +25,36 @@ namespace TradeArea.UI.AuctionInventory
 
         private readonly AuctionModel _auctionModel;
         private readonly UserModel _userModel;
+        private readonly OrderHubService _orderHubService;
 
         private CancellationTokenSource _cts = new();
 
-        public AuctionInventoryViewModel(AuctionModel auctionModel, UserModel userModel)
+        public AuctionInventoryViewModel(AuctionModel auctionModel, UserModel userModel, 
+            OrderHubService orderHubService)
         {
             _auctionModel = auctionModel;
             _userModel = userModel;
+            _orderHubService = orderHubService;
+        }
+
+        public async UniTask TestSell(Guid itemConfigId)
+        {
+            if (_orderHubService.OrderHub == null)
+            {
+                FLogger.LogWarning<AuctionInventoryViewModel>("Order hub is null");
+                return;
+            }
+
+            try
+            {
+                await _orderHubService.OrderHub.CreateLot(new CreateLotDto(itemConfigId, 2, 5))
+                    .AsUniTask()
+                    .AttachExternalCancellation(_cts.Token);
+            }
+            catch (Exception ex)
+            {
+                FLogger.LogWarning<AuctionInventoryViewModel>($"Failed to test sell: {ex.Message} {ex.InnerException?.Message}");
+            }
         }
 
         public void RefreshInventory()

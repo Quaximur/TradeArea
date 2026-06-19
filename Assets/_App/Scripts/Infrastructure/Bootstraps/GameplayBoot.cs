@@ -40,12 +40,14 @@ namespace TradeArea.Infrastructure.Bootstraps
 
             builder.Register<Subject<Unit>>(Lifetime.Singleton)
                 .Keyed(Constants.GAMEPLAY_RESTART_SIGNAL);
-                
+
             builder.Register<AuctionSearchViewModel>(Lifetime.Transient);
             builder.Register<AuctionInventoryViewModel>(Lifetime.Transient);
             builder.Register<AuctionLotsViewModel>(Lifetime.Transient);
             builder.Register<AuctionBidsViewModel>(Lifetime.Transient);
             builder.Register<AuctionOrdersViewModel>(Lifetime.Transient);
+            
+            builder.Register<OrderHubService>(Lifetime.Singleton);
             builder.Register<AuctionModel>(Lifetime.Singleton);
 
             builder.RegisterMVVM<AuctionView, AuctionViewModel>(_auctionViewPrefab);

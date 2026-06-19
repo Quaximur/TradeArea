@@ -6,7 +6,7 @@ using DevKit.Utils;
 using System;
 using System.Linq;
 
-namespace TradeArea.UI.Auction
+namespace TradeArea
 {
     public class OrderHubReceiver : IOrderHubReceiver
     {
@@ -65,7 +65,8 @@ namespace TradeArea.UI.Auction
                 remainingQuantity: lotCreated.TotalQuantity,
                 totalQuantity: lotCreated.TotalQuantity,
                 createdAt: default, // TODO: add CreatedAt
-                itemConfig: lotCreated.ItemConfig));
+                itemConfig: lotCreated.ItemConfig,
+                extraSoldoutMoney: 0));
 
             _auctionModel.OnOwnLotsChanged.OnNext(_auctionModel.OnOwnLotsChanged.Value); // TODO: notify for RefreshItems only
 
@@ -88,6 +89,49 @@ namespace TradeArea.UI.Auction
 
         public void OnLotRemoved(LotRemovedDto lotRemoved)
         {
+            FLogger.LogGood($"Lot removed: {lotRemoved.LotId} {lotRemoved.ItemConfig?.Name}");
+
+            // 1. Находим существующий стек с таким же ItemConfig в инвентаре
+            var existingStack = _auctionModel.OnInventoryChanged.Value.Value
+                .FirstOrDefault(x => x.ItemConfig.Id == lotRemoved.ItemConfig.Id);
+
+            if (existingStack != null)
+            {
+                // Если стек существует - увеличиваем количество
+                existingStack.Quantity += lotRemoved.RemovedQuantity;
+            }
+            else
+            {
+                // Если стека нет - создаем новый
+                var newStack = new ItemStackDto{
+                    ItemConfig = lotRemoved.ItemConfig,
+                    Quantity = lotRemoved.RemovedQuantity
+                };
+                _auctionModel.OnInventoryChanged.Value.Value.Add(newStack);
+            }
+
+            // 2. Обновляем UsedWeight
+            // _auctionModel.OnInventoryChanged.Value.UsedWeight +=
+            //     lotRemoved.ItemConfig.Weight * lotRemoved.RemovedQuantity;
+
+            // 3. Обновляем UsedCapacity (если был создан новый стек)
+            // if (existingStack == null)
+            // {
+            //     _auctionModel.OnInventoryChanged.Value.UsedCapacity += 1;
+            // }
+
+            // 4. Удаляем лот из списка своих лотов
+            var ownLot = _auctionModel.OnOwnLotsChanged.Value.Value
+                .FirstOrDefault(x => x.Id == lotRemoved.LotId);
+                
+            if (ownLot != null)
+            {
+                _auctionModel.OnOwnLotsChanged.Value.Value.Remove(ownLot);
+                _auctionModel.OnOwnLotsChanged.OnNext(_auctionModel.OnOwnLotsChanged.Value);
+            }
+
+            // 5. Уведомляем об изменении инвентаря
+            _auctionModel.OnInventoryChanged.OnNext(_auctionModel.OnInventoryChanged.Value);
         }
         #endregion
 

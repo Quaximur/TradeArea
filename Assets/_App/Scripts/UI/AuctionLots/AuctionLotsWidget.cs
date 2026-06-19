@@ -1,4 +1,6 @@
+using System;
 using Aucy.Contracts.OnionClient;
+using Cysharp.Threading.Tasks;
 using DevKit.UI.MVVM;
 using R3;
 using TradeArea.UI.Custom;
@@ -25,15 +27,30 @@ namespace TradeArea.UI.AuctionLots
         {
             _disposables = new();
 
-            _loadableList.ListView.bindItem = (x, i) =>
+            _loadableList.ListView.bindItem = (e, i) =>
             {
-                var itemRow = x.Q<ItemConfigRow>(); // TODO: Replace with Element for ItemStack
+                var itemRow = e.Q<ItemConfigRow>(); // TODO: Replace with Element for ItemStack
                 var ownLot = (OwnLotDto)_loadableList.ListView.itemsSource[i];
-                itemRow.ItemName = $"{ownLot.ItemConfig.Name} ({ownLot.RemainingQuantity}/{ownLot.TotalQuantity}) | {ownLot.UnitPrice} $";
+                var soldQuantity = ownLot.SoldQuantity;
+
+                e.RegisterCallback<ClickEvent, Guid>(OnItemClicked, ownLot.Id);
+
+                itemRow.ItemName = $"{ownLot.ItemConfig.Name} | Remaining: {ownLot.TotalQuantity} | Sold: {soldQuantity} | Price: {ownLot.UnitPrice}$ | Collect: ({soldQuantity * ownLot.UnitPrice} + {ownLot.ExtraSoldoutMoney})$";
+            };
+
+             _loadableList.ListView.unbindItem = (e, i) =>
+            {
+                e.UnregisterCallback<ClickEvent, Guid>(OnItemClicked);
             };
 
             viewModel.OwnLots.Subscribe(_loadableList.OnLoadingStateChanged)
                 .AddTo(_disposables);
+        }
+
+        private void OnItemClicked(ClickEvent _, Guid lotId)
+        {
+            // Получаем ViewModel через поле класса или другим способом
+            ViewModel.TestRemoveLot(lotId).Forget();
         }
     }
 }
