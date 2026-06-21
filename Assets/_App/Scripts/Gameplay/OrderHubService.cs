@@ -33,17 +33,19 @@ namespace TradeArea
 
             async UniTaskVoid StartMessagingAsync()
             {
-                try
+                while (!_cts.Token.IsCancellationRequested)
                 {
-                    while (true)
+                    try
                     {
                         _auctionModel.OnInventoryChanged.Value = LoadingState.Loading<List<ItemStackDto>>();
                         _auctionModel.OnOwnLotsChanged.Value = LoadingState.Loading<List<OwnLotDto>>();
                         _auctionModel.OnOwnBidsChanged.Value = LoadingState.Loading<List<OwnBidDto>>();
 
+                        Disposes.ClearDispose(ref _channel);
                         _channel = GrpcChannelx.ForAddress(Constants.AUCY_URL);
                         var receiver = new OrderHubReceiver(_auctionModel);
-                        OrderHub = await StreamingHubClient.ConnectAsync<IOrderHub, IOrderHubReceiver>(_channel, receiver,
+                        OrderHub = await StreamingHubClient.ConnectAsync<IOrderHub, IOrderHubReceiver>(
+                            _channel, receiver,
                             cancellationToken: _cts.Token,
                             option: new CallOptions().WithHeaders(GetAuthHeader())).AsUniTask();
 
@@ -54,25 +56,32 @@ namespace TradeArea
                         if (disconnect.Type == DisconnectionType.CompletedNormally)
                         {
                             FLogger.LogGood<OrderHubService>("DisconnectionType.CompletedNormally");
-                            break;
+                            return; // intentional disconnect, stop retrying
                         }
-                        else
-                        {
-                            FLogger.LogWarning<OrderHubService>(disconnect.Type.ToString());
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    FLogger.LogError<OrderHubService>($"{nameof(StartMessagingAsync)}: {ex.Message}");
 
-                    _auctionModel.OnInventoryChanged.Value = LoadingState.Fail<List<ItemStackDto>>();
-                    _auctionModel.OnOwnLotsChanged.Value = LoadingState.Fail<List<OwnLotDto>>();
-                    _auctionModel.OnOwnBidsChanged.Value = LoadingState.Fail<List<OwnBidDto>>();
+                        FLogger.LogWarning<OrderHubService>($"Disconnected: {disconnect.Type}, retrying...");
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        return; // _cts was cancelled, exit cleanly
+                    }
+                    catch (Exception ex)
+                    {
+                        FLogger.LogError<OrderHubService>($"{nameof(StartMessagingAsync)}: {ex.Message}");
+
+                        _auctionModel.OnInventoryChanged.Value = LoadingState.Fail<List<ItemStackDto>>();
+                        _auctionModel.OnOwnLotsChanged.Value = LoadingState.Fail<List<OwnLotDto>>();
+                        _auctionModel.OnOwnBidsChanged.Value = LoadingState.Fail<List<OwnBidDto>>();
+                    }
+
+                    // Wait before retrying (won't delay if token is cancelled)
+                    if (_cts != null)
+                        await UniTask.Delay(TimeSpan.FromSeconds(3), cancellationToken: _cts.Token)
+                            .SuppressCancellationThrow();
                 }
             }
         }
-
+        
         private Metadata GetAuthHeader()
         {
             return new Metadata { { "authorization", $"Bearer {_userModel.OnTokenChanged.Value}" } };
