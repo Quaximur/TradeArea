@@ -47,6 +47,7 @@
     padding-left: 0;
     font-size: 18px;
     color: rgb(255, 255, 255);
+    min-width: 160px;
 }
 
 .item-config-row:hover {
@@ -56,5 +57,3 @@
     border-top-color: rgb(233, 233, 233);
     border-bottom-color: rgb(233, 233, 233);
 }
-
-

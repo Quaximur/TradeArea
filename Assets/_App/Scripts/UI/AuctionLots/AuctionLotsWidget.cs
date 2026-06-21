@@ -12,6 +12,8 @@ namespace TradeArea.UI.AuctionLots
     public partial class AuctionLotsWidget : ToolkitWidget<AuctionLotsViewModel>
     {
         [UxmlAttribute] private string _loadableListViewWidgetName = null;
+        [UxmlAttribute] private int _lotMarginTop = 2;
+        [UxmlAttribute] private int _lotPaddingTop = 4;
 
         private LoadableListViewWidget _loadableList;
 
@@ -26,11 +28,21 @@ namespace TradeArea.UI.AuctionLots
         protected override void OnBind(AuctionLotsViewModel viewModel)
         {
             _disposables = new();
+
+            _loadableList.ListView.makeItem = () =>
+            {
+                var row = new OwnLotRow();
+                return row;
+            };
+            
             _loadableList.ListView.bindItem = (e, i) =>
             {
-                var ownLotRow = e.Q<OwnLotRow>();
+                var ownLotRow = (OwnLotRow)e;
+                ownLotRow.style.marginTop = _lotMarginTop;
+                ownLotRow.style.paddingTop = _lotPaddingTop;
+
                 var ownLot = (OwnLotDto)_loadableList.ListView.itemsSource[i];
-                var soldQuantity = ownLot?.SoldQuantity ?? 0;
+                var soldQuantity = ownLot.SoldQuantity;
 
                 ownLotRow.CollectButton.RegisterCallback<ClickEvent, Guid>(OnCollectClicked, ownLot.Id);
                 ownLotRow.RemoveButton.RegisterCallback<ClickEvent, Guid>(OnRemoveClicked, ownLot.Id);
@@ -52,9 +64,9 @@ namespace TradeArea.UI.AuctionLots
 
             _loadableList.ListView.unbindItem = (e, i) =>
            {
-               var ownLotRow = e?.Q<OwnLotRow>();
-               ownLotRow?.CollectButton?.UnregisterCallback<ClickEvent, Guid>(OnCollectClicked);
-               ownLotRow?.RemoveButton?.UnregisterCallback<ClickEvent, Guid>(OnRemoveClicked);
+               var ownLotRow = (OwnLotRow)e;
+               ownLotRow.CollectButton?.UnregisterCallback<ClickEvent, Guid>(OnCollectClicked);
+               ownLotRow.RemoveButton?.UnregisterCallback<ClickEvent, Guid>(OnRemoveClicked);
            };
 
             viewModel.OwnLots.Subscribe(_loadableList.OnLoadingStateChanged)

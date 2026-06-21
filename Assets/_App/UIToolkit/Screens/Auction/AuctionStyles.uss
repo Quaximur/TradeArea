@@ -494,3 +494,8 @@
     align-items: center;
     color: rgb(255, 255, 255);
 }
+/* 
+.auction__market-list > .unity-scroll-view > .unity-scroll-view__content-and-vertical-scroll-container > .unity-scroll-view__content-viewport > .unity-scroll-view__content-container > .unity-collection-view__item {
+    margin-top: 2px;
+    padding-top: 4px;
+} */

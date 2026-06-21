@@ -111,10 +111,27 @@ namespace TradeArea.Infrastructure.Bootstraps
                     WeightLimit = 10000
                 });
 
+                // TEST
                 await inventoryClient.AddItemStack(new AddItemStackDto
                 {
                     ItemConfig = new ItemConfigDto(
                     id: Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                        name: "bread",
+                        isUnary: false,
+                        icon: "bread",
+                        grade: null,
+                        rarity: 0,
+                        weight: 0.1f,
+                        baseType: "consumable",
+                        extra: null,
+                        categoryPath: "food"),
+                    Quantity = Random.Range(500, 1001)
+                });
+
+                await inventoryClient.AddItemStack(new AddItemStackDto
+                {
+                    ItemConfig = new ItemConfigDto(
+                    id: Guid.Parse("00000000-0000-0000-0000-000000000002"),
                         name: "bread",
                         isUnary: false,
                         icon: "bread",

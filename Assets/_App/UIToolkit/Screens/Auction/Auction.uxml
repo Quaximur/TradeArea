@@ -20,7 +20,9 @@
                                     <ui:Label text="ItemConfig Items For Sale" class="auction__user-title"/>
                                     <ui:Button name="RefreshMarket" text="Refresh" class="auction__button auction__button-primary" style="position: absolute; right: 0; top: 0;"/>
                                 </ui:VisualElement>
-                                <ui:Instance template="LoadableListView" name="LoadableListView" style="flex-grow: 1;"/>
+                                <ui:Instance template="LoadableListView" name="LoadableListView" style="flex-grow: 1;">
+                                    <AttributeOverrides element-name="ListView" item-template="project://database/Assets/_App/UIToolkit/Components/ItemConfigRow/ItemConfigRow.uxml?fileID=9197481963319205126&amp;guid=bc9bf92e06cc9164ab7a60b8824f9616&amp;type=3#ItemConfigRow"/>
+                                </ui:Instance>
                             </ui:VisualElement>
                         </TradeArea.UI.AuctionSearch.AuctionSearchWidget>
                     </ui:Tab>
@@ -36,6 +38,7 @@
                                             </ui:VisualElement>
                                             <ui:Instance template="LoadableListView" name="LoadableListView" class="auction__panel-main" style="flex-grow: 1;">
                                                 <AttributeOverrides element-name="NoItemsLabel" text="No Bids found."/>
+                                                <AttributeOverrides element-name="ListView" item-template="project://database/Assets/_App/UIToolkit/Components/ItemConfigRow/ItemConfigRow.uxml?fileID=9197481963319205126&amp;guid=bc9bf92e06cc9164ab7a60b8824f9616&amp;type=3#ItemConfigRow"/>
                                             </ui:Instance>
                                         </TradeArea.UI.AuctionBids.AuctionBidsWidget>
                                     </ui:Tab>
@@ -47,7 +50,6 @@
                                             </ui:VisualElement>
                                             <ui:Instance template="LoadableListView" name="LoadableListView" class="auction__panel-main" style="flex-grow: 1;">
                                                 <AttributeOverrides element-name="NoItemsLabel" text="No Lots found."/>
-                                                <AttributeOverrides element-name="ListView" item-template="project://database/Assets/_App/UIToolkit/Components/OwnLotRow/OwnLotRow.uxml?fileID=9197481963319205126&amp;guid=bc901e5fc5f9fcb4ebdf4ec795632b70&amp;type=3#OwnLotRow"/>
                                             </ui:Instance>
                                         </TradeArea.UI.AuctionLots.AuctionLotsWidget>
                                     </ui:Tab>
@@ -67,7 +69,9 @@
                                             <ui:Button name="RemoveMoney" text="Remove Money" class="auction__button auction__wallet-button-right"/>
                                         </ui:VisualElement>
                                     </ui:VisualElement>
-                                    <ui:Instance template="LoadableListView" name="LoadableListView" class="auction__panel-main" style="flex-grow: 1; padding-top: 6px; padding-right: 6px; padding-bottom: 6px; padding-left: 6px;"/>
+                                    <ui:Instance template="LoadableListView" name="LoadableListView" class="auction__panel-main" style="flex-grow: 1; padding-top: 6px; padding-right: 6px; padding-bottom: 6px; padding-left: 6px;">
+                                        <AttributeOverrides element-name="ListView" item-template="project://database/Assets/_App/UIToolkit/Components/ItemConfigRow/ItemConfigRow.uxml?fileID=9197481963319205126&amp;guid=bc9bf92e06cc9164ab7a60b8824f9616&amp;type=3#ItemConfigRow"/>
+                                    </ui:Instance>
                                 </ui:VisualElement>
                             </TradeArea.UI.AuctionInventory.AuctionInventoryWidget>
                         </ui:VisualElement>
