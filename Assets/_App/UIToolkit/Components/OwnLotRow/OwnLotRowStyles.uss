@@ -11,6 +11,14 @@
     border-bottom-left-radius: 4px;
 }
 
+.own-lot-row:hover {
+    background-color: rgb(40, 48, 63);
+    border-left-color: rgb(233, 233, 233);
+    border-right-color: rgb(233, 233, 233);
+    border-top-color: rgb(233, 233, 233);
+    border-bottom-color: rgb(233, 233, 233);
+}
+
 .own-lot-row__stats {
     flex-direction: row;
     flex-grow: 1;
