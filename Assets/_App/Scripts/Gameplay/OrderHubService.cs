@@ -33,7 +33,7 @@ namespace TradeArea
 
             async UniTaskVoid StartMessagingAsync()
             {
-                while (!_cts.Token.IsCancellationRequested)
+                while (_cts != null && !_cts.Token.IsCancellationRequested)
                 {
                     try
                     {
@@ -81,7 +81,7 @@ namespace TradeArea
                 }
             }
         }
-        
+
         private Metadata GetAuthHeader()
         {
             return new Metadata { { "authorization", $"Bearer {_userModel.OnTokenChanged.Value}" } };

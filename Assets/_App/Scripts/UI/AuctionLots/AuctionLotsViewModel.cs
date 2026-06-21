@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Aucy.Contracts.OnionClient;
 using Cysharp.Threading.Tasks;
@@ -22,7 +23,7 @@ namespace TradeArea.UI.AuctionLots
 
         private CancellationTokenSource _cts = new();
 
-        public AuctionLotsViewModel(UserModel userModel, AuctionModel auctionModel, 
+        public AuctionLotsViewModel(UserModel userModel, AuctionModel auctionModel,
             OrderHubService orderHubService)
         {
             _userModel = userModel;
@@ -50,56 +51,28 @@ namespace TradeArea.UI.AuctionLots
             }
         }
 
-        public void CreateLot()
+        public async UniTask CollectLot(Guid lotId)
         {
+            if (_orderHubService.OrderHub == null)
+            {
+                FLogger.LogWarning<AuctionLotsViewModel>("Order hub is null");
+                return;
+            }
 
-            // TEST: create lot for bread after 5s
-            // UniTask.Create(async (_) =>
-            // {
-            //     try
-            //     {
-            //         await UniTask.Delay(5000);
-            //         await client.CreateBid(new CreateBidDto(Guid.Parse("00000000-0000-0000-0000-000000000001"), 4, 2));
-            //     }
-            //     catch (Exception ex)
-            //     {
-            //         FLogger.LogWarning($"Failed to create test lot. {ex.Message}");
-            //     }
-            // }, cancellationToken: _cts.Token).Forget();
+            try
+            {
+                await _orderHubService.OrderHub
+                    .CollectLot(new CollectLotDto(lotId,
+                        _auctionModel.OnOwnLotsChanged.Value.Value.FirstOrDefault(x => x.Id == lotId).SoldQuantity))
+                    .AsUniTask()
+                    .AttachExternalCancellation(_cts.Token);
+            }
+            catch (Exception ex)
+            {
+                FLogger.LogWarning<AuctionLotsViewModel>($"Failed to test remove lot: {ex.Message} {ex.InnerException?.Message}");
+            }
         }
-        // public async UniTask<OwnLotsDto> GetOwnLotsAsync()
-        // {
-        //     using var channel = GrpcChannelx.ForAddress(Constants.AUCY_URL);
-        //     var auctionClient = MagicOnionClient.Create<IOrderBookService>(channel)
-        //         .WithHeaders(GetAuthHeader())
-        //         .WithCancellationToken(_cts.Token);
 
-        //     return await auctionClient.GetOwnLots();
-        // }
-
-        // public async UniTask CreateLotAsync(Guid itemConfigId, long unitPrice, int quantity)
-        // {
-        //     if (unitPrice <= 0 || quantity <= 0)
-        //     {
-        //         FLogger.Log<AuctionLotsViewModel>("Unit price and quantity must be greater than zero.");
-        //         return;
-        //     }
-
-        //     try
-        //     {
-        //         using var channel = GrpcChannelx.ForAddress(Constants.AUCY_URL);
-        //         var auctionClient = MagicOnionClient.Create<IOrderBookService>(channel)
-        //             .WithHeaders(GetAuthHeader())
-        //             .WithCancellationToken(_cts.Token);
-
-        //         var lot = await auctionClient.CreateLot(new CreateLotDto(itemConfigId, unitPrice, quantity));
-        //         FLogger.Log<AuctionLotsViewModel>($"{_userModel.OnNameChanged.Value} listed {lot.RemainingQuantity} item(s) at {lot.UnitPrice}.");
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         FLogger.LogError<AuctionLotsViewModel>($"{nameof(CreateLotAsync)}: {ex.Message}");
-        //     }
-        // }
 
         // public async UniTask CollectLotAsync(Guid lotId, int quantity)
         // {

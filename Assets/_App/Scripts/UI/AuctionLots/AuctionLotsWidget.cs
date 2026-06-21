@@ -12,11 +12,11 @@ namespace TradeArea.UI.AuctionLots
     public partial class AuctionLotsWidget : ToolkitWidget<AuctionLotsViewModel>
     {
         [UxmlAttribute] private string _loadableListViewWidgetName = null;
-        
+
         private LoadableListViewWidget _loadableList;
 
         private CompositeDisposable _disposables;
-        
+
         protected override void OnInit()
         {
             _loadableList = Root.Q<LoadableListViewWidget>(_loadableListViewWidgetName);
@@ -26,31 +26,51 @@ namespace TradeArea.UI.AuctionLots
         protected override void OnBind(AuctionLotsViewModel viewModel)
         {
             _disposables = new();
-
             _loadableList.ListView.bindItem = (e, i) =>
             {
-                var itemRow = e.Q<ItemConfigRow>(); // TODO: Replace with Element for ItemStack
+                var ownLotRow = e.Q<OwnLotRow>();
                 var ownLot = (OwnLotDto)_loadableList.ListView.itemsSource[i];
-                var soldQuantity = ownLot.SoldQuantity;
+                var soldQuantity = ownLot?.SoldQuantity ?? 0;
 
-                e.RegisterCallback<ClickEvent, Guid>(OnItemClicked, ownLot.Id);
+                ownLotRow.CollectButton.RegisterCallback<ClickEvent, Guid>(OnCollectClicked, ownLot.Id);
+                ownLotRow.RemoveButton.RegisterCallback<ClickEvent, Guid>(OnRemoveClicked, ownLot.Id);
 
-                itemRow.ItemName = $"{ownLot.ItemConfig.Name} | Remaining: {ownLot.TotalQuantity} | Sold: {soldQuantity} | Price: {ownLot.UnitPrice}$ | Collect: ({soldQuantity * ownLot.UnitPrice} + {ownLot.ExtraSoldoutMoney})$";
+                ownLotRow.ItemName = ownLot.ItemConfig.Name;
+                // itemRow.ItemIcon = ownLot.ItemConfig.Icon;
+
+                ownLotRow.SetStats(
+                    soldQuantity: soldQuantity.ToString(),
+                    totalQuantity: ownLot.TotalQuantity.ToString(),
+                    unitPrice: ownLot.UnitPrice.ToString(),
+                    extraSoldoutMoney: ownLot.ExtraSoldoutMoney.ToString(),
+                    revenue: (soldQuantity * ownLot.UnitPrice + ownLot.ExtraSoldoutMoney).ToString()
+                );
+
+                ownLotRow.SetCollectButtonEnabled(soldQuantity > 0);
+                ownLotRow.SetRemoveButtonEnabled(soldQuantity < ownLot.TotalQuantity);
             };
 
-             _loadableList.ListView.unbindItem = (e, i) =>
-            {
-                e.UnregisterCallback<ClickEvent, Guid>(OnItemClicked);
-            };
+            _loadableList.ListView.unbindItem = (e, i) =>
+           {
+               var ownLotRow = e?.Q<OwnLotRow>();
+               ownLotRow?.CollectButton?.UnregisterCallback<ClickEvent, Guid>(OnCollectClicked);
+               ownLotRow?.RemoveButton?.UnregisterCallback<ClickEvent, Guid>(OnRemoveClicked);
+           };
 
             viewModel.OwnLots.Subscribe(_loadableList.OnLoadingStateChanged)
                 .AddTo(_disposables);
         }
 
-        private void OnItemClicked(ClickEvent _, Guid lotId)
+        private void OnRemoveClicked(ClickEvent _, Guid lotId)
         {
             // Получаем ViewModel через поле класса или другим способом
             ViewModel.TestRemoveLot(lotId).Forget();
+        }
+
+        private void OnCollectClicked(ClickEvent _, Guid lotId)
+        {
+            // Получаем ViewModel через поле класса или другим способом
+            ViewModel.CollectLot(lotId).Forget();
         }
     }
 }

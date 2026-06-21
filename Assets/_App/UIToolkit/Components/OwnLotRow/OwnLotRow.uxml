@@ -1,0 +1,5 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/_App/UIToolkit/Components/ItemConfigRow/ItemConfigRowStyles.uss?fileID=7433441132597879392&amp;guid=827830abc29ad854187e50730af72bfc&amp;type=3#ItemConfigRowStyles"/>
+    <Style src="project://database/Assets/_App/UIToolkit/Components/OwnLotRow/OwnLotRowStyles.uss?fileID=7433441132597879392&amp;guid=d1ba5087345cc154f9fa8dbc7243ee81&amp;type=3#OwnLotRowStyles"/>
+    <TradeArea.UI.Custom.OwnLotRow total-quantity-description="Total" sold-quantity-description="Sold" item-name="ITEM_NAME"/>
+</ui:UXML>
