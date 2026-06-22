@@ -15,28 +15,28 @@ namespace TradeArea.UI.OrderBook
 {
     public class OrderBookViewModel : ScreenViewModel
     {
-        private readonly AuctionModel _auctionModel;
-        private readonly OrderHubService _orderHubService;
-
-        // Currently displayed item — set externally before opening the window
-        public Observable<ItemConfigDto> ItemConfig => _itemConfig;
-        private readonly ReactiveProperty<ItemConfigDto> _itemConfig = new();
-
-        // Latest order book snapshot from the stream
-        public Observable<RawItemListingDto> OrderBook => _orderBook;
-        private readonly ReactiveProperty<RawItemListingDto> _orderBook = new();
-
-        // True while the stream connection is being established
         public Observable<bool> IsLoading => _isLoading;
-        private readonly ReactiveProperty<bool> _isLoading = new(false);
+        public Observable<string> Error => _error;
+        public Observable<ItemConfigDto> ItemConfig => _itemConfig;
+        public Observable<RawItemListingDto> OrderBook => _orderBook;
 
         // Non-null when the stream has faulted
-        public Observable<string> Error => _error;
         private readonly ReactiveProperty<string> _error = new();
 
-        private CancellationTokenSource _streamCts;
+        // True while the stream connection is being established
+        private readonly ReactiveProperty<bool> _isLoading = new(false);
 
+        // Currently displayed item — set externally before opening the window
+        private readonly ReactiveProperty<ItemConfigDto> _itemConfig = new();
+        
+        // Latest order book snapshot from the stream
+        private readonly ReactiveProperty<RawItemListingDto> _orderBook = new();
+
+        private readonly AuctionModel _auctionModel;
+        private readonly OrderHubService _orderHubService;
         private readonly UserModel _userModel;
+     
+        private CancellationTokenSource _streamCts;
 
         public OrderBookViewModel(AuctionModel auctionModel,
             UserModel userModel,
@@ -51,7 +51,7 @@ namespace TradeArea.UI.OrderBook
         /// Call this before showing the window. Cancels any existing stream and
         /// starts a new one for the supplied item.
         /// </summary>
-        public void SetItem(ItemConfigDto itemConfig)
+        public void StartItemStreaming(ItemConfigDto itemConfig)
         {
             _itemConfig.Value = itemConfig;
             StartStreamAsync(itemConfig.Id).Forget();

@@ -80,7 +80,7 @@ namespace TradeArea.UI.AuctionSearch
             FLogger.Log<AuctionSearchViewModel>($"Opening {nameof(OrderBookView)} for itemConfigId: {itemConfig.Id}");
             
             var buyingViewModel = _buyingBinder.Open();
-            buyingViewModel.SetItem(itemConfig);
+            buyingViewModel.StartItemStreaming(itemConfig);
         }
 
         private Metadata GetAuthHeader()
