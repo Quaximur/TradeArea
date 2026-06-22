@@ -495,7 +495,3 @@
 
 .auction__base-list {
 }
-
-.auction__base-list .auction__market-list .unity-list-view__item:hover {
-    background-color: rgba(0, 0, 0, 0);
-}

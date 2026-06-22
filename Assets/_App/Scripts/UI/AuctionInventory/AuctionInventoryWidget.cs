@@ -13,7 +13,7 @@ namespace TradeArea.UI.AuctionInventory
     public partial class AuctionInventoryWidget : ToolkitWidget<AuctionInventoryViewModel>
     {
         [UxmlAttribute] private string _loadableListViewWidgetName = null;
-        [UxmlAttribute] private int _lotMarginTop = 2;
+        [UxmlAttribute] private int _lotMarginTop = 4;
         [UxmlAttribute] private int _lotPaddingTop = 4;
 
         private LoadableListViewWidget _loadableList;
@@ -42,7 +42,7 @@ namespace TradeArea.UI.AuctionInventory
                 var itemRow = (ItemConfigRow)e; // TODO: Replace with Element for ItemStack
                 itemRow.style.marginTop = _lotMarginTop;
                 itemRow.style.paddingTop = _lotPaddingTop;
-                
+
                 var itemStack = (ItemStackDto)_loadableList.ListView.itemsSource[i];
 
                 e.RegisterCallback<ClickEvent, Guid>(OnItemClicked, itemStack.ItemConfig.Id);

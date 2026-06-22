@@ -1,6 +1,6 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <TradeArea.UI.Custom.LoadableListViewWidget name="LoadableListView" style="flex-grow: 1;">
-        <ui:ListView name="ListView" allow-add="false" allow-remove="false" selection-type="None" show-bound-collection-size="false" fixed-item-height="72" class="auction__market-list"/>
+        <ui:ListView name="ListView" allow-add="false" allow-remove="false" selection-type="None" show-bound-collection-size="false" virtualization-method="FixedHeight" fixed-item-height="72" class="auction__market-list"/>
         <ui:VisualElement name="LoadingContainer" class="auction__state-container">
             <ui:Label text="Loading..." name="LoadingLabel"/>
         </ui:VisualElement>

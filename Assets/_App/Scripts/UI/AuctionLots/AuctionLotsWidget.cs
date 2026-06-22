@@ -12,7 +12,7 @@ namespace TradeArea.UI.AuctionLots
     public partial class AuctionLotsWidget : ToolkitWidget<AuctionLotsViewModel>
     {
         [UxmlAttribute] private string _loadableListViewWidgetName = null;
-        [UxmlAttribute] private int _lotMarginTop = 2;
+        [UxmlAttribute] private int _lotMarginTop = 4;
         [UxmlAttribute] private int _lotPaddingTop = 4;
 
         private LoadableListViewWidget _loadableList;
