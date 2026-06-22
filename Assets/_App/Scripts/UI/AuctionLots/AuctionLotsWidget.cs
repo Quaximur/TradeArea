@@ -75,12 +75,12 @@ namespace TradeArea.UI.AuctionLots
 
         private void OnRemoveClicked(ClickEvent _, Guid lotId)
         {
-            ViewModel.TestRemoveLot(lotId).Forget();
+            ViewModel.RemoveLotAsync(lotId).Forget();
         }
 
         private void OnCollectClicked(ClickEvent _, Guid lotId)
         {
-            ViewModel.CollectLot(lotId).Forget();
+            ViewModel.CollectLotAsync(lotId).Forget();
         }
     }
 }

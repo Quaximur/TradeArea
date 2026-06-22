@@ -4,6 +4,7 @@ using R3;
 using DevKit.Utils;
 using TradeArea.UI.Custom;
 using Aucy.Contracts.OnionClient;
+using System;
 
 namespace TradeArea.UI.AuctionSearch
 {
@@ -24,7 +25,7 @@ namespace TradeArea.UI.AuctionSearch
         {
             _loadableList = Root.Q<LoadableListViewWidget>(_loadableListViewWidgetName);
             _loadableList.Init();
-            
+
             _refreshMarketButton = Root.Q<Button>(_refreshMarketButtonName);
 
             _loadableList.ListView.makeItem = () =>
@@ -33,14 +34,27 @@ namespace TradeArea.UI.AuctionSearch
                 return row;
             };
 
-            _loadableList.ListView.bindItem = (x, i) =>
+            _loadableList.ListView.bindItem = (e, i) =>
             {
-                var itemRow = (ItemConfigRow)x;
+                var itemRow = (ItemConfigRow)e;
                 itemRow.style.marginTop = _lotMarginTop;
                 itemRow.style.paddingTop = _lotPaddingTop;
 
-                itemRow.ItemName = ((ItemConfigDto)_loadableList.ListView.itemsSource[i]).Name;
+                var itemConfig = (ItemConfigDto)_loadableList.ListView.itemsSource[i];
+                e.RegisterCallback<ClickEvent, Guid>(OnItemClicked, itemConfig.Id);
+
+                itemRow.ItemName = itemConfig.Name;
             };
+
+            _loadableList.ListView.unbindItem = (e, i) =>
+            {
+                e.UnregisterCallback<ClickEvent, Guid>(OnItemClicked);
+            };
+        }
+
+        private void OnItemClicked(ClickEvent _, Guid itemConfigId)
+        {
+            ViewModel.OpenBuyingView(itemConfigId);
         }
 
         protected override void OnBind(AuctionSearchViewModel viewModel)

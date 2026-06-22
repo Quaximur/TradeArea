@@ -31,7 +31,7 @@ namespace TradeArea.UI.AuctionLots
             _orderHubService = orderHubService;
         }
 
-        public async UniTask TestRemoveLot(Guid lotId)
+        public async UniTask RemoveLotAsync(Guid lotId)
         {
             if (_orderHubService.OrderHub == null)
             {
@@ -51,7 +51,7 @@ namespace TradeArea.UI.AuctionLots
             }
         }
 
-        public async UniTask CollectLot(Guid lotId)
+        public async UniTask CollectLotAsync(Guid lotId)
         {
             if (_orderHubService.OrderHub == null)
             {
@@ -71,36 +71,6 @@ namespace TradeArea.UI.AuctionLots
             {
                 FLogger.LogWarning<AuctionLotsViewModel>($"Failed to test remove lot: {ex.Message} {ex.InnerException?.Message}");
             }
-        }
-
-
-        // public async UniTask CollectLotAsync(Guid lotId, int quantity)
-        // {
-        //     if (quantity <= 0)
-        //     {
-        //         FLogger.Log<AuctionLotsViewModel>("Purchase quantity must be greater than zero.");
-        //         return;
-        //     }
-
-        //     try
-        //     {
-        //         using var channel = GrpcChannelx.ForAddress(Constants.AUCY_URL);
-        //         var auctionClient = MagicOnionClient.Create<IOrderBookService>(channel)
-        //             .WithHeaders(GetAuthHeader())
-        //             .WithCancellationToken(_cts.Token);
-
-        //         await auctionClient.CollectLot(new CollectLotDto(lotId, quantity));
-        //         FLogger.Log<AuctionLotsViewModel>($"{_userModel.OnNameChanged.Value} purchased {quantity} item(s).");
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         FLogger.LogError<AuctionLotsViewModel>($"{nameof(CollectLotAsync)}: {ex.Message}");
-        //     }
-        // }
-
-        private Metadata GetAuthHeader()
-        {
-            return new Metadata { { "authorization", $"Bearer {_userModel.OnTokenChanged.Value}" } };
         }
 
         public override void Dispose()

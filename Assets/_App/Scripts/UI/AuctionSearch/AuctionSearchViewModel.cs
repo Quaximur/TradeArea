@@ -11,6 +11,7 @@ using MagicOnion.Client;
 using R3;
 using TradeArea.Data;
 using TradeArea.Shared;
+using TradeArea.UI.AuctionBuying;
 
 namespace TradeArea.UI.AuctionSearch
 {
@@ -68,6 +69,11 @@ namespace TradeArea.UI.AuctionSearch
                     _onMarketListChanged.Value = LoadingState.Fail<List<ItemConfigDto>>();
                 }
             }
+        }
+
+        public void OpenBuyingView(Guid itemConfigId)
+        {
+            FLogger.Log<AuctionSearchViewModel>($"Opening {nameof(AuctionBuyingView)} for itemConfigId: {itemConfigId}");
         }
 
         private Metadata GetAuthHeader()

@@ -5,7 +5,6 @@ using Aucy.Contracts.OnionClient;
 using Cysharp.Threading.Tasks;
 using DevKit.UI.MVVM;
 using DevKit.Utils;
-using Grpc.Core;
 using R3;
 using TradeArea.Data;
 using TradeArea.Shared;
@@ -27,17 +26,12 @@ namespace TradeArea.UI.AuctionBids
             _auctionModel = auctionModel;
         }
 
-        public async UniTask RemoveBid(Guid bidId)
+        public async UniTask RemoveBidAsync(Guid bidId)
         {
         }
 
-        public async UniTask CollectBid(Guid bidId)
+        public async UniTask CollectBidAsync(Guid bidId)
         {
-        }
-
-        private Metadata GetAuthHeader()
-        {
-            return new Metadata { { "authorization", $"Bearer {_userModel.OnTokenChanged.Value}" } };
         }
 
         public override void Dispose()

@@ -173,7 +173,7 @@ namespace TradeArea.UI.Custom
             _bidPriceLabel.text          = bidPrice;
             _remainingQuantityLabel.text = remainingQuantity;
 
-            _refundFormulaLabel.text = $"{remainingQuantity} * {bidPrice} =";
+            _refundFormulaLabel.text = $"{remainingQuantity} * {bidPrice} ="; // TODO: remove it
             _refundValueLabel.text   = $"{refund}$";
         }
 
