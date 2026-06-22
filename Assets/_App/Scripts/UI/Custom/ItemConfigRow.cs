@@ -34,6 +34,7 @@ namespace TradeArea.UI.Custom
         private Sprite _itemIcon;
 
         private readonly Label _nameLabel;
+        protected readonly VisualElement _startContainer;
         private readonly VisualElement _iconElement;
 
         public ItemConfigRow()
@@ -45,9 +46,13 @@ namespace TradeArea.UI.Custom
             _iconElement.AddToClassList("item-config-row__icon");
             Add(_iconElement);
 
+            _startContainer = new VisualElement();
+            _startContainer.AddToClassList("item-config-row__start-container");
+            Add(_startContainer);
+            
             _nameLabel = new Label(_itemName);
             _nameLabel.AddToClassList("item-config-row__name");
-            Add(_nameLabel);
+            _startContainer.Add(_nameLabel);
         }
     }
 }

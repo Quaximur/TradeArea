@@ -59,8 +59,6 @@ namespace TradeArea.UI.Custom
         private readonly Label _totalQuantityLabel;
         private readonly Label _unitPriceLabel;
         private readonly Label _extraSoldoutMoneyLabel;
-
-        // Revenue gets its own emphasized label, separate from the formula
         private readonly Label _revenueLabel;
         private readonly Label _revenueFormulaLabel;
 
@@ -73,10 +71,10 @@ namespace TradeArea.UI.Custom
         {
             AddToClassList("own-lot-row");
 
-            // ── Left: sold/total block (sits below name, injected into base) ─
+            // Sold / Total inline row (left block, below name)
             var quantityRow = new VisualElement();
             quantityRow.AddToClassList("own-lot-row__quantity-row");
-            Add(quantityRow);
+            _startContainer.Add(quantityRow);
 
             (_soldQuantityDescLabel, _soldQuantityLabel) =
                 CreateInlineCell(quantityRow, "own-lot-row__sold");
@@ -88,17 +86,17 @@ namespace TradeArea.UI.Custom
             (_totalQuantityDescLabel, _totalQuantityLabel) =
                 CreateInlineCell(quantityRow, "own-lot-row__total");
 
-            // ── Divider ───────────────────────────────────────────────────────
+            // Vertical divider
             var divider = new VisualElement();
             divider.AddToClassList("own-lot-row__divider");
             Add(divider);
 
-            // ── Middle: price + revenue block ─────────────────────────────────
+            // Middle block — fixed width, not flex-grow
             var middleBlock = new VisualElement();
             middleBlock.AddToClassList("own-lot-row__middle");
             Add(middleBlock);
 
-            // Top row: unit price | extra soldout money
+            // Top: Unit Price + Bonus
             var middleTop = new VisualElement();
             middleTop.AddToClassList("own-lot-row__middle-top");
             middleBlock.Add(middleTop);
@@ -109,7 +107,7 @@ namespace TradeArea.UI.Custom
             (_extraSoldoutMoneyDescLabel, _extraSoldoutMoneyLabel) =
                 CreateStatCell(middleTop, "own-lot-row__stat--extra-soldout-money");
 
-            // Bottom row: revenue formula + emphasized total
+            // Bottom: Revenue formula + emphasized value
             var revenueRow = new VisualElement();
             revenueRow.AddToClassList("own-lot-row__revenue-row");
             middleBlock.Add(revenueRow);
@@ -126,7 +124,12 @@ namespace TradeArea.UI.Custom
             _revenueLabel.AddToClassList("own-lot-row__revenue-value");
             revenueRow.Add(_revenueLabel);
 
-            // ── Buttons ───────────────────────────────────────────────────────
+            // Spacer — pushes buttons to the right edge
+            var spacer = new VisualElement();
+            spacer.AddToClassList("own-lot-row__spacer");
+            Add(spacer);
+
+            // Buttons
             var buttonGroup = new VisualElement();
             buttonGroup.AddToClassList("own-lot-row__button-group");
             Add(buttonGroup);
@@ -165,15 +168,12 @@ namespace TradeArea.UI.Custom
             _unitPriceLabel.text         = unitPrice;
             _extraSoldoutMoneyLabel.text = extraSoldoutMoney;
 
-            // Formula left side: "0 * 2$ + 0$  ="
-            _revenueFormulaLabel.text = $"{soldQuantity} * {unitPrice} + {extraSoldoutMoney}  =";
-            // Emphasized total: "0$"
+            _revenueFormulaLabel.text = $"{soldQuantity} * {unitPrice} + {extraSoldoutMoney} =";
             _revenueLabel.text        = $"{revenue}$";
         }
 
         // ── Helpers ───────────────────────────────────────────────────────────
 
-        /// <summary>Desc label above, value label below — for middle block stats.</summary>
         private static (Label descLabel, Label valueLabel) CreateStatCell(
             VisualElement container, string modifierClass)
         {
@@ -193,7 +193,6 @@ namespace TradeArea.UI.Custom
             return (desc, value);
         }
 
-        /// <summary>Desc + value side by side — for the compact sold/total row.</summary>
         private static (Label descLabel, Label valueLabel) CreateInlineCell(
             VisualElement container, string modifierClass)
         {

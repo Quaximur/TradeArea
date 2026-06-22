@@ -1,12 +1,6 @@
-/* ── ItemConfigRow ───────────────────────────────────────────────────────────
-   Base row used by OwnLotRow, LotRow, and any future list item rows.
-   Palette is consistent with AuctionStyles.uss.
-   ────────────────────────────────────────────────────────────────────────── */
-
 .item-config-row {
     flex-direction: row;
     align-items: center;
-    min-height: 58px;
     background-color: rgb(27, 33, 43);
     border-width: 1px;
     border-color: rgb(49, 58, 73);
@@ -14,15 +8,17 @@
     border-top-right-radius: 6px;
     border-bottom-right-radius: 6px;
     border-bottom-left-radius: 6px;
-    padding-top: 7px;
-    padding-right: 7px;
-    padding-bottom: 7px;
-    padding-left: 7px;
+    padding-top: 4px;
+    padding-right: 4px;
+    padding-bottom: 4px;
+    padding-left: 4px;
     margin-top: 2px;
     margin-bottom: 2px;
-    /* Smooth hover transition */
     transition-property: background-color, border-color;
     transition-duration: 0.12s;
+    height: 72px;
+    margin-right: 2px;
+    margin-left: 2px;
 }
 
 .item-config-row:hover {
@@ -30,29 +26,23 @@
     border-color: rgb(80, 95, 115);
 }
 
-/* ── Icon slot ───────────────────────────────────────────────────────────── */
-
 .item-config-row__icon {
     flex-shrink: 0;
-    width: 40px;
-    height: 40px;
+    height: 100%;
     background-color: rgb(17, 21, 28);
     border-width: 1px;
     border-color: rgb(65, 76, 94);
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-    border-bottom-right-radius: 6px;
-    border-bottom-left-radius: 6px;
-    /* Inner shadow feel — slightly lighter center for icon readability */
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
     -unity-background-scale-mode: scale-to-fit;
+    aspect-ratio: 1;
 }
-
-/* ── Name label ──────────────────────────────────────────────────────────── */
 
 .item-config-row__name {
     flex-shrink: 0;
     min-width: 160px;
-    margin-left: 10px;
     padding-top: 0;
     padding-right: 0;
     padding-bottom: 0;
@@ -61,4 +51,9 @@
     -unity-font-style: bold;
     color: rgb(220, 230, 242);
     -unity-text-align: middle-left;
+}
+
+.item-config-row__start-container {
+    margin-left: 10px;
+    min-width: 300px;
 }

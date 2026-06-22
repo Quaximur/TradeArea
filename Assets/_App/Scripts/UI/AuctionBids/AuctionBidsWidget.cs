@@ -10,6 +10,8 @@ namespace TradeArea.UI.AuctionBids
     public partial class AuctionBidsWidget : ToolkitWidget<AuctionBidsViewModel>
     {
         [UxmlAttribute] private string _loadableListViewWidgetName = null;
+        [UxmlAttribute] private int _lotMarginTop = 2;
+        [UxmlAttribute] private int _lotPaddingTop = 4;
 
         private LoadableListViewWidget _loadableList;
 
@@ -34,6 +36,9 @@ namespace TradeArea.UI.AuctionBids
             _loadableList.ListView.bindItem = (x, i) =>
             {
                 var itemRow = (ItemConfigRow)x; // TODO: Replace with Element for ItemStack
+                itemRow.style.marginTop = _lotMarginTop;
+                itemRow.style.paddingTop = _lotPaddingTop;
+                
                 var ownBid = (OwnBidDto)_loadableList.ListView.itemsSource[i];
                 var boughtQuantity = ownBid.BoughtQuantity;
                 itemRow.ItemName = $"{ownBid.ItemConfig.Name} | Bought: {boughtQuantity} | Orders: {ownBid.TotalQuantity}) | Fund: {ownBid.RemainingQuantity * ownBid.BidPrice}$";
