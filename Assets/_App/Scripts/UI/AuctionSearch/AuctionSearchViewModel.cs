@@ -75,12 +75,12 @@ namespace TradeArea.UI.AuctionSearch
             }
         }
 
-        public void OpenBuyingView(Guid itemConfigId)
+        public void OpenBuyingView(ItemConfigDto itemConfig)
         {
-            FLogger.Log<AuctionSearchViewModel>($"Opening {nameof(AuctionBuyingView)} for itemConfigId: {itemConfigId}");
+            FLogger.Log<AuctionSearchViewModel>($"Opening {nameof(AuctionBuyingView)} for itemConfigId: {itemConfig.Id}");
             
             var buyingViewModel = _buyingBinder.Open();
-            // TODO: bind config to buyingViewModel
+            buyingViewModel.SetItem(itemConfig);
         }
 
         private Metadata GetAuthHeader()

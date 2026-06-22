@@ -64,7 +64,7 @@ namespace TradeArea
                 unitPrice: lotCreated.UnitPrice,
                 remainingQuantity: lotCreated.TotalQuantity,
                 totalQuantity: lotCreated.TotalQuantity,
-                createdAt: default, // TODO: add CreatedAt
+                createdAt: lotCreated.CreatedAt,
                 itemConfig: lotCreated.ItemConfig,
                 extraSoldoutMoney: 0));
 
@@ -85,6 +85,7 @@ namespace TradeArea
 
         public void OnLotCollected(LotCollectedDto lotCollected)
         {
+            FLogger.LogGood($"Lot collected, but UI change is not implemented yet)");
         }
 
         public void OnLotRemoved(LotRemovedDto lotRemoved)
@@ -103,7 +104,8 @@ namespace TradeArea
             else
             {
                 // Если стека нет - создаем новый
-                var newStack = new ItemStackDto{
+                var newStack = new ItemStackDto
+                {
                     ItemConfig = lotRemoved.ItemConfig,
                     Quantity = lotRemoved.RemovedQuantity
                 };
@@ -123,7 +125,7 @@ namespace TradeArea
             // 4. Удаляем лот из списка своих лотов
             var ownLot = _auctionModel.OnOwnLotsChanged.Value.Value
                 .FirstOrDefault(x => x.Id == lotRemoved.LotId);
-                
+
             if (ownLot != null)
             {
                 _auctionModel.OnOwnLotsChanged.Value.Value.Remove(ownLot);
@@ -138,14 +140,42 @@ namespace TradeArea
         #region Bids
         public void OnBidCreated(BidCreatedDto bidCreated)
         {
+            FLogger.LogGood($"Bid created: {bidCreated.BidId} {bidCreated.ItemConfig.Name}");
+
+            _auctionModel.OnOwnBidsChanged.Value.Value.Add(new OwnBidDto(id: bidCreated.BidId,
+                bidderUserId: default,
+                itemConfigId: bidCreated.ItemConfig.Id,
+                bidPrice: bidCreated.BidPrice,
+                remainingQuantity: bidCreated.TotalQuantity,
+                totalQuantity: bidCreated.TotalQuantity,
+                createdAt: bidCreated.CreatedAt,
+                itemConfig: bidCreated.ItemConfig));
+
+            _auctionModel.OnOwnBidsChanged.OnNext(_auctionModel.OnOwnBidsChanged.Value); // TODO: notify for RefreshItems only
+
+            // TODO: decrease Money
         }
 
         public void OnBidCollected(BidCollectedDto bidCollected)
         {
+            FLogger.LogGood($"Bid collected, but UI change is not implemented yet)");
         }
 
         public void OnBidRemoved(BidRemovedDto bidRemoved)
         {
+            FLogger.LogGood($"Bid removed: {bidRemoved.BidId}. Money returned: {bidRemoved.ReturningMoney}");
+
+            // 1. Удаляем ставку из списка своих лотов
+            var ownBid = _auctionModel.OnOwnBidsChanged.Value.Value
+                .FirstOrDefault();
+
+            if (_auctionModel.OnOwnBidsChanged.Value.Value.TryRemoveFirstWhere(x => x.Id == bidRemoved.BidId))
+                _auctionModel.OnOwnBidsChanged.OnNext(_auctionModel.OnOwnBidsChanged.Value);
+            else
+                FLogger.LogWarning("Bid for removing not found");
+
+            // 2. Возвращаем деньги
+            // TODO: add Money
         }
         #endregion
 

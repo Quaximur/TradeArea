@@ -114,11 +114,35 @@ namespace TradeArea.Infrastructure.Installers
                 });
 
                 FLogger.LogGood($"Inventory has been created (Capacity: {inventoryDto.Capacity}, WeightLimit: {inventoryDto.WeightLimit}).");
-
+                await AddMoneyAsync(10000, token);
             }
             catch (Exception ex)
             {
                 FLogger.LogError($"No Inventory has been created. {ex.Message}");
+            }
+        }
+
+        public async UniTask AddMoneyAsync(long amount, string token)
+        {
+            if (amount <= 0)
+            {
+                FLogger.Log<AuctionInventoryViewModel>("Funds amount must be greater than zero.");
+                return;
+            }
+
+            try
+            {
+                using var channel = GrpcChannelx.ForAddress(Constants.AUCY_URL);
+                var inventoryClient = MagicOnionClient.Create<IInventoryService>(channel)
+                    .WithHeaders(new Metadata { { "authorization", $"Bearer {token}" } })
+                    .WithCancellationToken(_cts.Token);
+
+                await inventoryClient.AddMoney(amount);
+                FLogger.LogGood<AuctionInventoryViewModel>($"Added {amount} funds with token {token}.");
+            }
+            catch (Exception ex)
+            {
+                FLogger.LogError($"{nameof(AddMoneyAsync)}: {ex.Message}");
             }
         }
 

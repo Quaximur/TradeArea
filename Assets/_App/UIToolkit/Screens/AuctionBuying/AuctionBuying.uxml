@@ -1,8 +1,53 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/_App/UIToolkit/Screens/AuctionBuying/AuctionBuyingStyles.uss?fileID=7433441132597879392&amp;guid=69d87f026db37ec4680a17fefbe1e46a&amp;type=3#AuctionBuyingStyles"/>
-    <ui:VisualElement name="AuctionBuyingWrapper" style="flex-grow: 1; justify-content: center; align-items: center; background-color: rgba(0, 0, 0, 0.235);">
-        <ui:VisualElement name="AuctionBuyingPanel" style="flex-grow: 0; width: 1000px; height: 800px; background-color: rgba(0, 0, 0, 0.725);">
-            <ui:Button text="X" name="CloseButton" style="align-self: flex-end;"/>
+    <ui:VisualElement name="Root" class="buying-window__root">
+        <ui:VisualElement class="buying-window__header">
+            <ui:Label name="ItemName" text="—" class="buying-window__item-name"/>
+            <ui:Label name="ItemCategory" text="—" class="buying-window__item-category"/>
         </ui:VisualElement>
+        <ui:VisualElement class="buying-window__body">
+            <ui:VisualElement class="buying-window__book">
+                <ui:Label name="LoadingLabel" text="Loading order book…" class="buying-window__state-label" style="display: none;"/>
+                <ui:Label name="ErrorLabel" text="" class="buying-window__state-label buying-window__state-label--error" style="display: none;"/>
+                <ui:VisualElement class="buying-window__book-columns">
+                    <ui:VisualElement class="buying-window__book-panel">
+                        <ui:VisualElement class="buying-window__book-header">
+                            <ui:Label text="Price" class="buying-window__book-header-cell"/>
+                            <ui:Label text="Quantity" class="buying-window__book-header-cell buying-window__book-header-cell--right"/>
+                        </ui:VisualElement>
+                        <ui:ScrollView name="LotsBook" vertical-scroller-visibility="Hidden" class="buying-window__book-scroll"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="buying-window__book-divider"/>
+                    <ui:VisualElement class="buying-window__book-panel">
+                        <ui:VisualElement class="buying-window__book-header">
+                            <ui:Label text="Price" class="buying-window__book-header-cell"/>
+                            <ui:Label text="Quantity" class="buying-window__book-header-cell buying-window__book-header-cell--right"/>
+                        </ui:VisualElement>
+                        <ui:ScrollView name="BidsBook" vertical-scroller-visibility="Hidden" class="buying-window__book-scroll"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement class="buying-window__forms">
+                <ui:VisualElement class="buying-window__form">
+                    <ui:Label text="Place Buy Order" class="buying-window__form-title"/>
+                    <ui:Label text="Quantity" class="buying-window__field-label"/>
+                    <ui:TextField name="BuyQuantity" value="1" class="buying-window__input"/>
+                    <ui:Label text="Bid Price" class="buying-window__field-label"/>
+                    <ui:TextField name="BuyPrice" value="0" class="buying-window__input"/>
+                    <ui:Label name="BuyTotal" text="Total: —" class="buying-window__total-label"/>
+                    <ui:Button name="PlaceBidButton" text="Place Bid" class="buying-window__button buying-window__button--bid"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="buying-window__form">
+                    <ui:Label text="Place Sell Order" class="buying-window__form-title"/>
+                    <ui:Label text="Quantity" class="buying-window__field-label"/>
+                    <ui:TextField name="SellQuantity" value="1" class="buying-window__input"/>
+                    <ui:Label text="Unit Price" class="buying-window__field-label"/>
+                    <ui:TextField name="SellPrice" value="0" class="buying-window__input"/>
+                    <ui:Label name="SellTotal" text="Total: —" class="buying-window__total-label"/>
+                    <ui:Button name="PlaceLotButton" text="Place Lot" class="buying-window__button buying-window__button--lot"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:Button text="X" name="CloseButton" style="position: absolute; align-self: flex-end;"/>
     </ui:VisualElement>
 </ui:UXML>

@@ -6,7 +6,6 @@ using Aucy.Contracts.OnionClient;
 using Cysharp.Threading.Tasks;
 using DevKit.UI.MVVM;
 using DevKit.Utils;
-using Grpc.Core;
 using R3;
 using TradeArea.Data;
 using TradeArea.Shared;
@@ -61,6 +60,8 @@ namespace TradeArea.UI.AuctionLots
 
             try
             {
+                // TODO: take quantity from PopUp
+
                 await _orderHubService.OrderHub
                     .CollectLot(new CollectLotDto(lotId,
                         _auctionModel.OnOwnLotsChanged.Value.Value.FirstOrDefault(x => x.Id == lotId).SoldQuantity))

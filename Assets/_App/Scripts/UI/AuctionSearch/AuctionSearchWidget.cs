@@ -41,20 +41,20 @@ namespace TradeArea.UI.AuctionSearch
                 itemRow.style.paddingTop = _lotPaddingTop;
 
                 var itemConfig = (ItemConfigDto)_loadableList.ListView.itemsSource[i];
-                e.RegisterCallback<ClickEvent, Guid>(OnItemClicked, itemConfig.Id);
+                e.RegisterCallback<ClickEvent, ItemConfigDto>(OnItemClicked, itemConfig);
 
                 itemRow.ItemName = itemConfig.Name;
             };
 
             _loadableList.ListView.unbindItem = (e, i) =>
             {
-                e.UnregisterCallback<ClickEvent, Guid>(OnItemClicked);
+                e.UnregisterCallback<ClickEvent, ItemConfigDto>(OnItemClicked);
             };
         }
 
-        private void OnItemClicked(ClickEvent _, Guid itemConfigId)
+        private void OnItemClicked(ClickEvent _, ItemConfigDto itemConfig)
         {
-            ViewModel.OpenBuyingView(itemConfigId);
+            ViewModel.OpenBuyingView(itemConfig);
         }
 
         protected override void OnBind(AuctionSearchViewModel viewModel)

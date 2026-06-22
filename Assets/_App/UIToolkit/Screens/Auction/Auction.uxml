@@ -3,6 +3,7 @@
     <Style src="project://database/Assets/_App/UIToolkit/Screens/Auction/AuctionStyles.uss?fileID=7433441132597879392&amp;guid=654d3c2fc88cc6f4ea822268e7d374d5&amp;type=3#AuctionStyles"/>
     <Style src="project://database/Assets/_App/UIToolkit/Components/ItemConfigRow/ItemConfigRowStyles.uss?fileID=7433441132597879392&amp;guid=827830abc29ad854187e50730af72bfc&amp;type=3#ItemConfigRowStyles"/>
     <Style src="project://database/Assets/_App/UIToolkit/Components/OwnLotRow/OwnLotRowStyles.uss?fileID=7433441132597879392&amp;guid=d1ba5087345cc154f9fa8dbc7243ee81&amp;type=3#OwnLotRowStyles"/>
+    <Style src="project://database/Assets/_App/UIToolkit/Components/OwnBidRow/OwnBidRowStyles.uss?fileID=7433441132597879392&amp;guid=236c3f1b6a8b1e44dabceb42911b59ca&amp;type=3#OwnBidRowStyles"/>
     <ui:VisualElement name="AuctionWrapper" class="auction__wrapper">
         <ui:VisualElement name="AuctionPanel" class="auction__panel">
             <ui:VisualElement name="AuctionHeader" class="auction__header">

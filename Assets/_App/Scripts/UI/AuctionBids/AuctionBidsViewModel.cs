@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Aucy.Contracts.OnionClient;
 using Cysharp.Threading.Tasks;
@@ -17,21 +18,60 @@ namespace TradeArea.UI.AuctionBids
 
         private readonly AuctionModel _auctionModel;
         private readonly UserModel _userModel;
+        private readonly OrderHubService _orderHubService;
 
         private CancellationTokenSource _cts = new();
 
-        public AuctionBidsViewModel(UserModel userModel, AuctionModel auctionModel)
+        public AuctionBidsViewModel(UserModel userModel, AuctionModel auctionModel,
+            OrderHubService orderHubService)
         {
             _userModel = userModel;
             _auctionModel = auctionModel;
+            _orderHubService = orderHubService;
         }
 
         public async UniTask RemoveBidAsync(Guid bidId)
         {
+            if (_orderHubService.OrderHub == null)
+            {
+                FLogger.LogWarning<AuctionBidsViewModel>("Order hub is null");
+                return;
+            }
+
+            try
+            {
+                await _orderHubService.OrderHub.RemoveBid(new RemoveBidDto(bidId))
+                    .AsUniTask()
+                    .AttachExternalCancellation(_cts.Token);
+            }
+            catch (Exception ex)
+            {
+                FLogger.LogWarning<AuctionBidsViewModel>($"Failed to remove bid: {ex.Message} {ex.InnerException?.Message}");
+            }
         }
 
         public async UniTask CollectBidAsync(Guid bidId)
         {
+            if (_orderHubService.OrderHub == null)
+            {
+                FLogger.LogWarning<AuctionBidsViewModel>("Order hub is null");
+                return;
+            }
+
+            try
+            {
+                // TODO: take quantity from PopUp
+                
+                await _orderHubService.OrderHub
+                    .CollectBid(new CollectBidDto(bidId,
+                        _auctionModel.OnOwnBidsChanged.Value.Value.FirstOrDefault(x => x.Id == bidId).BoughtQuantity))
+                    .AsUniTask()
+                    .AttachExternalCancellation(_cts.Token);
+            }
+            catch (Exception ex)
+            {
+                FLogger.LogWarning<AuctionBidsViewModel>($"Failed to test remove lot: {ex.Message} {ex.InnerException?.Message}");
+            }
         }
 
         public override void Dispose()
