@@ -25,9 +25,15 @@ namespace TradeArea.UI.AuctionBids
         {
             _disposables = new();
 
+            _loadableList.ListView.makeItem = () =>
+            {
+                var row = new ItemConfigRow();
+                return row;
+            };
+
             _loadableList.ListView.bindItem = (x, i) =>
             {
-                var itemRow = x.Q<ItemConfigRow>(); // TODO: Replace with Element for ItemStack
+                var itemRow = (ItemConfigRow)x; // TODO: Replace with Element for ItemStack
                 var ownBid = (OwnBidDto)_loadableList.ListView.itemsSource[i];
                 var boughtQuantity = ownBid.BoughtQuantity;
                 itemRow.ItemName = $"{ownBid.ItemConfig.Name} | Bought: {boughtQuantity} | Orders: {ownBid.TotalQuantity}) | Fund: {ownBid.RemainingQuantity * ownBid.BidPrice}$";

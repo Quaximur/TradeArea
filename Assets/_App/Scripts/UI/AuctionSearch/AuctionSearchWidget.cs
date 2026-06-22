@@ -25,9 +25,15 @@ namespace TradeArea.UI.AuctionSearch
             
             _refreshMarketButton = Root.Q<Button>(_refreshMarketButtonName);
 
+            _loadableList.ListView.makeItem = () =>
+            {
+                var row = new ItemConfigRow();
+                return row;
+            };
+
             _loadableList.ListView.bindItem = (x, i) =>
             {
-                var itemRow = x.Q<ItemConfigRow>();
+                var itemRow = (ItemConfigRow)x;
                 itemRow.ItemName = ((ItemConfigDto)_loadableList.ListView.itemsSource[i]).Name;
             };
         }

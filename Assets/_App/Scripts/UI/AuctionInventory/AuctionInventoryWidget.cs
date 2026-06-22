@@ -29,9 +29,15 @@ namespace TradeArea.UI.AuctionInventory
         {
             _disposables = new();
 
+            _loadableList.ListView.makeItem = () =>
+            {
+                var row = new ItemConfigRow();
+                return row;
+            };
+
             _loadableList.ListView.bindItem = (e, i) =>
             {
-                var itemRow = e.Q<ItemConfigRow>(); // TODO: Replace with Element for ItemStack
+                var itemRow = (ItemConfigRow)e; // TODO: Replace with Element for ItemStack
                 var itemStack = (ItemStackDto)_loadableList.ListView.itemsSource[i];
 
                 e.RegisterCallback<ClickEvent, Guid>(OnItemClicked, itemStack.ItemConfig.Id);

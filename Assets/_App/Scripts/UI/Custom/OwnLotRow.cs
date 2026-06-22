@@ -8,6 +8,8 @@ namespace TradeArea.UI.Custom
         public Button CollectButton => _collectButton;
         public Button RemoveButton => _removeButton;
 
+        // ── Inspector-editable descriptions ───────────────────────────────────
+
         [UxmlAttribute]
         public string SoldQuantityDescription
         {
@@ -43,86 +45,137 @@ namespace TradeArea.UI.Custom
             set => _revenueDescLabel.text = value;
         }
 
-        // Description labels (set via inspector)
+        // ── Description labels (inspector) ────────────────────────────────────
+
         private readonly Label _soldQuantityDescLabel;
         private readonly Label _totalQuantityDescLabel;
         private readonly Label _unitPriceDescLabel;
         private readonly Label _extraSoldoutMoneyDescLabel;
         private readonly Label _revenueDescLabel;
 
-        // Value labels (set at runtime)
+        // ── Value labels (runtime) ────────────────────────────────────────────
+
         private readonly Label _soldQuantityLabel;
         private readonly Label _totalQuantityLabel;
         private readonly Label _unitPriceLabel;
         private readonly Label _extraSoldoutMoneyLabel;
+
+        // Revenue gets its own emphasized label, separate from the formula
         private readonly Label _revenueLabel;
+        private readonly Label _revenueFormulaLabel;
 
         private readonly Button _collectButton;
         private readonly Button _removeButton;
+
+        // ── Constructor ───────────────────────────────────────────────────────
 
         public OwnLotRow() : base()
         {
             AddToClassList("own-lot-row");
 
-            var statsContainer = new VisualElement();
-            statsContainer.AddToClassList("own-lot-row__stats");
-            Add(statsContainer);
+            // ── Left: sold/total block (sits below name, injected into base) ─
+            var quantityRow = new VisualElement();
+            quantityRow.AddToClassList("own-lot-row__quantity-row");
+            Add(quantityRow);
 
             (_soldQuantityDescLabel, _soldQuantityLabel) =
-                CreateStatCell(statsContainer, "own-lot-row__stat--sold-quantity");
+                CreateInlineCell(quantityRow, "own-lot-row__sold");
+
+            var slash = new Label("/");
+            slash.AddToClassList("own-lot-row__slash");
+            quantityRow.Add(slash);
 
             (_totalQuantityDescLabel, _totalQuantityLabel) =
-                CreateStatCell(statsContainer, "own-lot-row__stat--total-quantity");
+                CreateInlineCell(quantityRow, "own-lot-row__total");
+
+            // ── Divider ───────────────────────────────────────────────────────
+            var divider = new VisualElement();
+            divider.AddToClassList("own-lot-row__divider");
+            Add(divider);
+
+            // ── Middle: price + revenue block ─────────────────────────────────
+            var middleBlock = new VisualElement();
+            middleBlock.AddToClassList("own-lot-row__middle");
+            Add(middleBlock);
+
+            // Top row: unit price | extra soldout money
+            var middleTop = new VisualElement();
+            middleTop.AddToClassList("own-lot-row__middle-top");
+            middleBlock.Add(middleTop);
 
             (_unitPriceDescLabel, _unitPriceLabel) =
-                CreateStatCell(statsContainer, "own-lot-row__stat--unit-price");
+                CreateStatCell(middleTop, "own-lot-row__stat--unit-price");
 
             (_extraSoldoutMoneyDescLabel, _extraSoldoutMoneyLabel) =
-                CreateStatCell(statsContainer, "own-lot-row__stat--extra-soldout-money");
+                CreateStatCell(middleTop, "own-lot-row__stat--extra-soldout-money");
 
-            (_revenueDescLabel, _revenueLabel) =
-                CreateStatCell(statsContainer, "own-lot-row__stat--revenue");
+            // Bottom row: revenue formula + emphasized total
+            var revenueRow = new VisualElement();
+            revenueRow.AddToClassList("own-lot-row__revenue-row");
+            middleBlock.Add(revenueRow);
+
+            _revenueDescLabel = new Label("Revenue");
+            _revenueDescLabel.AddToClassList("own-lot-row__stat-desc");
+            revenueRow.Add(_revenueDescLabel);
+
+            _revenueFormulaLabel = new Label();
+            _revenueFormulaLabel.AddToClassList("own-lot-row__revenue-formula");
+            revenueRow.Add(_revenueFormulaLabel);
+
+            _revenueLabel = new Label();
+            _revenueLabel.AddToClassList("own-lot-row__revenue-value");
+            revenueRow.Add(_revenueLabel);
+
+            // ── Buttons ───────────────────────────────────────────────────────
+            var buttonGroup = new VisualElement();
+            buttonGroup.AddToClassList("own-lot-row__button-group");
+            Add(buttonGroup);
 
             _collectButton = new Button { text = "Collect" };
             _collectButton.AddToClassList("own-lot-row__control-button");
             _collectButton.AddToClassList("own-lot-row__collect-button");
-            Add(_collectButton);
+            buttonGroup.Add(_collectButton);
 
             _removeButton = new Button { text = "Remove" };
             _removeButton.AddToClassList("own-lot-row__control-button");
             _removeButton.AddToClassList("own-lot-row__remove-button");
-            Add(_removeButton);
+            buttonGroup.Add(_removeButton);
 
-            // Default description text — override in inspector
-            _soldQuantityDescLabel.text = "Sold";
-            _totalQuantityDescLabel.text = "Total Qty";
-            _unitPriceDescLabel.text = "Unit Price";
+            // Default descriptions — override in inspector
+            _soldQuantityDescLabel.text      = "Sold";
+            _totalQuantityDescLabel.text     = "Total";
+            _unitPriceDescLabel.text         = "Unit Price";
             _extraSoldoutMoneyDescLabel.text = "Bonus";
-            _revenueDescLabel.text = "Revenue";
+            _revenueDescLabel.text           = "Revenue";
         }
 
-        public void SetCollectButtonEnabled(bool isEnabled)
-        {
+        // ── Public API ────────────────────────────────────────────────────────
+
+        public void SetCollectButtonEnabled(bool isEnabled) =>
             _collectButton.SetEnabled(isEnabled);
-        }
 
-        public void SetRemoveButtonEnabled(bool isEnabled)
-        {
+        public void SetRemoveButtonEnabled(bool isEnabled) =>
             _removeButton.SetEnabled(isEnabled);
-        }
 
         public void SetStats(string soldQuantity, string totalQuantity,
             string unitPrice, string extraSoldoutMoney, string revenue)
         {
-            _soldQuantityLabel.text = soldQuantity;
-            _totalQuantityLabel.text = totalQuantity;
-            _unitPriceLabel.text = unitPrice;
+            _soldQuantityLabel.text      = soldQuantity;
+            _totalQuantityLabel.text     = totalQuantity;
+            _unitPriceLabel.text         = unitPrice;
             _extraSoldoutMoneyLabel.text = extraSoldoutMoney;
-            _revenueLabel.text = $"{soldQuantity} * {unitPrice} + {extraSoldoutMoney} = {revenue}$";
+
+            // Formula left side: "0 * 2$ + 0$  ="
+            _revenueFormulaLabel.text = $"{soldQuantity} * {unitPrice} + {extraSoldoutMoney}  =";
+            // Emphasized total: "0$"
+            _revenueLabel.text        = $"{revenue}$";
         }
 
+        // ── Helpers ───────────────────────────────────────────────────────────
 
-        private static (Label descLabel, Label valueLabel) CreateStatCell(VisualElement container, string modifierClass)
+        /// <summary>Desc label above, value label below — for middle block stats.</summary>
+        private static (Label descLabel, Label valueLabel) CreateStatCell(
+            VisualElement container, string modifierClass)
         {
             var cell = new VisualElement();
             cell.AddToClassList("own-lot-row__stat");
@@ -135,6 +188,26 @@ namespace TradeArea.UI.Custom
 
             var value = new Label();
             value.AddToClassList("own-lot-row__stat-value");
+            cell.Add(value);
+
+            return (desc, value);
+        }
+
+        /// <summary>Desc + value side by side — for the compact sold/total row.</summary>
+        private static (Label descLabel, Label valueLabel) CreateInlineCell(
+            VisualElement container, string modifierClass)
+        {
+            var cell = new VisualElement();
+            cell.AddToClassList("own-lot-row__inline-cell");
+            cell.AddToClassList(modifierClass);
+            container.Add(cell);
+
+            var desc = new Label();
+            desc.AddToClassList("own-lot-row__inline-desc");
+            cell.Add(desc);
+
+            var value = new Label();
+            value.AddToClassList("own-lot-row__inline-value");
             cell.Add(value);
 
             return (desc, value);
