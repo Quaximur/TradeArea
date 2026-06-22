@@ -1,10 +1,11 @@
 using DevKit.UI.MVVM;
 using UnityEngine;
 using VContainer;
+using VContainer.Unity;
 
 namespace TradeArea.Infrastructure.Bootstraps
 {
-    public class RootBoot : Bootstrap
+    public class RootBoot : LifetimeScope
     {
         [SerializeField] private RootUIBinder _rootUIBinderPrefab;
         private RootUIBinder _rootUIBinder;
@@ -13,14 +14,14 @@ namespace TradeArea.Infrastructure.Bootstraps
         {
             builder.Register<SceneLoader>(Lifetime.Singleton);
 
-            //// REGISTRATIONS
+            // REGISTRATIONS
             
             _rootUIBinder = Instantiate(_rootUIBinderPrefab);
             DontDestroyOnLoad(_rootUIBinder);
 
             builder.RegisterInstance<IRootUIBinder>(_rootUIBinder);
 
-            ////
+            //
 
             builder.RegisterBuildCallback(OnBuild);
         }

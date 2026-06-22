@@ -21,15 +21,19 @@ namespace TradeArea.UI.AuctionSearch
 
         private readonly AuctionModel _auctionModel;
         private readonly UserModel _userModel;
+        private readonly IViewBinder<AuctionBuyingViewModel> _buyingBinder;
 
         private readonly ReactiveProperty<LoadingState<List<ItemConfigDto>>> _onMarketListChanged = new();
 
         private CancellationTokenSource _cts = new();
 
-        public AuctionSearchViewModel(AuctionModel auctionModel, UserModel userModel)
+        public AuctionSearchViewModel(AuctionModel auctionModel, 
+            UserModel userModel, 
+            IViewBinder<AuctionBuyingViewModel> buyingBinder)
         {
             _auctionModel = auctionModel;
             _userModel = userModel;
+            _buyingBinder = buyingBinder;
         }
         
         public void UpdateMarketItems()
@@ -74,6 +78,9 @@ namespace TradeArea.UI.AuctionSearch
         public void OpenBuyingView(Guid itemConfigId)
         {
             FLogger.Log<AuctionSearchViewModel>($"Opening {nameof(AuctionBuyingView)} for itemConfigId: {itemConfigId}");
+            
+            var buyingViewModel = _buyingBinder.Open();
+            // TODO: bind config to buyingViewModel
         }
 
         private Metadata GetAuthHeader()

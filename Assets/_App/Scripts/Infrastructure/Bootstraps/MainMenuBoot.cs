@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using R3;
 using TradeArea.Infrastructure.Contexts;
@@ -10,25 +12,27 @@ namespace TradeArea.Infrastructure.Bootstraps
     {
         private MainMenuEnterContext _mainMenuEnterContext;
 
-        protected override void Configure(IContainerBuilder builder)
+        protected override void OnConfigure(IContainerBuilder builder)
         {
-            //// REGISTRATIONS
+            // REGISTRATIONS
+            
             builder.Register<Subject<Unit>>(Lifetime.Scoped)
                 .Keyed(Constants.GAMEPLAY_START_SIGNAL);
  
-            ////
+            //
         }
 
-
-        public UniTask<Observable<MainMenuExitContext>> BootAsync(MainMenuEnterContext mainMenuEnterContext = null)
+        public async UniTask<Observable<MainMenuExitContext>> BootAsync(MainMenuEnterContext mainMenuEnterContext = null)
         {
             _mainMenuEnterContext = mainMenuEnterContext;
             
             Build();
 
-            //// INITIALIZATION
+            // INITIALIZATION
+            
+            await InitChildrenAsync(CancellationToken.None);
 
-            ////
+            //
 
             var startSessionSignal = Container.Resolve<Subject<Unit>>(Constants.GAMEPLAY_START_SIGNAL);
             var mainMenuExitSignal = new Subject<MainMenuExitContext>();
@@ -40,7 +44,7 @@ namespace TradeArea.Infrastructure.Bootstraps
                 mainMenuExitSignal.OnNext(mainMenuExitContext);
             }).AddTo(_disposables);
 
-            return UniTask.FromResult<Observable<MainMenuExitContext>>(mainMenuExitSignal);
+            return mainMenuExitSignal;
         }
 
         protected override void OnDestroy()
