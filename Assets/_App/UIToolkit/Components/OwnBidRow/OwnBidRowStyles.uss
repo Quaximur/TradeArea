@@ -1,0 +1,167 @@
+/* ── OwnBidRow ───────────────────────────────────────────────────────────────
+   Layout mirrors OwnLotRow. Refund is amber instead of green to distinguish
+   "money coming back" from "revenue earned".
+
+   [ Icon | Name           ] | [ Bid Price   Remaining ] [ Cancel ]
+   [      | Bought / Orders]   [ N * P$ =    REFUND$   ]
+   ────────────────────────────────────────────────────────────────────────── */
+
+.own-bid-row {
+    flex-direction: row;
+    align-items: stretch;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+/* ── Bought / Orders inline row ──────────────────────────────────────────── */
+
+.own-bid-row__quantity-row {
+    flex-direction: row;
+    align-items: center;
+    margin-top: 3px;
+}
+
+.own-bid-row__inline-cell {
+    flex-direction: row;
+    align-items: center;
+}
+
+.own-bid-row__inline-desc {
+    color: rgb(153, 166, 184);
+    font-size: 14px;
+    margin-right: 3px;
+    -unity-text-align: lower-left;
+}
+
+.own-bid-row__inline-value {
+    color: rgb(241, 245, 250);
+    font-size: 16px;
+    -unity-text-align: lower-left;
+}
+
+.own-bid-row__slash {
+    color: rgb(100, 112, 130);
+    font-size: 14px;
+    margin-left: 4px;
+    margin-right: 4px;
+    -unity-text-align: middle-center;
+}
+
+/* ── Divider ─────────────────────────────────────────────────────────────── */
+
+.own-bid-row__divider {
+    width: 1px;
+    background-color: rgb(57, 67, 84);
+    margin-left: 10px;
+    margin-right: 10px;
+    align-self: stretch;
+}
+
+/* ── Middle block ────────────────────────────────────────────────────────── */
+
+.own-bid-row__middle {
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.own-bid-row__middle-top {
+    flex-direction: row;
+    margin-bottom: 4px;
+}
+
+.own-bid-row__stat {
+    flex-direction: row;
+    justify-content: center;
+    margin-right: 24px;
+}
+
+.own-bid-row__stat-desc {
+    color: rgb(153, 166, 184);
+    font-size: 14px;
+    -unity-text-align: lower-left;
+    margin-bottom: 1px;
+    margin-right: 4px;
+}
+
+.own-bid-row__stat-value {
+    color: rgb(241, 245, 250);
+    font-size: 16px;
+    -unity-text-align: lower-left;
+}
+
+/* ── Refund row ──────────────────────────────────────────────────────────── */
+
+.own-bid-row__refund-row {
+    flex-direction: row;
+    align-items: center;
+}
+
+/* Muted formula: "3 * 2$ =" */
+.own-bid-row__refund-formula {
+    color: rgb(120, 133, 153);
+    font-size: 16px;
+    -unity-text-align: lower-left;
+    margin-right: 5px;
+}
+
+/* Emphasized refund total — amber to distinguish from green revenue */
+.own-bid-row__refund-value {
+    color: rgb(220, 175, 90);
+    font-size: 18px;
+    -unity-font-style: bold;
+    -unity-text-align: lower-left;
+}
+
+/* ── Spacer ──────────────────────────────────────────────────────────────── */
+
+.own-bid-row__spacer {
+    flex-grow: 1;
+}
+
+/* ── Button group ────────────────────────────────────────────────────────── */
+
+.own-bid-row__button-group {
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    margin-left: 10px;
+}
+
+.item-config-row__control-button {
+    min-width: 86px;
+    color: rgb(238, 244, 251);
+    border-width: 1px;
+    border-top-left-radius: 1px;
+    border-top-right-radius: 1px;
+    border-bottom-right-radius: 1px;
+    border-bottom-left-radius: 1px;
+    -unity-text-align: middle-center;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
+    flex-shrink: 0;
+    flex-grow: 1;
+}
+
+/* Cancel — destructive, red tint */
+.own-bid-row__cancel-button {
+    background-color: rgb(90, 45, 45);
+    border-color: rgb(140, 80, 80);
+    margin-bottom: 0;
+}
+
+.own-bid-row__cancel-button:hover {
+    background-color: rgb(115, 55, 55);
+    border-color: rgb(170, 100, 100);
+}
+
+.own-bid-row__cancel-button:disabled {
+    opacity: 0.4;
+}

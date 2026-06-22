@@ -1,4 +1,6 @@
+using System;
 using Aucy.Contracts.OnionClient;
+using Cysharp.Threading.Tasks;
 using DevKit.UI.MVVM;
 using R3;
 using TradeArea.UI.Custom;
@@ -33,20 +35,48 @@ namespace TradeArea.UI.AuctionBids
                 return row;
             };
 
+            _loadableList.ListView.makeItem = () => new OwnBidRow();
             _loadableList.ListView.bindItem = (x, i) =>
             {
-                var itemRow = (ItemConfigRow)x; // TODO: Replace with Element for ItemStack
-                itemRow.style.marginTop = _lotMarginTop;
-                itemRow.style.paddingTop = _lotPaddingTop;
-                
+                var bidRow = (OwnBidRow)x;
+                bidRow.style.marginTop = _lotMarginTop;
+                bidRow.style.paddingTop = _lotPaddingTop;
+
                 var ownBid = (OwnBidDto)_loadableList.ListView.itemsSource[i];
                 var boughtQuantity = ownBid.BoughtQuantity;
-                itemRow.ItemName = $"{ownBid.ItemConfig.Name} | Bought: {boughtQuantity} | Orders: {ownBid.TotalQuantity}) | Fund: {ownBid.RemainingQuantity * ownBid.BidPrice}$";
+                var remainingQuantity = ownBid.RemainingQuantity;
+                var refund = remainingQuantity * ownBid.BidPrice;
 
+                bidRow.ItemName = ownBid.ItemConfig.Name;
+                // bidRow.ItemIcon = ownBid.ItemConfig.Icon;
+
+                bidRow.SetStats(
+                    boughtQuantity: boughtQuantity.ToString(),
+                    totalQuantity: ownBid.TotalQuantity.ToString(),
+                    bidPrice: ownBid.BidPrice.ToString(),
+                    remainingQuantity: remainingQuantity.ToString(),
+                    refund: refund.ToString()
+                );
+
+                // Can only cancel if there are still unfilled orders
+                bidRow.SetCollectButtonEnabled(boughtQuantity > 0);
+                bidRow.SetRemoveButtonEnabled(remainingQuantity > 0);
+
+                bidRow.RemoveButton.RegisterCallback<ClickEvent, Guid>(OnRemoveClicked, ownBid.Id);
             };
 
             viewModel.OwnBids.Subscribe(_loadableList.OnLoadingStateChanged)
                 .AddTo(_disposables);
+        }
+
+        private void OnRemoveClicked(ClickEvent _, Guid bidId)
+        {
+            ViewModel.RemoveBid(bidId).Forget();
+        }
+
+        private void OnCollectClicked(ClickEvent _, Guid bidId)
+        {
+            ViewModel.CollectBid(bidId).Forget();
         }
     }
 }

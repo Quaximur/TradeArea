@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using Aucy.Contracts.OnionClient;
+using Cysharp.Threading.Tasks;
 using DevKit.UI.MVVM;
 using DevKit.Utils;
 using Grpc.Core;
@@ -23,6 +25,14 @@ namespace TradeArea.UI.AuctionBids
         {
             _userModel = userModel;
             _auctionModel = auctionModel;
+        }
+
+        public async UniTask RemoveBid(Guid bidId)
+        {
+        }
+
+        public async UniTask CollectBid(Guid bidId)
+        {
         }
 
         private Metadata GetAuthHeader()

@@ -135,13 +135,13 @@ namespace TradeArea.UI.Custom
             Add(buttonGroup);
 
             _collectButton = new Button { text = "Collect" };
-            _collectButton.AddToClassList("own-lot-row__control-button");
-            _collectButton.AddToClassList("own-lot-row__collect-button");
+            _collectButton.AddToClassList("item-config-row__control-button");
+            _collectButton.AddToClassList("item-config-row__collect-button");
             buttonGroup.Add(_collectButton);
 
             _removeButton = new Button { text = "Remove" };
-            _removeButton.AddToClassList("own-lot-row__control-button");
-            _removeButton.AddToClassList("own-lot-row__remove-button");
+            _removeButton.AddToClassList("item-config-row__control-button");
+            _removeButton.AddToClassList("item-config-row__remove-button");
             buttonGroup.Add(_removeButton);
 
             // Default descriptions — override in inspector

@@ -59,7 +59,7 @@ namespace TradeArea.UI.AuctionLots
                 );
 
                 ownLotRow.SetCollectButtonEnabled(soldQuantity > 0);
-                ownLotRow.SetRemoveButtonEnabled(soldQuantity < ownLot.TotalQuantity);
+                ownLotRow.SetRemoveButtonEnabled(ownLot.RemainingQuantity > 0);
             };
 
             _loadableList.ListView.unbindItem = (e, i) =>
@@ -75,13 +75,11 @@ namespace TradeArea.UI.AuctionLots
 
         private void OnRemoveClicked(ClickEvent _, Guid lotId)
         {
-            // Получаем ViewModel через поле класса или другим способом
             ViewModel.TestRemoveLot(lotId).Forget();
         }
 
         private void OnCollectClicked(ClickEvent _, Guid lotId)
         {
-            // Получаем ViewModel через поле класса или другим способом
             ViewModel.CollectLot(lotId).Forget();
         }
     }

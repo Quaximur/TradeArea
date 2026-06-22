@@ -59,7 +59,7 @@ namespace TradeArea
                             return; // intentional disconnect, stop retrying
                         }
 
-                        FLogger.LogWarning<OrderHubService>($"Disconnected: {disconnect.Type}, retrying...");
+                        FLogger.LogWarning<OrderHubService>($"Disconnected: {disconnect.Type}");
                     }
                     catch (OperationCanceledException)
                     {
