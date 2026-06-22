@@ -11,9 +11,9 @@ using TradeArea.Shared;
 using MagicOnion.Client;
 using Grpc.Core;
 
-namespace TradeArea.UI.AuctionBuying
+namespace TradeArea.UI.OrderBook
 {
-    public class AuctionBuyingViewModel : ScreenViewModel
+    public class OrderBookViewModel : ScreenViewModel
     {
         private readonly AuctionModel _auctionModel;
         private readonly OrderHubService _orderHubService;
@@ -38,7 +38,7 @@ namespace TradeArea.UI.AuctionBuying
 
         private readonly UserModel _userModel;
 
-        public AuctionBuyingViewModel(AuctionModel auctionModel,
+        public OrderBookViewModel(AuctionModel auctionModel,
             UserModel userModel,
             OrderHubService orderHubService)
         {
@@ -61,7 +61,7 @@ namespace TradeArea.UI.AuctionBuying
         {
             if (_orderHubService.OrderHub == null)
             {
-                FLogger.LogWarning<AuctionBuyingViewModel>("Order hub is null");
+                FLogger.LogWarning<OrderBookViewModel>("Order hub is null");
                 return;
             }
 
@@ -75,7 +75,7 @@ namespace TradeArea.UI.AuctionBuying
             }
             catch (Exception ex)
             {
-                FLogger.LogError<AuctionBuyingViewModel>($"{nameof(CreateBidAsync)}: {ex.Message}");
+                FLogger.LogError<OrderBookViewModel>($"{nameof(CreateBidAsync)}: {ex.Message}");
             }
         }
 
@@ -110,7 +110,7 @@ namespace TradeArea.UI.AuctionBuying
                 }
                 catch (Exception ex)
                 {
-                    FLogger.LogError<AuctionBuyingViewModel>($"{nameof(StartStreamAsync)}: {ex.Message}");
+                    FLogger.LogError<OrderBookViewModel>($"{nameof(StartStreamAsync)}: {ex.Message}");
                 }
             }
             catch (OperationCanceledException)

@@ -1,15 +1,4 @@
-/* ── AuctionBuyingWindow ─────────────────────────────────────────────────────
-   Palette pulled from AuctionStyles.uss.
-   Layout:
-   ┌─────────────────────────────────────┐
-   │ Header: item name + category        │
-   ├─────────────────────┬───────────────┤
-   │  Order Book         │  Buy  / Sell  │
-   │  [Asks] | [Bids]   │  forms        │
-   └─────────────────────┴───────────────┘
-   ────────────────────────────────────────────────────────────────────────── */
-
-.buying-window__root {
+.order-book__root {
     flex-direction: column;
     flex-grow: 1;
     background-color: rgb(16, 19, 26);
@@ -19,9 +8,7 @@
     padding-left: 16px;
 }
 
-/* ── Header ──────────────────────────────────────────────────────────────── */
-
-.buying-window__header {
+.order-book__header {
     flex-direction: column;
     margin-bottom: 14px;
     padding-bottom: 12px;
@@ -29,30 +16,26 @@
     border-bottom-color: rgb(49, 58, 73);
 }
 
-.buying-window__item-name {
+.order-book__item-name {
     color: rgb(243, 246, 251);
     font-size: 22px;
     -unity-font-style: bold;
     -unity-text-align: middle-left;
 }
 
-.buying-window__item-category {
+.order-book__item-category {
     color: rgb(153, 166, 184);
     font-size: 12px;
     margin-top: 3px;
     -unity-text-align: middle-left;
 }
 
-/* ── Body ────────────────────────────────────────────────────────────────── */
-
-.buying-window__body {
+.order-book__body {
     flex-direction: row;
     flex-grow: 1;
 }
 
-/* ── Order book ──────────────────────────────────────────────────────────── */
-
-.buying-window__book {
+.order-book__book {
     flex-grow: 1;
     flex-direction: column;
     background-color: rgb(17, 21, 28);
@@ -69,18 +52,17 @@
     margin-right: 14px;
 }
 
-.buying-window__book-columns {
+.order-book__book-columns {
     flex-direction: row;
     flex-grow: 1;
 }
 
-.buying-window__book-panel {
+.order-book__book-panel {
     flex-grow: 1;
     flex-direction: column;
 }
 
-/* Vertical divider between asks and bids */
-.buying-window__book-divider {
+.order-book__book-divider {
     width: 1px;
     background-color: rgb(57, 67, 84);
     margin-left: 8px;
@@ -88,8 +70,7 @@
     align-self: stretch;
 }
 
-/* Column headers */
-.buying-window__book-header {
+.order-book__book-header {
     flex-direction: row;
     justify-content: space-between;
     padding-bottom: 6px;
@@ -98,23 +79,21 @@
     border-bottom-color: rgb(49, 58, 73);
 }
 
-.buying-window__book-header-cell {
+.order-book__book-header-cell {
     color: rgb(120, 133, 153);
     font-size: 11px;
     -unity-text-align: middle-left;
 }
 
-.buying-window__book-header-cell--right {
+.order-book__book-header-cell--right {
     -unity-text-align: middle-right;
 }
 
-.buying-window__book-scroll {
+.order-book__book-scroll {
     flex-grow: 1;
 }
 
-/* ── Book rows (built in C#) ─────────────────────────────────────────────── */
-
-.buying-window__book-row {
+.order-book__book-row {
     flex-direction: row;
     justify-content: space-between;
     padding-top: 3px;
@@ -125,35 +104,31 @@
     border-bottom-color: rgb(30, 36, 47);
 }
 
-.buying-window__book-row:hover {
+.order-book__book-row:hover {
     background-color: rgb(27, 33, 43);
 }
 
-.buying-window__book-price {
+.order-book__book-price {
     font-size: 13px;
     -unity-text-align: middle-left;
     min-width: 60px;
 }
 
-/* Ask (sell) side — red */
-.buying-window__book-price--ask {
+.order-book__book-price--ask {
     color: rgb(210, 100, 100);
 }
 
-/* Bid (buy) side — green */
-.buying-window__book-price--bid {
+.order-book__book-price--bid {
     color: rgb(100, 210, 145);
 }
 
-.buying-window__book-qty {
+.order-book__book-qty {
     color: rgb(200, 210, 225);
     font-size: 13px;
     -unity-text-align: middle-right;
 }
 
-/* ── State labels (loading / error) ─────────────────────────────────────── */
-
-.buying-window__state-label {
+.order-book__state-label {
     color: rgb(153, 166, 184);
     font-size: 13px;
     -unity-text-align: middle-center;
@@ -161,19 +136,18 @@
     margin-bottom: 12px;
 }
 
-.buying-window__state-label--error {
+.order-book__state-label--error {
     color: rgb(210, 100, 100);
 }
 
-/* ── Forms sidebar ───────────────────────────────────────────────────────── */
-
-.buying-window__forms {
+.order-book__forms {
     flex-direction: column;
     width: 220px;
     flex-shrink: 0;
+    justify-content: flex-end;
 }
 
-.buying-window__form {
+.order-book__form {
     flex-direction: column;
     background-color: rgb(27, 32, 41);
     border-width: 1px;
@@ -189,7 +163,7 @@
     margin-bottom: 10px;
 }
 
-.buying-window__form-title {
+.order-book__form-title {
     color: rgb(243, 246, 251);
     font-size: 14px;
     -unity-font-style: bold;
@@ -197,7 +171,7 @@
     margin-bottom: 10px;
 }
 
-.buying-window__field-label {
+.order-book__field-label {
     color: rgb(153, 166, 184);
     font-size: 11px;
     -unity-text-align: middle-left;
@@ -205,7 +179,7 @@
     margin-top: 6px;
 }
 
-.buying-window__input {
+.order-book__input {
     height: 32px;
     color: rgb(242, 246, 250);
     background-color: rgb(18, 23, 32);
@@ -218,11 +192,11 @@
     margin-bottom: 0;
 }
 
-.buying-window__input:focus {
+.order-book__input:focus {
     border-color: rgb(93, 155, 176);
 }
 
-.buying-window__total-label {
+.order-book__total-label {
     color: rgb(220, 175, 90);
     font-size: 13px;
     -unity-font-style: bold;
@@ -231,9 +205,7 @@
     margin-bottom: 8px;
 }
 
-/* ── Buttons ─────────────────────────────────────────────────────────────── */
-
-.buying-window__button {
+.order-book__button {
     height: 34px;
     color: rgb(238, 244, 251);
     border-width: 1px;
@@ -252,26 +224,24 @@
     margin-bottom: 0;
 }
 
-/* Bid button — green tint */
-.buying-window__button--bid {
+.order-book__button--bid {
     background-color: rgb(35, 90, 60);
     border-color: rgb(70, 160, 105);
 }
 
-.buying-window__button--bid:hover {
+.order-book__button--bid:hover {
     background-color: rgb(45, 110, 75);
 }
 
-/* Lot button — teal tint (matches auction primary) */
-.buying-window__button--lot {
+.order-book__button--lot {
     background-color: rgb(45, 95, 115);
     border-color: rgb(93, 155, 176);
 }
 
-.buying-window__button--lot:hover {
+.order-book__button--lot:hover {
     background-color: rgb(55, 115, 138);
 }
 
-.buying-window__button:disabled {
+.order-book__button:disabled {
     opacity: 0.4;
 }

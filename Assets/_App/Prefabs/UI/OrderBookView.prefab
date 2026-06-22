@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5016298990045183426}
   - component: {fileID: 5970873910795333140}
   m_Layer: 0
-  m_Name: AuctionBuyingView
+  m_Name: OrderBookView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

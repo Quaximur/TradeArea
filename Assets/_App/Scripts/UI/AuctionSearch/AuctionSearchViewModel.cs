@@ -11,7 +11,7 @@ using MagicOnion.Client;
 using R3;
 using TradeArea.Data;
 using TradeArea.Shared;
-using TradeArea.UI.AuctionBuying;
+using TradeArea.UI.OrderBook;
 
 namespace TradeArea.UI.AuctionSearch
 {
@@ -21,7 +21,7 @@ namespace TradeArea.UI.AuctionSearch
 
         private readonly AuctionModel _auctionModel;
         private readonly UserModel _userModel;
-        private readonly IViewBinder<AuctionBuyingViewModel> _buyingBinder;
+        private readonly IViewBinder<OrderBookViewModel> _buyingBinder;
 
         private readonly ReactiveProperty<LoadingState<List<ItemConfigDto>>> _onMarketListChanged = new();
 
@@ -29,7 +29,7 @@ namespace TradeArea.UI.AuctionSearch
 
         public AuctionSearchViewModel(AuctionModel auctionModel, 
             UserModel userModel, 
-            IViewBinder<AuctionBuyingViewModel> buyingBinder)
+            IViewBinder<OrderBookViewModel> buyingBinder)
         {
             _auctionModel = auctionModel;
             _userModel = userModel;
@@ -77,7 +77,7 @@ namespace TradeArea.UI.AuctionSearch
 
         public void OpenBuyingView(ItemConfigDto itemConfig)
         {
-            FLogger.Log<AuctionSearchViewModel>($"Opening {nameof(AuctionBuyingView)} for itemConfigId: {itemConfig.Id}");
+            FLogger.Log<AuctionSearchViewModel>($"Opening {nameof(OrderBookView)} for itemConfigId: {itemConfig.Id}");
             
             var buyingViewModel = _buyingBinder.Open();
             buyingViewModel.SetItem(itemConfig);

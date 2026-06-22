@@ -12,7 +12,7 @@ using TradeArea.Data;
 using TradeArea.Shared;
 using TradeArea.UI.Auction;
 using TradeArea.UI.AuctionBids;
-using TradeArea.UI.AuctionBuying;
+using TradeArea.UI.OrderBook;
 using TradeArea.UI.AuctionInventory;
 using TradeArea.UI.AuctionLots;
 using TradeArea.UI.AuctionOrders;
@@ -26,7 +26,7 @@ namespace TradeArea.Infrastructure.Installers
     public class AuctionInstaller : ModuleInstaller
     {
         [SerializeField] private AuctionView _auctionViewPrefab;
-        [SerializeField] private AuctionBuyingView _auctionBuyingViewPrefab;
+        [SerializeField] private OrderBookView _orderBookViewPrefab;
 
         private CancellationTokenSource _cts = new();
 
@@ -43,7 +43,7 @@ namespace TradeArea.Infrastructure.Installers
 
             builder.RegisterMVVM<AuctionView, AuctionViewModel>(_auctionViewPrefab, 
                 viewModelLifetime: Lifetime.Transient);
-            builder.RegisterMVVM<AuctionBuyingView, AuctionBuyingViewModel>(_auctionBuyingViewPrefab, 
+            builder.RegisterMVVM<OrderBookView, OrderBookViewModel>(_orderBookViewPrefab, 
                 viewModelLifetime: Lifetime.Transient);
 
             // TODO: take user data from context

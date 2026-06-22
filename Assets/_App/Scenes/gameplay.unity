@@ -340,7 +340,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: TradeArea.Infrastructure::TradeArea.Infrastructure.Installers.AuctionInstaller
   _auctionViewPrefab: {fileID: 5197827658297244371, guid: e31353b5b6318d34391daed2625784fa, type: 3}
-  _auctionBuyingViewPrefab: {fileID: 5970873910795333140, guid: 908b79429738a494facc0bab73c09a95, type: 3}
+  _orderBookViewPrefab: {fileID: 5970873910795333140, guid: 908b79429738a494facc0bab73c09a95, type: 3}
 --- !u!1 &1606812942
 GameObject:
   m_ObjectHideFlags: 0

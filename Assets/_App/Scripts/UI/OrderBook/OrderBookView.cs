@@ -6,9 +6,9 @@ using DevKit.Utils;
 using R3;
 using UnityEngine.UIElements;
 
-namespace TradeArea.UI.AuctionBuying
+namespace TradeArea.UI.OrderBook
 {
-    public class AuctionBuyingView : AttachableToolkitWindow<AuctionBuyingViewModel>
+    public class OrderBookView : AttachableToolkitWindow<OrderBookViewModel>
     {
         // Header
         private Label _itemNameLabel;
@@ -67,7 +67,7 @@ namespace TradeArea.UI.AuctionBuying
             _sellPriceField.RegisterValueChangedCallback(_ => RefreshSellTotal());
         }
 
-        protected override void OnBind(AuctionBuyingViewModel viewModel)
+        protected override void OnBind(OrderBookViewModel viewModel)
         {
             base.OnBind(viewModel);
             
@@ -166,16 +166,16 @@ namespace TradeArea.UI.AuctionBuying
         private static VisualElement CreateBookRow(long price, long quantity, bool isSell)
         {
             var row = new VisualElement();
-            row.AddToClassList("buying-window__book-row");
+            row.AddToClassList("order-book__book-row");
 
             var priceLabel = new Label(price.ToString());
-            priceLabel.AddToClassList("buying-window__book-price");
+            priceLabel.AddToClassList("order-book__book-price");
             priceLabel.AddToClassList(isSell
-                ? "buying-window__book-price--ask"
-                : "buying-window__book-price--bid");
+                ? "order-book__book-price--ask"
+                : "order-book__book-price--bid");
 
             var qtyLabel = new Label(quantity.ToString());
-            qtyLabel.AddToClassList("buying-window__book-qty");
+            qtyLabel.AddToClassList("order-book__book-qty");
 
             row.Add(priceLabel);
             row.Add(qtyLabel);
