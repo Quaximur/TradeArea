@@ -7,8 +7,10 @@ namespace Aucy.Contracts.OnionClient
     [MessagePackObject]
     public class ItemConfigWithRawListingDto : ItemConfigDto
     {
-        [Key(10)] public RawLotTuple[] RawLots { get; set; }
-        [Key(11)] public RawBidTuple[] RawBids { get; set; }
+        [Key(50)] public RawLotTuple[] RawLots { get; set; }
+        [Key(51)] public RawBidTuple[] RawBids { get; set; }
+
+        public ItemConfigWithRawListingDto() { }
 
         public ItemConfigWithRawListingDto(Guid id,
             string name,
@@ -21,7 +23,11 @@ namespace Aucy.Contracts.OnionClient
             List<string> extra,
             string categoryPath,
             RawLotTuple[] rawLots,
-            RawBidTuple[] rawBids)
+            RawBidTuple[] rawBids,
+            long minPrice,
+            long maxPrice,
+            int maxSellQuantity,
+            int maxBuyQuantity)
 
             : base(id: id,
                   name: name,
@@ -32,7 +38,11 @@ namespace Aucy.Contracts.OnionClient
                   weight: weight,
                   baseType: baseType,
                   extra: extra,
-                  categoryPath: categoryPath)
+                  categoryPath: categoryPath,
+                  minPrice: minPrice,
+                  maxPrice: maxPrice,
+                  maxSellQuantity: maxSellQuantity,
+                  maxBuyQuantity: maxBuyQuantity)
         {
             RawLots = rawLots;
             RawBids = rawBids;

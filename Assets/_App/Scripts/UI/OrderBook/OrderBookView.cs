@@ -70,7 +70,7 @@ namespace TradeArea.UI.OrderBook
         protected override void OnBind(OrderBookViewModel viewModel)
         {
             base.OnBind(viewModel);
-            
+
             _disposables = new();
 
             // Item header
@@ -131,31 +131,27 @@ namespace TradeArea.UI.OrderBook
             _bidsBookContainer.Clear();
 
             // Lots: cheapest first (ascending) — buyers scan from top
-            var lots = listing.RawLots
-                .OrderBy(l => l.UnitPrice)
-                .ToList();
+            var levels = listing.Levels
+                .OrderBy(l => l.MinPrice)
+                .ToArray();
 
-            foreach (var lot in lots)
+            foreach (var level in levels)
             {
                 var row = CreateBookRow(
-                    price: lot.UnitPrice,
-                    quantity: lot.RemainingQuantity,
+                    minPrice: level.MinPrice,
+                   maxPrice: level.MaxPrice,
+                    quantity: level.LotQuantity,
                     isSell: true);
+
                 _lotsBookContainer.Add(row);
-            }
 
-            // Bids: highest first (descending) — sellers scan from top
-            var bids = listing.RawBids
-                .OrderByDescending(b => b.BidPrice)
-                .ToList();
+                var row2 = CreateBookRow(
+                   minPrice: level.MinPrice,
+                   maxPrice: level.MaxPrice,
+                   quantity: level.BidQuantity,
+                   isSell: false);
 
-            foreach (var bid in bids)
-            {
-                var row = CreateBookRow(
-                    price: bid.BidPrice,
-                    quantity: bid.RemainingQuantity,
-                    isSell: false);
-                _bidsBookContainer.Add(row);
+                _bidsBookContainer.Add(row2);
             }
         }
 
@@ -163,12 +159,12 @@ namespace TradeArea.UI.OrderBook
         /// Creates a single order book row.
         /// isSell=true → price in red (asks); isSell=false → price in green (bids).
         /// </summary>
-        private static VisualElement CreateBookRow(long price, long quantity, bool isSell)
+        private static VisualElement CreateBookRow(long minPrice, long maxPrice, long quantity, bool isSell)
         {
             var row = new VisualElement();
             row.AddToClassList("order-book__book-row");
 
-            var priceLabel = new Label(price.ToString());
+            var priceLabel = new Label($"{minPrice}-{maxPrice}");
             priceLabel.AddToClassList("order-book__book-price");
             priceLabel.AddToClassList(isSell
                 ? "order-book__book-price--ask"
@@ -203,7 +199,7 @@ namespace TradeArea.UI.OrderBook
 
         private static bool TryParseLong(string value, out long result) =>
             long.TryParse(value, out result) && result > 0;
-        
+
         private static bool TryParseInt(string value, out int result) =>
             int.TryParse(value, out result) && result > 0;
 
