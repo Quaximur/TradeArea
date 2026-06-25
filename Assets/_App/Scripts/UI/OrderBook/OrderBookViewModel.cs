@@ -71,7 +71,7 @@ namespace TradeArea.UI.OrderBook
             _sellPrice.Value = itemConfig.MaxPrice;
 
             _buyQuantity.Value = 1;
-            _buyPrice.Value = itemConfig.MaxPrice;
+            _buyPrice.Value = itemConfig.MinPrice;
 
             StartStreamAsync(itemConfig.Id).Forget();
         }

@@ -59,12 +59,6 @@ namespace TradeArea.UI.OrderBook
             _sellPriceField = Root.Q<LongField>("SellPrice");
             _sellTotalLabel = Root.Q<Label>("SellTotal");
             _placeLotButton = Root.Q<Button>("PlaceLotButton");
-
-            // Wire input → total labels before ViewModel is bound
-            _buyQuantityField.RegisterValueChangedCallback(_ => RefreshBuyTotal());
-            _buyPriceField.RegisterValueChangedCallback(_ => RefreshBuyTotal());
-            _sellQuantityField.RegisterValueChangedCallback(_ => RefreshSellTotal());
-            _sellPriceField.RegisterValueChangedCallback(_ => RefreshSellTotal());
         }
 
         protected override void OnBind(OrderBookViewModel viewModel)
@@ -108,16 +102,35 @@ namespace TradeArea.UI.OrderBook
                 .Subscribe(RebuildOrderBook)
                 .AddTo(_disposables);
 
-            viewModel.OnSellQuantityChanged.Subscribe(_sellQuantityField.SetValueWithoutNotify)
-                .AddTo(_disposables);
-            viewModel.OnSellPriceChanged.Subscribe(_sellPriceField.SetValueWithoutNotify)
-                .AddTo(_disposables);
+            viewModel.OnSellQuantityChanged.Subscribe(x =>
+            {
+                _sellQuantityField.SetValueWithoutNotify(x);
+                RefreshSellTotal();
+            }).AddTo(_disposables);
+            
+            viewModel.OnSellPriceChanged.Subscribe(x =>
+            {
+                _sellPriceField.SetValueWithoutNotify(x);
+                RefreshSellTotal();
+            }).AddTo(_disposables);
 
-            viewModel.OnBuyQuantityChanged.Subscribe(_buyQuantityField.SetValueWithoutNotify)
-                .AddTo(_disposables);
+            viewModel.OnBuyQuantityChanged.Subscribe(x =>
+            {
+                _buyQuantityField.SetValueWithoutNotify(x);
+                RefreshBuyTotal();
+            }).AddTo(_disposables);
 
-            viewModel.OnBuyPriceChanged.Subscribe(_buyPriceField.SetValueWithoutNotify)
-                .AddTo(_disposables);
+            viewModel.OnBuyPriceChanged.Subscribe(x =>
+            {
+                _buyPriceField.SetValueWithoutNotify(x);
+                RefreshBuyTotal();
+            }).AddTo(_disposables);
+
+            _sellQuantityField.RegisterValueChangedCallback<int>(x => viewModel.SetSellQuantity(x.newValue));
+            _sellPriceField.RegisterValueChangedCallback<long>(x => viewModel.SetSellPrice(x.newValue));
+
+            _buyQuantityField.RegisterValueChangedCallback<int>(x => viewModel.SetBuyQuantity(x.newValue));
+            _buyPriceField.RegisterValueChangedCallback<long>(x => viewModel.SetBuyPrice(x.newValue));
 
             // Place Bid button
             _placeBidButton.RegisterCallback<ClickEvent>(_ =>
