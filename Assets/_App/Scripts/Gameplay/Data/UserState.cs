@@ -1,9 +1,12 @@
+using UnityEngine;
+
 namespace TradeArea.Data
 {
+    [System.Serializable]
     public class UserState
     {
-        public string Name { get; set; }
-        public string Token { get; set; }
-        public string UserId { get; set; }
+        [field: SerializeField] public string Name { get; set; }
+        [field: SerializeField] public string Token { get; set; }
+        [field: SerializeField] public string UserId { get; set; }
     }
 }

@@ -90,9 +90,10 @@ namespace TradeArea.UI.OrderBook
                 .Subscribe(err =>
                 {
                     var hasError = !string.IsNullOrEmpty(err);
-                    _errorLabel.style.display =
-                        hasError ? DisplayStyle.Flex : DisplayStyle.None;
-                    if (hasError) _errorLabel.text = $"Stream error: {err}";
+                    _errorLabel.style.display = hasError ? DisplayStyle.Flex : DisplayStyle.None;
+                    
+                    if (hasError) 
+                        _errorLabel.text = $"Stream error: {err}";
                 })
                 .AddTo(_disposables);
 
@@ -107,7 +108,7 @@ namespace TradeArea.UI.OrderBook
                 _sellQuantityField.SetValueWithoutNotify(x);
                 RefreshSellTotal();
             }).AddTo(_disposables);
-            
+
             viewModel.OnSellPriceChanged.Subscribe(x =>
             {
                 _sellPriceField.SetValueWithoutNotify(x);

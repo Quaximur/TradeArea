@@ -127,7 +127,7 @@ namespace TradeArea.UI.OrderBook
 
         public void SetSellQuantity(int sellQuantity)
         {
-             _sellQuantity.Value = Math.Clamp(sellQuantity, 1, _itemConfig.Value.MaxSellQuantity);
+            _sellQuantity.Value = Math.Clamp(sellQuantity, 1, _itemConfig.Value.MaxSellQuantity);
         }
 
         public void SetBuyPrice(long buyPrice)
@@ -154,32 +154,26 @@ namespace TradeArea.UI.OrderBook
 
             try
             {
-                try
-                {
-                    using var channel = GrpcChannelx.ForAddress(Constants.AUCY_URL);
-                    var itemListingClient = MagicOnionClient.Create<IItemListingService>(channel)
-                        .WithHeaders(GetAuthHeader())
-                        .WithCancellationToken(_streamCts.Token);
+                using var channel = GrpcChannelx.ForAddress(Constants.AUCY_URL);
+                var itemListingClient = MagicOnionClient.Create<IItemListingService>(channel)
+                    .WithHeaders(GetAuthHeader())
+                    .WithCancellationToken(_streamCts.Token);
 
-                    var stream = await itemListingClient.GetItemListingStream(itemConfigId);
-                    _isLoading.Value = false;
+                var stream = await itemListingClient.GetItemListingStream(itemConfigId);
+                _isLoading.Value = false;
 
-                    await foreach (var listing in stream.ResponseStream.ReadAllAsync(ct))
-                    {
-                        _orderBook.Value = listing;
-                    }
-                }
-                catch (Exception ex)
+                await foreach (var listing in stream.ResponseStream.ReadAllAsync(ct))
                 {
-                    FLogger.LogError<OrderBookViewModel>($"{nameof(StartStreamAsync)}: {ex.Message}");
+                    _orderBook.Value = listing;
                 }
             }
-            catch (OperationCanceledException)
+            catch (RpcException rpce) when ( rpce.StatusCode == StatusCode.Cancelled)
             {
-                // Normal on window close or item switch — no error
+                FLogger.Log<OrderBookViewModel>($"{nameof(StartStreamAsync)}: {rpce.Message}");
             }
             catch (Exception ex)
             {
+                FLogger.LogError<OrderBookViewModel>($"{nameof(StartStreamAsync)}: {ex.Message}");
                 _isLoading.Value = false;
                 _error.Value = ex.Message;
             }
@@ -194,10 +188,6 @@ namespace TradeArea.UI.OrderBook
         {
             _streamCts?.Cancel();
             _streamCts?.Dispose();
-            _itemConfig.Dispose();
-            _orderBook.Dispose();
-            _isLoading.Dispose();
-            _error.Dispose();
 
             base.Dispose();
         }

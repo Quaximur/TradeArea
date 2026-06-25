@@ -341,6 +341,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: TradeArea.Infrastructure::TradeArea.Infrastructure.Installers.AuctionInstaller
   _auctionViewPrefab: {fileID: 5197827658297244371, guid: e31353b5b6318d34391daed2625784fa, type: 3}
   _orderBookViewPrefab: {fileID: 5970873910795333140, guid: 908b79429738a494facc0bab73c09a95, type: 3}
+  _devUserState:
+    <Name>k__BackingField: MyUser
+    <Token>k__BackingField: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWMyZjJmNzEtYWEwZi00NmYxLTgzOWYtOTc2NGEzNGI0Zjc2IiwiZXhwIjoxNzgyNDE4NzcwfQ.-3m9b7P63xuTTc7dS9lOp_BAdKZOoBjSUo_tSmNLCxU
+    <UserId>k__BackingField: 1c2f2f71-aa0f-46f1-839f-9764a34b4f76
 --- !u!1 &1606812942
 GameObject:
   m_ObjectHideFlags: 0

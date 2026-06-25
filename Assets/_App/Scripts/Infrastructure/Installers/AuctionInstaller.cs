@@ -1,6 +1,5 @@
 using System;
 using System.Threading;
-using Aucy.Contracts.OnionClient;
 using Aucy.Contracts.OnionServer;
 using Cysharp.Threading.Tasks;
 using DevKit.UI.MVVM;
@@ -27,6 +26,7 @@ namespace TradeArea.Infrastructure.Installers
     {
         [SerializeField] private AuctionView _auctionViewPrefab;
         [SerializeField] private OrderBookView _orderBookViewPrefab;
+        [SerializeField] private UserState _devUserState;
 
         private CancellationTokenSource _cts = new();
 
@@ -49,9 +49,9 @@ namespace TradeArea.Infrastructure.Installers
             // TODO: take user data from context
             builder.RegisterInstance(new UserModel(new UserState()
             {
-                Name = "User 1",
-                Token = Constants.UserTokens[Constants.UserIndex1],
-                UserId = Constants.UserIds[Constants.UserIndex1],
+                Name = _devUserState.Name,
+                Token = _devUserState.Token,
+                UserId = _devUserState.UserId,
             }));
         }
 
