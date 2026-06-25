@@ -13,7 +13,7 @@ namespace TradeArea.Shared
         public static string[] UserTokens = { TokenUser1, TokenUser2 };
         public static string[] UserIds = { UserId1, UserId2 };
 
-        private const string TokenUser1 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWMyZjJmNzEtYWEwZi00NmYxLTgzOWYtOTc2NGEzNGI0Zjc2IiwiZXhwIjoxNzgyMzY2ODM4fQ.4nqr-E5VkSgKU1zADySZp-vKvyxOzBI7RPGpNDQkexo";
+        private const string TokenUser1 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWMyZjJmNzEtYWEwZi00NmYxLTgzOWYtOTc2NGEzNGI0Zjc2IiwiZXhwIjoxNzgyNDE4NzcwfQ.-3m9b7P63xuTTc7dS9lOp_BAdKZOoBjSUo_tSmNLCxU";
         private const string TokenUser2 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMmMyZjJmNzEtYWEwZi00NmYxLTgzOWYtOTc2NGEzNGI0Zjc2IiwiZXhwIjoxNzgxMjQ1MjMxfQ.2uX07jRLRns9g3cvXrMO5_jtmU1zzaKakRbEyhTSOS8";
         private const string UserId1 = "1c2f2f71-aa0f-46f1-839f-9764a34b4f76";
         private const string UserId2 = "2c2f2f71-aa0f-46f1-839f-9764a34b4f76";

@@ -164,7 +164,9 @@ namespace TradeArea.UI.OrderBook
             var row = new VisualElement();
             row.AddToClassList("order-book__book-row");
 
-            var priceLabel = new Label($"{minPrice}-{maxPrice}");
+            var priceText = minPrice == maxPrice ? minPrice.ToString() : $"{minPrice}-{maxPrice}";
+            
+            var priceLabel = new Label(priceText);
             priceLabel.AddToClassList("order-book__book-price");
             priceLabel.AddToClassList(isSell
                 ? "order-book__book-price--ask"
