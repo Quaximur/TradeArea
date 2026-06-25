@@ -144,7 +144,10 @@
     flex-grow: 1;
 }
 
-
+.auction__market-list .unity-scroll-view__content-container{
+    flex-grow: 1;
+    height: 100%
+}
 
 .auction__button {
     height: 34px;
