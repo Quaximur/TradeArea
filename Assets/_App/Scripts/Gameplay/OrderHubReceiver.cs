@@ -78,19 +78,38 @@ namespace TradeArea
                 if (itemStack.Quantity <= 0)
                     _auctionModel.OnInventoryChanged.Value.Value.Remove(itemStack);
 
-
                 _auctionModel.OnInventoryChanged.OnNext(_auctionModel.OnInventoryChanged.Value); // TODO: notify for RefreshItems only
             }
         }
 
         public void OnLotCollected(LotCollectedDto lotCollected)
         {
-            FLogger.LogGood($"Lot collected, but UI change is not implemented yet)");
+            FLogger.Log($"OnLotCollected");
+
+            var ownLot = _auctionModel.OnOwnLotsChanged.Value.Value
+                .FirstOrDefault(x => x.Id == lotCollected.LotId);
+
+            if (ownLot != null)
+            {
+                var collectedQuantity = lotCollected.CollectedQuantity;
+                if (ownLot.RemainingQuantity == 0 && ownLot.TotalQuantity == collectedQuantity)
+                    _auctionModel.OnOwnLotsChanged.Value.Value.Remove(ownLot);
+                else
+                    ownLot.TotalQuantity -= collectedQuantity;
+
+                _auctionModel.OnOwnLotsChanged.OnNext(_auctionModel.OnOwnLotsChanged.Value); // TODO: notify for RefreshItems only
+            }
+            else
+            {
+                FLogger.LogWarning("Lot to collect is not found");
+            }
+
+            // TODO: add money
         }
 
         public void OnLotRemoved(LotRemovedDto lotRemoved)
         {
-            FLogger.LogGood($"Lot removed: {lotRemoved.LotId} {lotRemoved.ItemConfig?.Name}");
+            FLogger.Log($"OnLotRemoved: {lotRemoved.LotId} {lotRemoved.ItemConfig?.Name}");
 
             // 1. Находим существующий стек с таким же ItemConfig в инвентаре
             var existingStack = _auctionModel.OnInventoryChanged.Value.Value
@@ -128,8 +147,17 @@ namespace TradeArea
 
             if (ownLot != null)
             {
-                _auctionModel.OnOwnLotsChanged.Value.Value.Remove(ownLot);
+                var removedQuantity = lotRemoved.RemovedQuantity;
+                if (ownLot.RemainingQuantity == ownLot.TotalQuantity && ownLot.TotalQuantity == removedQuantity)
+                    _auctionModel.OnOwnLotsChanged.Value.Value.Remove(ownLot);
+                else
+                    ownLot.TotalQuantity -= removedQuantity;
+
                 _auctionModel.OnOwnLotsChanged.OnNext(_auctionModel.OnOwnLotsChanged.Value);
+            }
+            else
+            {
+                FLogger.LogWarning("Lot to remove is not found");
             }
 
             // 5. Уведомляем об изменении инвентаря
@@ -158,7 +186,52 @@ namespace TradeArea
 
         public void OnBidCollected(BidCollectedDto bidCollected)
         {
-            FLogger.LogGood($"Bid collected, but UI change is not implemented yet)");
+            FLogger.Log($"OnBidCollected");
+
+            var existingStack = _auctionModel.OnInventoryChanged.Value.Value
+                .FirstOrDefault(x => x.ItemConfig.Id == bidCollected.ItemConfig.Id);
+
+            if (existingStack != null)
+            {
+                // Если стек существует - увеличиваем количество
+                existingStack.Quantity += bidCollected.CollectedQuantity;
+            }
+            else
+            {
+                // Если стека нет - создаем новый
+                var newStack = new ItemStackDto
+                {
+                    ItemConfig = bidCollected.ItemConfig,
+                    Quantity = bidCollected.CollectedQuantity
+                };
+                _auctionModel.OnInventoryChanged.Value.Value.Add(newStack);
+            }
+
+            _auctionModel.OnInventoryChanged.OnNext(_auctionModel.OnInventoryChanged.Value); // TODO: notify for RefreshItems only
+
+            // TODO: update UsedWeight
+
+            var ownBid = _auctionModel.OnOwnBidsChanged.Value.Value
+                .FirstOrDefault(x => x.Id == bidCollected.BidId);
+
+            if (ownBid != null)
+            {
+                var collectedQuantity = bidCollected.CollectedQuantity;
+                if (ownBid.RemainingQuantity == 0 && ownBid.TotalQuantity == collectedQuantity)
+                {
+                    _auctionModel.OnOwnBidsChanged.Value.Value.Remove(ownBid);
+                }
+                else
+                {
+                    ownBid.TotalQuantity -= collectedQuantity;
+                }
+
+                _auctionModel.OnOwnBidsChanged.OnNext(_auctionModel.OnOwnBidsChanged.Value); // TODO: notify for RefreshItems only
+            }
+            else
+            {
+                FLogger.LogWarning("Bid to collect is not found");
+            }
         }
 
         public void OnBidRemoved(BidRemovedDto bidRemoved)
@@ -167,7 +240,27 @@ namespace TradeArea
 
             // 1. Удаляем ставку из списка своих лотов
             var ownBid = _auctionModel.OnOwnBidsChanged.Value.Value
-                .FirstOrDefault();
+                .FirstOrDefault(x => x.Id == bidRemoved.BidId);
+            
+            if (ownBid != null)
+            {
+                var removedQuantity = bidRemoved.RemovedQuantity;
+                if (ownBid.RemainingQuantity == ownBid.TotalQuantity && ownBid.TotalQuantity == removedQuantity)
+                {
+                    _auctionModel.OnOwnBidsChanged.Value.Value.Remove(ownBid);
+                }
+                else
+                {
+                    ownBid.RemainingQuantity -= removedQuantity;
+                    ownBid.TotalQuantity -= removedQuantity;
+                }
+
+                _auctionModel.OnOwnBidsChanged.OnNext(_auctionModel.OnOwnBidsChanged.Value); // TODO: notify for RefreshItems only
+            }
+            else
+            {
+                FLogger.LogWarning("Bid to collect is not found");
+            }
 
             if (_auctionModel.OnOwnBidsChanged.Value.Value.TryRemoveFirstWhere(x => x.Id == bidRemoved.BidId))
                 _auctionModel.OnOwnBidsChanged.OnNext(_auctionModel.OnOwnBidsChanged.Value);
@@ -184,12 +277,40 @@ namespace TradeArea
         {
             // TODO: store events queue until full state fetch (OnJoin)
             FLogger.Log("OnBought");
+
+            var ownBid = _auctionModel.OnOwnBidsChanged.Value.Value
+                .FirstOrDefault(x => x.Id == bidId);
+
+            if (ownBid != null)
+            {
+                ownBid.RemainingQuantity -= boughtQuantity;
+                _auctionModel.OnOwnBidsChanged.OnNext(_auctionModel.OnOwnBidsChanged.Value); // TODO: notify for RefreshItems only
+            }
+            else
+            {
+                FLogger.LogWarning($"{nameof(OnBought)}: bid not found");
+            }
+            // TODO: add extra money to the inventory
         }
 
         public void OnSold(Guid lotId, int soldQuantity, long extraMoney)
         {
             // TODO: store events queue until full state fetch (OnJoin)
             FLogger.Log("OnSold");
+
+            var ownLot = _auctionModel.OnOwnLotsChanged.Value.Value
+                .FirstOrDefault(x => x.Id == lotId);
+
+            if (ownLot != null)
+            {
+                ownLot.RemainingQuantity -= soldQuantity;
+                ownLot.ExtraSoldoutMoney += extraMoney;
+                _auctionModel.OnOwnLotsChanged.OnNext(_auctionModel.OnOwnLotsChanged.Value); // TODO: notify for RefreshItems only
+            }
+            else
+            {
+                FLogger.LogWarning($"{nameof(OnSold)}: lot not found");
+            }
         }
         #endregion
     }
