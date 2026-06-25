@@ -192,7 +192,7 @@ namespace TradeArea.UI.OrderBook
                 ? "order-book__book-price--ask"
                 : "order-book__book-price--bid");
 
-            var qtyLabel = new Label(quantity.ToString());
+            var qtyLabel = new Label(quantity > 0 ? quantity.ToString() : string.Empty);
             qtyLabel.AddToClassList("order-book__book-qty");
 
             row.Add(priceLabel);
