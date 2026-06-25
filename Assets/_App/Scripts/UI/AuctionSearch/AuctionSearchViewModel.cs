@@ -21,7 +21,7 @@ namespace TradeArea.UI.AuctionSearch
 
         private readonly AuctionModel _auctionModel;
         private readonly UserModel _userModel;
-        private readonly IViewBinder<OrderBookViewModel> _buyingBinder;
+        private readonly IViewBinder<OrderBookViewModel> _orderBookBinder;
 
         private readonly ReactiveProperty<LoadingState<List<ItemConfigDto>>> _onMarketListChanged = new();
 
@@ -29,11 +29,11 @@ namespace TradeArea.UI.AuctionSearch
 
         public AuctionSearchViewModel(AuctionModel auctionModel, 
             UserModel userModel, 
-            IViewBinder<OrderBookViewModel> buyingBinder)
+            IViewBinder<OrderBookViewModel> orderBookBinder)
         {
             _auctionModel = auctionModel;
             _userModel = userModel;
-            _buyingBinder = buyingBinder;
+            _orderBookBinder = orderBookBinder;
         }
         
         public void UpdateMarketItems()
@@ -79,8 +79,8 @@ namespace TradeArea.UI.AuctionSearch
         {
             FLogger.Log<AuctionSearchViewModel>($"Opening {nameof(OrderBookView)} for itemConfigId: {itemConfig.Id}");
             
-            var buyingViewModel = _buyingBinder.Open();
-            buyingViewModel.StartItemStreaming(itemConfig);
+            var orderBookViewModel = _orderBookBinder.Open();
+            orderBookViewModel.StartItemStreaming(itemConfig);
         }
 
         private Metadata GetAuthHeader()

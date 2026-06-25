@@ -45,24 +45,24 @@ namespace TradeArea.UI.AuctionInventory
 
                 var itemStack = (ItemStackDto)_loadableList.ListView.itemsSource[i];
 
-                e.RegisterCallback<ClickEvent, Guid>(OnItemClicked, itemStack.ItemConfig.Id);
+                e.RegisterCallback<ClickEvent, ItemConfigDto>(OnItemClicked, itemStack.ItemConfig);
 
                 itemRow.ItemName = $"{itemStack.ItemConfig.Name} {itemStack.Quantity}";
             };
 
             _loadableList.ListView.unbindItem = (e, i) =>
             {
-                e.UnregisterCallback<ClickEvent, Guid>(OnItemClicked);
+                e.UnregisterCallback<ClickEvent, ItemConfigDto>(OnItemClicked);
             };
 
             viewModel.ItemStacks.Subscribe(_loadableList.OnLoadingStateChanged)
                 .AddTo(_disposables);
         }
 
-        private void OnItemClicked(ClickEvent _, Guid itemId)
+        private void OnItemClicked(ClickEvent _, ItemConfigDto itemConfig)
         {
             // Получаем ViewModel через поле класса или другим способом
-            ViewModel.TestSell(itemId).Forget();
+            ViewModel.OpenSellingView(itemConfig);
         }
 
         public override void Dispose()
