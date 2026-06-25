@@ -28,23 +28,23 @@
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement class="order-book__forms">
-                <ui:VisualElement class="order-book__form">
-                    <ui:Label text="Place Buy Order" class="order-book__form-title"/>
-                    <ui:Label text="Quantity" class="order-book__field-label"/>
-                    <ui:TextField name="BuyQuantity" value="1" class="order-book__input"/>
-                    <ui:Label text="Bid Price" class="order-book__field-label"/>
-                    <ui:TextField name="BuyPrice" value="0" class="order-book__input"/>
-                    <ui:Label name="BuyTotal" text="Total: —" class="order-book__total-label"/>
-                    <ui:Button name="PlaceBidButton" text="Place Bid" class="order-book__button order-book__button--bid"/>
-                </ui:VisualElement>
-                <ui:VisualElement class="order-book__form">
+                <ui:VisualElement name="SellPanel" class="order-book__form">
                     <ui:Label text="Place Sell Order" class="order-book__form-title"/>
-                    <ui:Label text="Quantity" class="order-book__field-label"/>
-                    <ui:TextField name="SellQuantity" value="1" class="order-book__input"/>
                     <ui:Label text="Unit Price" class="order-book__field-label"/>
-                    <ui:TextField name="SellPrice" value="0" class="order-book__input"/>
+                    <ui:LongField value="1" name="SellPrice" class="order-book__input"/>
+                    <ui:Label text="Quantity" class="order-book__field-label"/>
+                    <ui:IntegerField value="1" name="SellQuantity" class="order-book__input"/>
                     <ui:Label name="SellTotal" text="Total: —" class="order-book__total-label"/>
                     <ui:Button name="PlaceLotButton" text="Place Lot" class="order-book__button order-book__button--lot"/>
+                </ui:VisualElement>
+                <ui:VisualElement name="BuyPanel" class="order-book__form">
+                    <ui:Label text="Place Buy Order" class="order-book__form-title"/>
+                    <ui:Label text="Bid Price" class="order-book__field-label"/>
+                    <ui:LongField name="BuyPrice" value="1" class="order-book__input"/>
+                    <ui:Label text="Quantity" class="order-book__field-label"/>
+                    <ui:IntegerField value="1" name="BuyQuantity" class="order-book__input"/>
+                    <ui:Label name="BuyTotal" text="Total: —" class="order-book__total-label"/>
+                    <ui:Button name="PlaceBidButton" text="Place Bid" class="order-book__button order-book__button--bid"/>
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

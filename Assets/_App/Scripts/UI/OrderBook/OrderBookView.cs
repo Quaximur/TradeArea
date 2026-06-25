@@ -21,14 +21,14 @@ namespace TradeArea.UI.OrderBook
         private Label _errorLabel;
 
         // Buy form
-        private TextField _buyQuantityField; // TODO: input field
-        private TextField _buyPriceField;
+        private IntegerField _buyQuantityField; // TODO: input field
+        private LongField _buyPriceField;
         private Label _buyTotalLabel;
         private Button _placeBidButton;
 
         // Sell form
-        private TextField _sellQuantityField;
-        private TextField _sellPriceField;
+        private IntegerField _sellQuantityField;
+        private LongField _sellPriceField;
         private Label _sellTotalLabel;
         private Button _placeLotButton;
 
@@ -49,14 +49,14 @@ namespace TradeArea.UI.OrderBook
             _errorLabel = Root.Q<Label>("ErrorLabel");
 
             // Buy form
-            _buyQuantityField = Root.Q<TextField>("BuyQuantity");
-            _buyPriceField = Root.Q<TextField>("BuyPrice");
+            _buyQuantityField = Root.Q<IntegerField>("BuyQuantity");
+            _buyPriceField = Root.Q<LongField>("BuyPrice");
             _buyTotalLabel = Root.Q<Label>("BuyTotal");
             _placeBidButton = Root.Q<Button>("PlaceBidButton");
 
             // Sell form
-            _sellQuantityField = Root.Q<TextField>("SellQuantity");
-            _sellPriceField = Root.Q<TextField>("SellPrice");
+            _sellQuantityField = Root.Q<IntegerField>("SellQuantity");
+            _sellPriceField = Root.Q<LongField>("SellPrice");
             _sellTotalLabel = Root.Q<Label>("SellTotal");
             _placeLotButton = Root.Q<Button>("PlaceLotButton");
 
@@ -108,21 +108,28 @@ namespace TradeArea.UI.OrderBook
                 .Subscribe(RebuildOrderBook)
                 .AddTo(_disposables);
 
+            viewModel.OnSellQuantityChanged.Subscribe(_sellQuantityField.SetValueWithoutNotify)
+                .AddTo(_disposables);
+            viewModel.OnSellPriceChanged.Subscribe(_sellPriceField.SetValueWithoutNotify)
+                .AddTo(_disposables);
+
+            viewModel.OnBuyQuantityChanged.Subscribe(_buyQuantityField.SetValueWithoutNotify)
+                .AddTo(_disposables);
+
+            viewModel.OnBuyPriceChanged.Subscribe(_buyPriceField.SetValueWithoutNotify)
+                .AddTo(_disposables);
+
             // Place Bid button
-            _placeBidButton.clicked += () =>
+            _placeBidButton.RegisterCallback<ClickEvent>(_ =>
             {
-                if (!TryParseInt(_buyQuantityField.value, out var qty)) return;
-                if (!TryParseLong(_buyPriceField.value, out var price)) return;
-                viewModel.CreateBidAsync(qty, price).Forget();
-            };
+                viewModel.CreateBidAsync().Forget();
+            });
 
             // Place Lot button
-            // _placeLotButton.clicked += () =>
-            // {
-            //     if (!TryParseInt(_sellQuantityField.value, out var qty)) return;
-            //     if (!TryParseLong(_sellPriceField.value, out var price)) return;
-            //     viewModel.CreateLotAsync(qty, price).Forget();
-            // };
+            _placeLotButton.RegisterCallback<ClickEvent>(_ =>
+            {
+                viewModel.CreateLotAsync().Forget();
+            });
         }
 
         private void RebuildOrderBook(RawItemListingDto listing)
@@ -130,7 +137,6 @@ namespace TradeArea.UI.OrderBook
             _lotsBookContainer.Clear();
             _bidsBookContainer.Clear();
 
-            // Lots: cheapest first (ascending) — buyers scan from top
             var levels = listing.Levels
                 .OrderBy(l => l.MinPrice)
                 .ToArray();
@@ -165,7 +171,7 @@ namespace TradeArea.UI.OrderBook
             row.AddToClassList("order-book__book-row");
 
             var priceText = minPrice == maxPrice ? minPrice.ToString() : $"{minPrice}-{maxPrice}";
-            
+
             var priceLabel = new Label(priceText);
             priceLabel.AddToClassList("order-book__book-price");
             priceLabel.AddToClassList(isSell
@@ -183,27 +189,13 @@ namespace TradeArea.UI.OrderBook
 
         private void RefreshBuyTotal()
         {
-            if (TryParseLong(_buyQuantityField.value, out var qty) &&
-                TryParseLong(_buyPriceField.value, out var price))
-                _buyTotalLabel.text = $"Total: {qty * price}$";
-            else
-                _buyTotalLabel.text = "Total: —";
+            _buyTotalLabel.text = $"{_buyQuantityField.value * _buyPriceField.value}";
         }
 
         private void RefreshSellTotal()
         {
-            if (TryParseLong(_sellQuantityField.value, out var qty) &&
-                TryParseLong(_sellPriceField.value, out var price))
-                _sellTotalLabel.text = $"Total: {qty * price}$";
-            else
-                _sellTotalLabel.text = "Total: —";
+            _sellTotalLabel.text = $"{_sellQuantityField.value * _sellPriceField.value}";
         }
-
-        private static bool TryParseLong(string value, out long result) =>
-            long.TryParse(value, out result) && result > 0;
-
-        private static bool TryParseInt(string value, out int result) =>
-            int.TryParse(value, out result) && result > 0;
 
         public override void Dispose()
         {

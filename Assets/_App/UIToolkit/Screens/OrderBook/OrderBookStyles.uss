@@ -114,11 +114,11 @@
     min-width: 60px;
 }
 
-.order-book__book-price--ask {
+.order-book__book-price--bid {
     color: rgb(210, 100, 100);
 }
 
-.order-book__book-price--bid {
+.order-book__book-price--ask {
     color: rgb(100, 210, 145);
 }
 
@@ -175,8 +175,12 @@
     color: rgb(153, 166, 184);
     font-size: 11px;
     -unity-text-align: middle-left;
-    margin-bottom: 3px;
+    margin-bottom: 2px;
     margin-top: 6px;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
 }
 
 .order-book__input {
@@ -194,6 +198,14 @@
 
 .order-book__input:focus {
     border-color: rgb(93, 155, 176);
+}
+
+.order-book__input .unity-base-field__input {
+    background-color: rgb(18, 23, 32);
+    padding-top: 4px;
+    padding-right: 4px;
+    padding-bottom: 4px;
+    padding-left: 4px;
 }
 
 .order-book__total-label {
@@ -225,21 +237,25 @@
 }
 
 .order-book__button--bid {
+    background-color: rgb(210, 100, 100);
+    border-color: rgb(70, 160, 105);
+    border-left-color: rgb(237, 153, 144);
+    border-right-color: rgb(237, 153, 144);
+    border-top-color: rgb(237, 153, 144);
+    border-bottom-color: rgb(237, 153, 144);
+}
+
+.order-book__button--bid:hover {
+    background-color: rgb(233, 113, 113);
+}
+
+.order-book__button--lot {
     background-color: rgb(35, 90, 60);
     border-color: rgb(70, 160, 105);
 }
 
-.order-book__button--bid:hover {
-    background-color: rgb(45, 110, 75);
-}
-
-.order-book__button--lot {
-    background-color: rgb(45, 95, 115);
-    border-color: rgb(93, 155, 176);
-}
-
 .order-book__button--lot:hover {
-    background-color: rgb(55, 115, 138);
+    background-color: rgb(45, 110, 75);
 }
 
 .order-book__button:disabled {

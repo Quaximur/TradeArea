@@ -20,6 +20,12 @@ namespace TradeArea.UI.OrderBook
         public Observable<ItemConfigDto> ItemConfig => _itemConfig;
         public Observable<RawItemListingDto> OrderBook => _orderBook;
 
+        public Observable<int> OnSellQuantityChanged => _sellQuantity;
+        public Observable<long> OnSellPriceChanged => _sellPrice;
+
+        public Observable<int> OnBuyQuantityChanged => _buyQuantity;
+        public Observable<long> OnBuyPriceChanged => _buyPrice;
+
         // Non-null when the stream has faulted
         private readonly ReactiveProperty<string> _error = new();
 
@@ -28,14 +34,20 @@ namespace TradeArea.UI.OrderBook
 
         // Currently displayed item — set externally before opening the window
         private readonly ReactiveProperty<ItemConfigDto> _itemConfig = new();
-        
+
         // Latest order book snapshot from the stream
         private readonly ReactiveProperty<RawItemListingDto> _orderBook = new();
+
+        private readonly ReactiveProperty<int> _sellQuantity = new(1);
+        private readonly ReactiveProperty<long> _sellPrice = new();
+
+        private readonly ReactiveProperty<int> _buyQuantity = new(1);
+        private readonly ReactiveProperty<long> _buyPrice = new();
 
         private readonly AuctionModel _auctionModel;
         private readonly OrderHubService _orderHubService;
         private readonly UserModel _userModel;
-     
+
         private CancellationTokenSource _streamCts;
 
         public OrderBookViewModel(AuctionModel auctionModel,
@@ -54,10 +66,17 @@ namespace TradeArea.UI.OrderBook
         public void StartItemStreaming(ItemConfigDto itemConfig)
         {
             _itemConfig.Value = itemConfig;
+
+            _sellQuantity.Value = 1;
+            _sellPrice.Value = itemConfig.MaxPrice;
+
+            _buyQuantity.Value = 1;
+            _buyPrice.Value = itemConfig.MaxPrice;
+
             StartStreamAsync(itemConfig.Id).Forget();
         }
 
-        public async UniTask CreateBidAsync(int quantity, long bidPrice)
+        public async UniTask CreateBidAsync()
         {
             if (_orderHubService.OrderHub == null)
             {
@@ -69,14 +88,56 @@ namespace TradeArea.UI.OrderBook
             {
                 await _orderHubService.OrderHub.CreateBid(
                     new CreateBidDto(itemConfigId: _itemConfig.Value.Id,
-                        bidPrice: bidPrice,
-                        totalQuantity: quantity)
+                        bidPrice: _buyPrice.Value,
+                        totalQuantity: _buyQuantity.Value)
                 );
             }
             catch (Exception ex)
             {
                 FLogger.LogError<OrderBookViewModel>($"{nameof(CreateBidAsync)}: {ex.Message}");
             }
+        }
+
+        public async UniTask CreateLotAsync()
+        {
+            if (_orderHubService.OrderHub == null)
+            {
+                FLogger.LogWarning<OrderBookViewModel>("Order hub is null");
+                return;
+            }
+
+            try
+            {
+                await _orderHubService.OrderHub.CreateLot(
+                    new CreateLotDto(itemConfigId: _itemConfig.Value.Id,
+                        unitPrice: _sellPrice.Value,
+                        totalQuantity: _sellQuantity.Value)
+                );
+            }
+            catch (Exception ex)
+            {
+                FLogger.LogError<OrderBookViewModel>($"{nameof(CreateLotAsync)}: {ex.Message}");
+            }
+        }
+
+        public void SetSellPrice(long sellPrice)
+        {
+            _sellPrice.Value = Math.Clamp(sellPrice, _itemConfig.Value.MinPrice, _itemConfig.Value.MaxPrice);
+        }
+
+        public void SetSellQuantity(int sellQuantity)
+        {
+             _sellQuantity.Value = Math.Clamp(sellQuantity, 1, _itemConfig.Value.MaxSellQuantity);
+        }
+
+        public void SetBuyPrice(long buyPrice)
+        {
+            _buyPrice.Value = Math.Clamp(buyPrice, _itemConfig.Value.MinPrice, _itemConfig.Value.MaxPrice);
+        }
+
+        public void SetBuyQuantity(int buyQuantity)
+        {
+            _buyQuantity.Value = Math.Clamp(buyQuantity, 1, _itemConfig.Value.MaxBuyQuantity);
         }
 
         private async UniTaskVoid StartStreamAsync(Guid itemConfigId)
