@@ -122,22 +122,22 @@ namespace TradeArea.UI.OrderBook
 
         public void SetSellPrice(long sellPrice)
         {
-            _sellPrice.Value = Math.Clamp(sellPrice, _itemConfig.Value.MinPrice, _itemConfig.Value.MaxPrice);
+            _sellPrice.OnNext(Math.Clamp(sellPrice, _itemConfig.Value.MinPrice, _itemConfig.Value.MaxPrice));
         }
 
         public void SetSellQuantity(int sellQuantity)
         {
-            _sellQuantity.Value = Math.Clamp(sellQuantity, 1, _itemConfig.Value.MaxSellQuantity);
+            _sellQuantity.OnNext(Math.Clamp(sellQuantity, 1, _itemConfig.Value.MaxSellQuantity));
         }
 
         public void SetBuyPrice(long buyPrice)
         {
-            _buyPrice.Value = Math.Clamp(buyPrice, _itemConfig.Value.MinPrice, _itemConfig.Value.MaxPrice);
+            _buyPrice.OnNext(Math.Clamp(buyPrice, _itemConfig.Value.MinPrice, _itemConfig.Value.MaxPrice));
         }
 
         public void SetBuyQuantity(int buyQuantity)
         {
-            _buyQuantity.Value = Math.Clamp(buyQuantity, 1, _itemConfig.Value.MaxBuyQuantity);
+            _buyQuantity.OnNext(Math.Clamp(buyQuantity, 1, _itemConfig.Value.MaxBuyQuantity));
         }
 
         private async UniTaskVoid StartStreamAsync(Guid itemConfigId)
