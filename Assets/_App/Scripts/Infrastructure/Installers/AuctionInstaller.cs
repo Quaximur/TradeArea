@@ -19,6 +19,8 @@ using TradeArea.UI.AuctionSearch;
 using UnityEngine;
 using VContainer;
 using Random = UnityEngine.Random;
+using UnityEngine.InputSystem;
+using R3;
 
 namespace TradeArea.Infrastructure.Installers
 {
@@ -27,6 +29,13 @@ namespace TradeArea.Infrastructure.Installers
         [SerializeField] private AuctionView _auctionViewPrefab;
         [SerializeField] private OrderBookView _orderBookViewPrefab;
         [SerializeField] private UserState _devUserState;
+        [SerializeField] private UserState _devUserState2;
+        [SerializeField] private string _auctionActionName = "GameUI/Auction";
+        [SerializeField] private InputActionAsset _inputActionAsset;
+
+        private InputAction _auctionActionRef;
+        private IViewBinder<AuctionViewModel> _auctionBinder;
+        private bool _isAuctionOpened = false;
 
         private CancellationTokenSource _cts = new();
 
@@ -41,9 +50,9 @@ namespace TradeArea.Infrastructure.Installers
             builder.Register<OrderHubService>(Lifetime.Singleton);
             builder.Register<AuctionModel>(Lifetime.Singleton);
 
-            builder.RegisterMVVM<AuctionView, AuctionViewModel>(_auctionViewPrefab, 
+            builder.RegisterMVVM<AuctionView, AuctionViewModel>(_auctionViewPrefab,
                 viewModelLifetime: Lifetime.Transient);
-            builder.RegisterMVVM<OrderBookView, OrderBookViewModel>(_orderBookViewPrefab, 
+            builder.RegisterMVVM<OrderBookView, OrderBookViewModel>(_orderBookViewPrefab,
                 viewModelLifetime: Lifetime.Transient);
 
             // TODO: take user data from context
@@ -60,9 +69,65 @@ namespace TradeArea.Infrastructure.Installers
             var userModel = Container.Resolve<UserModel>();
 
             await CreateInventory(userModel.OnTokenChanged.Value);
-            await CreateInventory(Constants.UserTokens[Constants.UserIndex2]);  // TEST 2nd user
+            await CreateInventory(_devUserState2.Token);  // TEST 2nd user
 
-            Container.Resolve<IViewBinder<AuctionViewModel>>().Open(); // TODO: opening control
+            SubscribeAuctionKey();
+
+#if UNITY_EDITOR
+            // Dev user profiles switcher
+            // TIP: Switch profiles before joining StreamingHub
+
+            Observable.EveryUpdate().Where(_ => Keyboard.current.kKey.wasPressedThisFrame)
+                .Subscribe(_ =>
+                {
+                    userModel.OnUserIdChanged.Value = _devUserState.UserId;
+                    userModel.OnNameChanged.Value = _devUserState.Name;
+                    userModel.OnTokenChanged.Value = _devUserState.Token;
+                    FLogger.Log("USER 1 is used");
+                }).AddTo(_disposables);
+
+            Observable.EveryUpdate().Where(_ => Keyboard.current.lKey.wasPressedThisFrame)
+                .Subscribe(_ =>
+                {
+                    userModel.OnUserIdChanged.Value = _devUserState2.UserId;
+                    userModel.OnNameChanged.Value = _devUserState2.Name;
+                    userModel.OnTokenChanged.Value = _devUserState2.Token;
+                    FLogger.Log("USER 2 is used");
+                }).AddTo(_disposables);
+#endif
+        }
+
+        private void SubscribeAuctionKey()
+        {
+            _auctionBinder = Container.Resolve<IViewBinder<AuctionViewModel>>();
+            _inputActionAsset.Enable();
+            _auctionActionRef = _inputActionAsset.FindAction(_auctionActionName);
+
+            if (_auctionActionRef != null)
+            {
+                _auctionActionRef.started += ToggleAuctionView;
+                FLogger.Log("Auction action binded");
+            }
+            else
+            {
+                FLogger.LogWarning("Auction action not found");
+            }
+        }
+
+        private void ToggleAuctionView(InputAction.CallbackContext _)
+        {
+            if (!_isAuctionOpened)
+                _auctionBinder.Open();
+            else
+                _auctionBinder.Close();
+
+            _isAuctionOpened = !_isAuctionOpened;
+        }
+
+        private void UnsubscribeAuctionKey()
+        {
+            if (_auctionActionRef != null)
+                _auctionActionRef.started -= ToggleAuctionView;
         }
 
         private async UniTask CreateInventory(string token)
@@ -80,20 +145,17 @@ namespace TradeArea.Infrastructure.Installers
                 );
 
                 // TEST
-                await inventoryClient.AddItemStack(
-                    new AddItemStackDto(itemConfigId: Guid.Parse("00000000-0000-0000-0000-000000000001"), 
-                        itemConfig: null, 
-                        quantity: Random.Range(500, 1001))
-                );
-
-                await inventoryClient.AddItemStack(
-                    new AddItemStackDto(itemConfigId: Guid.Parse("00000000-0000-0000-0000-000000000002"), 
-                        itemConfig: null, 
-                        quantity: Random.Range(500, 1001))
-                );
+                for (var i = 0; i < 7; i++)
+                {
+                    await inventoryClient.AddItemStack(
+                        new AddItemStackDto(itemConfigId: Guid.Parse($"00000000-0000-0000-0000-00000000000{Random.Range(1, 10)}"),
+                            itemConfig: null,
+                            quantity: Random.Range(500, 1001))
+                    );
+                }
 
                 FLogger.LogGood($"Inventory has been created (Capacity: {inventoryDto.Capacity}, WeightLimit: {inventoryDto.WeightLimit}).");
-                await AddMoneyAsync(10000, token);
+                await AddMoneyAsync(500_000_000, token);
             }
             catch (Exception ex)
             {
@@ -127,6 +189,7 @@ namespace TradeArea.Infrastructure.Installers
 
         protected override void OnDestroy()
         {
+            UnsubscribeAuctionKey();
             Disposes.ClearCts(ref _cts);
             base.OnDestroy();
         }

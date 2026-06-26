@@ -18,7 +18,7 @@ namespace TradeArea
 
         private readonly AuctionModel _auctionModel;
         private readonly UserModel _userModel;
-        private CancellationTokenSource _cts = new();
+        private CancellationTokenSource _cts;
         private GrpcChannelx _channel = null;
 
         public OrderHubService(AuctionModel auctionModel, UserModel userModel)
@@ -29,6 +29,9 @@ namespace TradeArea
 
         public void StartMessaging()
         {
+            Disposes.ClearCts(ref _cts);
+            _cts = new();
+
             StartMessagingAsync().Forget();
 
             async UniTaskVoid StartMessagingAsync()
@@ -43,6 +46,7 @@ namespace TradeArea
 
                         Disposes.ClearDispose(ref _channel);
                         _channel = GrpcChannelx.ForAddress(Constants.AUCY_URL);
+                        
                         var receiver = new OrderHubReceiver(_auctionModel);
                         OrderHub = await StreamingHubClient.ConnectAsync<IOrderHub, IOrderHubReceiver>(
                             _channel, receiver,

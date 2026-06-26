@@ -149,9 +149,14 @@ namespace TradeArea
             {
                 var removedQuantity = lotRemoved.RemovedQuantity;
                 if (ownLot.RemainingQuantity == ownLot.TotalQuantity && ownLot.TotalQuantity == removedQuantity)
+                {
                     _auctionModel.OnOwnLotsChanged.Value.Value.Remove(ownLot);
+                }
                 else
+                {
                     ownLot.TotalQuantity -= removedQuantity;
+                    ownLot.RemainingQuantity -= removedQuantity;
+                } 
 
                 _auctionModel.OnOwnLotsChanged.OnNext(_auctionModel.OnOwnLotsChanged.Value);
             }
@@ -241,7 +246,7 @@ namespace TradeArea
             // 1. Удаляем ставку из списка своих лотов
             var ownBid = _auctionModel.OnOwnBidsChanged.Value.Value
                 .FirstOrDefault(x => x.Id == bidRemoved.BidId);
-            
+
             if (ownBid != null)
             {
                 var removedQuantity = bidRemoved.RemovedQuantity;

@@ -62,6 +62,7 @@ namespace TradeArea.UI.AuctionBids
                 ownBidRow.SetCollectButtonEnabled(boughtQuantity > 0);
                 ownBidRow.SetRemoveButtonEnabled(remainingQuantity > 0);
 
+                ownBidRow.CollectButton.RegisterCallback<ClickEvent, Guid>(OnCollectClicked, ownBid.Id);
                 ownBidRow.RemoveButton.RegisterCallback<ClickEvent, Guid>(OnRemoveClicked, ownBid.Id);
             };
 
