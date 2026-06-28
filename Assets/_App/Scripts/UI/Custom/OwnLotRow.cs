@@ -178,7 +178,7 @@ namespace TradeArea.UI.Custom
 
             // Default descriptions — override in inspector
             _soldQuantityDescLabel.text = "Sold";
-            _totalQuantityDescLabel.text = "Total";
+            _totalQuantityDescLabel.text = "Orders";
             _unitPriceDescLabel.text = "Unit Price";
             _extraSoldoutMoneyDescLabel.text = "Bonus";
             _revenueDescLabel.text = "Revenue";

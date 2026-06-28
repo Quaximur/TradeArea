@@ -31,12 +31,12 @@ namespace TradeArea.UI.Custom
             set => _bidPriceDescLabel.text = value;
         }
 
-        [UxmlAttribute]
-        public string RemainingQuantityDescription
-        {
-            get => _remainingQuantityDescLabel.text;
-            set => _remainingQuantityDescLabel.text = value;
-        }
+        // [UxmlAttribute]
+        // public string RemainingQuantityDescription
+        // {
+        //     get => _remainingQuantityDescLabel.text;
+        //     set => _remainingQuantityDescLabel.text = value;
+        // }
 
         [UxmlAttribute]
         public string RefundDescription
@@ -50,7 +50,7 @@ namespace TradeArea.UI.Custom
         private readonly Label _boughtQuantityDescLabel;
         private readonly Label _totalQuantityDescLabel;
         private readonly Label _bidPriceDescLabel;
-        private readonly Label _remainingQuantityDescLabel;
+        // private readonly Label _remainingQuantityDescLabel;
         private readonly Label _refundDescLabel;
 
         // ── Value labels (runtime) ────────────────────────────────────────────
@@ -58,7 +58,7 @@ namespace TradeArea.UI.Custom
         private readonly Label _boughtQuantityLabel;
         private readonly Label _totalQuantityLabel;
         private readonly Label _bidPriceLabel;
-        private readonly Label _remainingQuantityLabel;
+        // private readonly Label _remainingQuantityLabel;
         private readonly Label _refundFormulaLabel;
         private readonly Label _refundValueLabel;
 
@@ -116,8 +116,8 @@ namespace TradeArea.UI.Custom
             moneyIcon1.AddToClassList("silver-icon");
             bidPriceCell.Add(moneyIcon1);
 
-            (_remainingQuantityDescLabel, _remainingQuantityLabel) =
-                CreateStatCell(middleTop, "own-bid-row__stat--remaining-quantity");
+            // (_remainingQuantityDescLabel, _remainingQuantityLabel) =
+            //     CreateStatCell(middleTop, "own-bid-row__stat--remaining-quantity");
 
             // Bottom: Refund formula + emphasized refund value
             var refundRow = new VisualElement();
@@ -164,7 +164,7 @@ namespace TradeArea.UI.Custom
             _boughtQuantityDescLabel.text = "Bought";
             _totalQuantityDescLabel.text = "Orders";
             _bidPriceDescLabel.text = "Bid Price";
-            _remainingQuantityDescLabel.text = "Remaining";
+            // _remainingQuantityDescLabel.text = "Remaining";
             _refundDescLabel.text = "Refund";
         }
 
@@ -185,9 +185,9 @@ namespace TradeArea.UI.Custom
             _boughtQuantityLabel.text = boughtQuantity;
             _totalQuantityLabel.text = totalQuantity;
             _bidPriceLabel.text = bidPrice;
-            _remainingQuantityLabel.text = remainingQuantity;
+            // _remainingQuantityLabel.text = remainingQuantity;
 
-            _refundFormulaLabel.text = $"{remainingQuantity} * {bidPrice} = "; // TODO: remove it
+            _refundFormulaLabel.text = $"({totalQuantity} - {boughtQuantity}) * {bidPrice} = "; // TODO: remove it
             _refundValueLabel.text = refund;
         }
 
