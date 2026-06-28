@@ -101,11 +101,39 @@ namespace TradeArea.UI.Custom
             middleTop.AddToClassList("own-lot-row__middle-top");
             middleBlock.Add(middleTop);
 
-            (_unitPriceDescLabel, _unitPriceLabel) =
-                CreateStatCell(middleTop, "own-lot-row__stat--unit-price");
+            var unitPriceCell = new VisualElement();
+            unitPriceCell.AddToClassList("own-lot-row__stat");
+            unitPriceCell.AddToClassList("own-lot-row__stat--unit-price");
+            middleTop.Add(unitPriceCell);
 
-            (_extraSoldoutMoneyDescLabel, _extraSoldoutMoneyLabel) =
-                CreateStatCell(middleTop, "own-lot-row__stat--extra-soldout-money");
+            _unitPriceDescLabel = new Label();
+            _unitPriceDescLabel.AddToClassList("own-lot-row__stat-desc");
+            unitPriceCell.Add(_unitPriceDescLabel);
+
+            _unitPriceLabel = new Label();
+            _unitPriceLabel.AddToClassList("own-lot-row__stat-value");
+            unitPriceCell.Add(_unitPriceLabel);
+
+            var moneyIcon1 = new VisualElement();
+            moneyIcon1.AddToClassList("silver-icon");
+            unitPriceCell.Add(moneyIcon1);
+
+            var extraMoneyCell = new VisualElement();
+            extraMoneyCell.AddToClassList("own-lot-row__stat");
+            extraMoneyCell.AddToClassList("own-lot-row__stat--extra-soldout-money");
+            middleTop.Add(extraMoneyCell);
+
+            _extraSoldoutMoneyDescLabel = new Label();
+            _extraSoldoutMoneyDescLabel.AddToClassList("own-lot-row__stat-desc");
+            extraMoneyCell.Add(_extraSoldoutMoneyDescLabel);
+
+            _extraSoldoutMoneyLabel = new Label();
+            _extraSoldoutMoneyLabel.AddToClassList("own-lot-row__stat-value");
+            extraMoneyCell.Add(_extraSoldoutMoneyLabel);
+
+            var moneyIcon2 = new VisualElement();
+            moneyIcon2.AddToClassList("silver-icon");
+            extraMoneyCell.Add(moneyIcon2);
 
             // Bottom: Revenue formula + emphasized value
             var revenueRow = new VisualElement();
@@ -123,6 +151,10 @@ namespace TradeArea.UI.Custom
             _revenueLabel = new Label();
             _revenueLabel.AddToClassList("own-lot-row__revenue-value");
             revenueRow.Add(_revenueLabel);
+
+            var moneyIcon3 = new VisualElement();
+            moneyIcon3.AddToClassList("silver-icon");
+            revenueRow.Add(moneyIcon3);
 
             // Spacer — pushes buttons to the right edge
             var spacer = new VisualElement();
@@ -145,14 +177,13 @@ namespace TradeArea.UI.Custom
             buttonGroup.Add(_removeButton);
 
             // Default descriptions — override in inspector
-            _soldQuantityDescLabel.text      = "Sold";
-            _totalQuantityDescLabel.text     = "Total";
-            _unitPriceDescLabel.text         = "Unit Price";
+            _soldQuantityDescLabel.text = "Sold";
+            _totalQuantityDescLabel.text = "Total";
+            _unitPriceDescLabel.text = "Unit Price";
             _extraSoldoutMoneyDescLabel.text = "Bonus";
-            _revenueDescLabel.text           = "Revenue";
+            _revenueDescLabel.text = "Revenue";
         }
 
-        // ── Public API ────────────────────────────────────────────────────────
 
         public void SetCollectButtonEnabled(bool isEnabled) =>
             _collectButton.SetEnabled(isEnabled);
@@ -163,16 +194,14 @@ namespace TradeArea.UI.Custom
         public void SetStats(string soldQuantity, string totalQuantity,
             string unitPrice, string extraSoldoutMoney, string revenue)
         {
-            _soldQuantityLabel.text      = soldQuantity;
-            _totalQuantityLabel.text     = totalQuantity;
-            _unitPriceLabel.text         = unitPrice;
+            _soldQuantityLabel.text = soldQuantity;
+            _totalQuantityLabel.text = totalQuantity;
+            _unitPriceLabel.text = unitPrice;
             _extraSoldoutMoneyLabel.text = extraSoldoutMoney;
 
-            _revenueFormulaLabel.text = $"{soldQuantity} * {unitPrice} + {extraSoldoutMoney} =";
-            _revenueLabel.text        = $"{revenue}$";
+            _revenueFormulaLabel.text = $"{soldQuantity} * {unitPrice} + {extraSoldoutMoney} = ";
+            _revenueLabel.text = revenue;
         }
-
-        // ── Helpers ───────────────────────────────────────────────────────────
 
         private static (Label descLabel, Label valueLabel) CreateStatCell(
             VisualElement container, string modifierClass)

@@ -65,8 +65,6 @@ namespace TradeArea.UI.Custom
         private readonly Button _collectButton;
         private readonly Button _removeButton;
 
-        // ── Constructor ───────────────────────────────────────────────────────
-
         public OwnBidRow() : base()
         {
             AddToClassList("own-bid-row");
@@ -101,8 +99,22 @@ namespace TradeArea.UI.Custom
             middleTop.AddToClassList("own-bid-row__middle-top");
             middleBlock.Add(middleTop);
 
-            (_bidPriceDescLabel, _bidPriceLabel) =
-                CreateStatCell(middleTop, "own-bid-row__stat--bid-price");
+            var bidPriceCell = new VisualElement();
+            bidPriceCell.AddToClassList("own-bid-row__stat");
+            bidPriceCell.AddToClassList("own-bid-row__stat--bid-price");
+            middleTop.Add(bidPriceCell);
+
+            _bidPriceDescLabel = new Label();
+            _bidPriceDescLabel.AddToClassList("own-bid-row__stat-desc");
+            bidPriceCell.Add(_bidPriceDescLabel);
+
+            _bidPriceLabel = new Label();
+            _bidPriceLabel.AddToClassList("own-bid-row__stat-value");
+            bidPriceCell.Add(_bidPriceLabel);
+
+            var moneyIcon1 = new VisualElement();
+            moneyIcon1.AddToClassList("silver-icon");
+            bidPriceCell.Add(moneyIcon1);
 
             (_remainingQuantityDescLabel, _remainingQuantityLabel) =
                 CreateStatCell(middleTop, "own-bid-row__stat--remaining-quantity");
@@ -123,6 +135,10 @@ namespace TradeArea.UI.Custom
             _refundValueLabel = new Label();
             _refundValueLabel.AddToClassList("own-bid-row__refund-value");
             refundRow.Add(_refundValueLabel);
+
+            var moneyIcon2 = new VisualElement();
+            moneyIcon2.AddToClassList("silver-icon");
+            refundRow.Add(moneyIcon2);
 
             // Spacer — pushes button to the right edge
             var spacer = new VisualElement();
@@ -145,14 +161,12 @@ namespace TradeArea.UI.Custom
             buttonGroup.Add(_removeButton);
 
             // Default descriptions — override in inspector
-            _boughtQuantityDescLabel.text    = "Bought";
-            _totalQuantityDescLabel.text     = "Orders";
-            _bidPriceDescLabel.text          = "Bid Price";
+            _boughtQuantityDescLabel.text = "Bought";
+            _totalQuantityDescLabel.text = "Orders";
+            _bidPriceDescLabel.text = "Bid Price";
             _remainingQuantityDescLabel.text = "Remaining";
-            _refundDescLabel.text            = "Refund";
+            _refundDescLabel.text = "Refund";
         }
-
-        // ── Public API ────────────────────────────────────────────────────────
 
         public void SetCollectButtonEnabled(bool isEnabled) =>
             _collectButton.SetEnabled(isEnabled);
@@ -168,13 +182,13 @@ namespace TradeArea.UI.Custom
         public void SetStats(string boughtQuantity, string totalQuantity,
             string bidPrice, string remainingQuantity, string refund)
         {
-            _boughtQuantityLabel.text    = boughtQuantity;
-            _totalQuantityLabel.text     = totalQuantity;
-            _bidPriceLabel.text          = bidPrice;
+            _boughtQuantityLabel.text = boughtQuantity;
+            _totalQuantityLabel.text = totalQuantity;
+            _bidPriceLabel.text = bidPrice;
             _remainingQuantityLabel.text = remainingQuantity;
 
-            _refundFormulaLabel.text = $"{remainingQuantity} * {bidPrice} ="; // TODO: remove it
-            _refundValueLabel.text   = $"{refund}$";
+            _refundFormulaLabel.text = $"{remainingQuantity} * {bidPrice} = "; // TODO: remove it
+            _refundValueLabel.text = refund;
         }
 
         // ── Helpers ───────────────────────────────────────────────────────────
