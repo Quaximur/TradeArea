@@ -57,16 +57,13 @@
                                 <ui:VisualElement name="InventoryPanel" class="auction__sidebar-card">
                                     <ui:VisualElement class="auction__content-header">
                                         <ui:Label text="Inventory" class="auction__content-title"/>
-                                        <ui:Label text="Available Items" class="auction__content-subtitle"/>
                                     </ui:VisualElement>
-                                    <ui:VisualElement class="auction__wallet-panel">
-                                        <ui:Label text="Silver" class="auction__wallet-label"/>
-                                        <ui:TextField name="User1FundsAmount" value="1000" class="auction__input auction__wallet-input"/>
-                                        <ui:VisualElement class="auction__wallet-buttons">
-                                            <ui:Button name="AddMoney" text="Add Money" class="auction__button"/>
-                                            <ui:Button name="RemoveMoney" text="Remove Money" class="auction__button auction__wallet-button-right"/>
-                                        </ui:VisualElement>
+                                    <ui:Label text="Silver" class="auction__content-subtitle"/>
+                                    <ui:VisualElement class="auction__wallet-panel" style="flex-direction: row;">
+                                        <ui:VisualElement class="silver-icon"/>
+                                        <ui:Label text="0" name="MoneyLabel" class="auction__money-label"/>
                                     </ui:VisualElement>
+                                    <ui:Label text="Available Items" class="auction__content-subtitle"/>
                                     <ui:Instance template="LoadableListView" name="LoadableListView" class="auction__panel-main auction__base-list" style="flex-grow: 1; padding-top: 6px; padding-right: 6px; padding-bottom: 6px; padding-left: 6px;"/>
                                 </ui:VisualElement>
                             </TradeArea.UI.AuctionInventory.AuctionInventoryWidget>

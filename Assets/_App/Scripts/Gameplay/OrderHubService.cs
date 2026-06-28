@@ -40,6 +40,7 @@ namespace TradeArea
                 {
                     try
                     {
+                        _auctionModel.OnMoneyChanged.Value = LoadingState.Loading<long>();
                         _auctionModel.OnInventoryChanged.Value = LoadingState.Loading<List<ItemStackDto>>();
                         _auctionModel.OnOwnLotsChanged.Value = LoadingState.Loading<List<OwnLotDto>>();
                         _auctionModel.OnOwnBidsChanged.Value = LoadingState.Loading<List<OwnBidDto>>();
@@ -73,6 +74,7 @@ namespace TradeArea
                     {
                         FLogger.LogError<OrderHubService>($"{nameof(StartMessagingAsync)}: {ex.Message}");
 
+                        _auctionModel.OnMoneyChanged.Value = LoadingState.Fail<long>();
                         _auctionModel.OnInventoryChanged.Value = LoadingState.Fail<List<ItemStackDto>>();
                         _auctionModel.OnOwnLotsChanged.Value = LoadingState.Fail<List<OwnLotDto>>();
                         _auctionModel.OnOwnBidsChanged.Value = LoadingState.Fail<List<OwnBidDto>>();
@@ -93,8 +95,8 @@ namespace TradeArea
 
         public void Dispose()
         {
-            Disposes.ClearDispose(ref _channel);
             Disposes.ClearDispose(ref _cts);
+            Disposes.ClearDispose(ref _channel);
         }
     }
 }

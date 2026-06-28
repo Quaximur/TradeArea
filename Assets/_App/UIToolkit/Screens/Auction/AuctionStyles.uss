@@ -144,9 +144,9 @@
     flex-grow: 1;
 }
 
-.auction__market-list .unity-scroll-view__content-container{
+.auction__market-list .unity-scroll-view__content-container {
     flex-grow: 1;
-    height: 100%
+    height: 100%;
 }
 
 .auction__button {
@@ -430,6 +430,20 @@
     color: rgb(153, 166, 184);
     font-size: 12px;
     margin-bottom: 6px;
+    -unity-text-align: lower-center;
+}
+
+.auction__money-label {
+    font-size: 24px;
+    color: rgb(243, 246, 251);
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
 }
 
 .auction__wallet-input {
@@ -497,4 +511,13 @@
 }
 
 .auction__base-list {
+}
+
+.silver-icon {
+    background-image: url("project://database/Assets/_App/Art/Images/Icons/silver_coin_2_512_transp.png?fileID=21300000&guid=818a8c213d0022940b35f331a0028498&type=3#silver_coin_2_512_transp");
+    height: 34px;
+    aspect-ratio: 1;
+    flex-shrink: 0;
+    -unity-background-scale-mode: scale-to-fit;
+    margin-right: 6px;
 }

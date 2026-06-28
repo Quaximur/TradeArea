@@ -23,6 +23,7 @@ namespace TradeArea.UI.AuctionInventory
         /// Inventory items. After full collection loading starts diffs streaming.
         /// </summary>
         public Observable<LoadingState<List<ItemStackDto>>> ItemStacks => _auctionModel.OnInventoryChanged;
+        public Observable<LoadingState<long>> OnMoneyChanged => _auctionModel.OnMoneyChanged;
 
         private readonly AuctionModel _auctionModel;
         private readonly UserModel _userModel;

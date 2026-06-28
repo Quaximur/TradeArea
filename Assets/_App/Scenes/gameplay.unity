@@ -343,11 +343,11 @@ MonoBehaviour:
   _orderBookViewPrefab: {fileID: 5970873910795333140, guid: 908b79429738a494facc0bab73c09a95, type: 3}
   _devUserState:
     <Name>k__BackingField: MyUser1
-    <Token>k__BackingField: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWMyZjJmNzEtYWEwZi00NmYxLTgzOWYtOTc2NGEzNGI0Zjc2IiwiZXhwIjoxNzgyNTI1ODU2fQ.u_abbBzuZg9BpLRSMdPDPRDkfZYVa79FJZQJ44I7O58
+    <Token>k__BackingField: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWMyZjJmNzEtYWEwZi00NmYxLTgzOWYtOTc2NGEzNGI0Zjc2IiwiZXhwIjoxNzgyNjk3NzMxfQ.Kv_DHSGSt-Ye8tiT3rU5uUA52YVyYW8RkbsEXKwxhJo
     <UserId>k__BackingField: 1c2f2f71-aa0f-46f1-839f-9764a34b4f76
   _devUserState2:
     <Name>k__BackingField: MyUser2
-    <Token>k__BackingField: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMmMyZjJmNzEtYWEwZi00NmYxLTgzOWYtOTc2NGEzNGI0Zjc2IiwiZXhwIjoxNzgyNTI1ODc1fQ.HfcIfXd0Kjx6P20auTA6FdqtkJ7WjH5CPdtFCB1hOLI
+    <Token>k__BackingField: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMmMyZjJmNzEtYWEwZi00NmYxLTgzOWYtOTc2NGEzNGI0Zjc2IiwiZXhwIjoxNzgyNjk3NzAyfQ.G0d0k-JLIqZU1RiOqz1N_vi0alRKhiPfswgEeYLlcSw
     <UserId>k__BackingField: 2c2f2f71-aa0f-46f1-839f-9764a34b4f76
   _auctionActionName: GameUI/Auction
   _inputActionAsset: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

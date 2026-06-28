@@ -19,15 +19,25 @@ namespace TradeArea
 
         public void OnJoin(OwnLotsDto ownLots, OwnBidsDto ownBids, InventoryDto inventory)
         {
-            if (inventory != null && inventory.ItemStacks != null && inventory.ItemStacks.Length > 0)
+            if (inventory != null)
             {
-                FLogger.Log(inventory.ItemStacks[0].ItemConfig.Name);
-                _auctionModel.OnInventoryChanged.Value = LoadingState.Success(inventory.ItemStacks.ToList());
+                _auctionModel.OnMoneyChanged.Value = LoadingState.Success(inventory.Money);
+                if (inventory.ItemStacks != null && inventory.ItemStacks.Length > 0)
+                {
+                    FLogger.Log(inventory.ItemStacks[0].ItemConfig.Name);
+                    _auctionModel.OnInventoryChanged.Value = LoadingState.Success(inventory.ItemStacks.ToList());
+                }
+                else
+                {
+                    FLogger.Log("Empty Inventory");
+                    _auctionModel.OnInventoryChanged.Value = LoadingState.Success<List<ItemStackDto>>(new());
+                }
             }
             else
             {
-                FLogger.Log("Empty Inventory");
-                _auctionModel.OnInventoryChanged.Value = LoadingState.Success<List<ItemStackDto>>(new());
+                FLogger.LogWarning("Inventory is null");
+                _auctionModel.OnMoneyChanged.Value = LoadingState.Fail<long>();
+                _auctionModel.OnInventoryChanged.Value = LoadingState.Fail<List<ItemStackDto>>();
             }
 
             if (ownLots != null && ownLots.Lots != null && ownLots.Lots.Count > 0)
@@ -104,7 +114,7 @@ namespace TradeArea
                 FLogger.LogWarning("Lot to collect is not found");
             }
 
-            // TODO: add money
+            AddMoney(lotCollected.ReturningMoney);
         }
 
         public void OnLotRemoved(LotRemovedDto lotRemoved)
@@ -124,10 +134,10 @@ namespace TradeArea
             {
                 // Если стека нет - создаем новый
                 var newStack = new ItemStackDto
-                {
-                    ItemConfig = lotRemoved.ItemConfig,
-                    Quantity = lotRemoved.RemovedQuantity
-                };
+                (
+                    itemConfig: lotRemoved.ItemConfig,
+                    quantity: lotRemoved.RemovedQuantity
+                );
                 _auctionModel.OnInventoryChanged.Value.Value.Add(newStack);
             }
 
@@ -156,7 +166,7 @@ namespace TradeArea
                 {
                     ownLot.TotalQuantity -= removedQuantity;
                     ownLot.RemainingQuantity -= removedQuantity;
-                } 
+                }
 
                 _auctionModel.OnOwnLotsChanged.OnNext(_auctionModel.OnOwnLotsChanged.Value);
             }
@@ -186,7 +196,7 @@ namespace TradeArea
 
             _auctionModel.OnOwnBidsChanged.OnNext(_auctionModel.OnOwnBidsChanged.Value); // TODO: notify for RefreshItems only
 
-            // TODO: decrease Money
+            RemoveMoney(bidCreated.BidPrice * bidCreated.TotalQuantity);
         }
 
         public void OnBidCollected(BidCollectedDto bidCollected)
@@ -205,10 +215,10 @@ namespace TradeArea
             {
                 // Если стека нет - создаем новый
                 var newStack = new ItemStackDto
-                {
-                    ItemConfig = bidCollected.ItemConfig,
-                    Quantity = bidCollected.CollectedQuantity
-                };
+                (
+                    itemConfig: bidCollected.ItemConfig,
+                    quantity: bidCollected.CollectedQuantity
+                );
                 _auctionModel.OnInventoryChanged.Value.Value.Add(newStack);
             }
 
@@ -272,8 +282,7 @@ namespace TradeArea
             else
                 FLogger.LogWarning("Bid for removing not found");
 
-            // 2. Возвращаем деньги
-            // TODO: add Money
+            AddMoney(bidRemoved.ReturningMoney);
         }
         #endregion
 
@@ -295,7 +304,8 @@ namespace TradeArea
             {
                 FLogger.LogWarning($"{nameof(OnBought)}: bid not found");
             }
-            // TODO: add extra money to the inventory
+            
+            AddMoney(extraMoney);
         }
 
         public void OnSold(Guid lotId, int soldQuantity, long extraMoney)
@@ -318,5 +328,17 @@ namespace TradeArea
             }
         }
         #endregion
+
+        private void AddMoney(long moneyToAdd)
+        {
+            _auctionModel.OnMoneyChanged.Value = LoadingState.Success<long>(_auctionModel.OnMoneyChanged.Value.Value 
+                + moneyToAdd);
+        }
+
+        private void RemoveMoney(long moneyToRemove)
+        {
+            _auctionModel.OnMoneyChanged.Value = LoadingState.Success<long>(_auctionModel.OnMoneyChanged.Value.Value 
+                - moneyToRemove);
+        }
     }
 }

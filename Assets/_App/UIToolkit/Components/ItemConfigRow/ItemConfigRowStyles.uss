@@ -58,7 +58,6 @@
     min-width: 300px;
 }
 
-
 .item-config-row__control-button {
     min-width: 86px;
     color: rgb(238, 244, 251);
@@ -85,7 +84,7 @@
     margin-bottom: 4px;
 }
 
-.item-config-row__collect-button:hover {
+.item-config-row__collect-button:enabled:hover {
     background-color: rgb(55, 115, 138);
 }
 
@@ -95,11 +94,11 @@
     margin-bottom: 0;
 }
 
-.item-config-row__remove-button:hover {
+.item-config-row__remove-button:enabled:hover {
     background-color: rgb(90, 45, 45);
     border-color: rgb(140, 80, 80);
 }
 
 .item-config-row__control-button:disabled {
-    opacity: 0.4;
+    opacity: 0.2;
 }

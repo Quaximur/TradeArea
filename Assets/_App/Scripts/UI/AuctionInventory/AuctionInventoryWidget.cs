@@ -1,4 +1,3 @@
-using System;
 using Aucy.Contracts.OnionClient;
 using Cysharp.Threading.Tasks;
 using DevKit.UI.MVVM;
@@ -12,10 +11,12 @@ namespace TradeArea.UI.AuctionInventory
     [UxmlElement]
     public partial class AuctionInventoryWidget : ToolkitWidget<AuctionInventoryViewModel>
     {
+        [UxmlAttribute] private string _moneyLabelName = "MoneyLabel";
         [UxmlAttribute] private string _loadableListViewWidgetName = null;
         [UxmlAttribute] private int _lotMarginTop = 4;
         [UxmlAttribute] private int _lotPaddingTop = 4;
 
+        private Label _moneyLabel;
         private LoadableListViewWidget _loadableList;
 
         private CompositeDisposable _disposables;
@@ -23,6 +24,7 @@ namespace TradeArea.UI.AuctionInventory
 
         protected override void OnInit()
         {
+            _moneyLabel = Root.Q<Label>(name: _moneyLabelName);
             _loadableList = Root.Q<LoadableListViewWidget>(_loadableListViewWidgetName);
             _loadableList.Init();
         }
@@ -57,6 +59,12 @@ namespace TradeArea.UI.AuctionInventory
 
             viewModel.ItemStacks.Subscribe(_loadableList.OnLoadingStateChanged)
                 .AddTo(_disposables);
+
+            viewModel.OnMoneyChanged.Subscribe(x => // TODO: loading/error state
+            {
+                if (x.LoadingFlag == Shared.LoadingFlag.Success)
+                    _moneyLabel.text = x.Value.ToString("N0");
+            }).AddTo(_disposables);
         }
 
         private void OnItemClicked(ClickEvent _, ItemConfigDto itemConfig)
