@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using DevKit.UI.MVVM.Bases;
 using DevKit.Utils;
 using R3;
+using TradeArea.UI.Custom;
 using UnityEngine.UIElements;
 
 namespace TradeArea.UI.OrderBook
@@ -15,13 +16,12 @@ namespace TradeArea.UI.OrderBook
         private Label _itemCategoryLabel;
 
         // Order book
-        private VisualElement _lotsBookContainer;
-        private VisualElement _bidsBookContainer;
+        private VisualElement _orderBookContainer;
         private Label _loadingLabel;
         private Label _errorLabel;
 
         // Buy form
-        private IntegerField _buyQuantityField; // TODO: input field
+        private IntegerField _buyQuantityField;
         private LongField _buyPriceField;
         private Label _buyTotalLabel;
         private Button _placeBidButton;
@@ -43,8 +43,7 @@ namespace TradeArea.UI.OrderBook
             _itemCategoryLabel = Root.Q<Label>("ItemCategory");
 
             // Order book panels
-            _lotsBookContainer = Root.Q<VisualElement>("LotsBook");
-            _bidsBookContainer = Root.Q<VisualElement>("BidsBook");
+            _orderBookContainer = Root.Q<VisualElement>("OrderBookContainer");
             _loadingLabel = Root.Q<Label>("LoadingLabel");
             _errorLabel = Root.Q<Label>("ErrorLabel");
 
@@ -91,8 +90,8 @@ namespace TradeArea.UI.OrderBook
                 {
                     var hasError = !string.IsNullOrEmpty(err);
                     _errorLabel.style.display = hasError ? DisplayStyle.Flex : DisplayStyle.None;
-                    
-                    if (hasError) 
+
+                    if (hasError)
                         _errorLabel.text = $"Stream error: {err}";
                 })
                 .AddTo(_disposables);
@@ -133,13 +132,11 @@ namespace TradeArea.UI.OrderBook
             _buyQuantityField.RegisterValueChangedCallback<int>(x => viewModel.SetBuyQuantity(x.newValue));
             _buyPriceField.RegisterValueChangedCallback<long>(x => viewModel.SetBuyPrice(x.newValue));
 
-            // Place Bid button
             _placeBidButton.RegisterCallback<ClickEvent>(_ =>
             {
                 viewModel.CreateBidAsync().Forget();
             });
 
-            // Place Lot button
             _placeLotButton.RegisterCallback<ClickEvent>(_ =>
             {
                 viewModel.CreateLotAsync().Forget();
@@ -148,57 +145,41 @@ namespace TradeArea.UI.OrderBook
 
         private void RebuildOrderBook(RawItemListingDto listing)
         {
-            _lotsBookContainer.Clear();
-            _bidsBookContainer.Clear();
+            _orderBookContainer.Clear();
+
+            if (listing.Levels == null || listing.Levels.Length == 0) 
+                return;
 
             var levels = listing.Levels
                 .OrderBy(l => l.MinPrice)
                 .ToArray();
 
+            long maxBid = levels.Max(l => l.BidQuantity);
+            long maxLot = levels.Max(l => l.LotQuantity);
+
             foreach (var level in levels)
             {
-                var row = CreateBookRow(
+                var row = new OrderBookLine();
+
+                float bidFillRatio = 0f;
+                if (maxBid > 0 && level.BidQuantity > 0)
+                    bidFillRatio = (float)level.BidQuantity / maxBid;
+
+                float lotFillRatio = 0f;
+                if (maxLot > 0 && level.LotQuantity > 0)
+                    lotFillRatio = (float)level.LotQuantity / maxLot;
+
+                row.Setup(
                     minPrice: level.MinPrice,
-                   maxPrice: level.MaxPrice,
-                    quantity: level.LotQuantity,
-                    isSell: true);
+                    maxPrice: level.MaxPrice,
+                    bidQuantity: level.BidQuantity,
+                    lotQuantity: level.LotQuantity,
+                    bidFillRatio: bidFillRatio,
+                    lotFillRatio: lotFillRatio
+                );
 
-                _lotsBookContainer.Add(row);
-
-                var row2 = CreateBookRow(
-                   minPrice: level.MinPrice,
-                   maxPrice: level.MaxPrice,
-                   quantity: level.BidQuantity,
-                   isSell: false);
-
-                _bidsBookContainer.Add(row2);
+                _orderBookContainer.Add(row);
             }
-        }
-
-        /// <summary>
-        /// Creates a single order book row.
-        /// isSell=true → price in red (asks); isSell=false → price in green (bids).
-        /// </summary>
-        private static VisualElement CreateBookRow(long minPrice, long maxPrice, long quantity, bool isSell)
-        {
-            var row = new VisualElement();
-            row.AddToClassList("order-book__book-row");
-
-            var priceText = minPrice == maxPrice ? minPrice.ToString() : $"{minPrice}-{maxPrice}";
-
-            var priceLabel = new Label(priceText);
-            priceLabel.AddToClassList("order-book__book-price");
-            priceLabel.AddToClassList(isSell
-                ? "order-book__book-price--ask"
-                : "order-book__book-price--bid");
-
-            var qtyLabel = new Label(quantity > 0 ? quantity.ToString() : string.Empty);
-            qtyLabel.AddToClassList("order-book__book-qty");
-
-            row.Add(priceLabel);
-            row.Add(qtyLabel);
-
-            return row;
         }
 
         private void RefreshBuyTotal()

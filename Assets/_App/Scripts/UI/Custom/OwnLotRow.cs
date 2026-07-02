@@ -184,7 +184,6 @@ namespace TradeArea.UI.Custom
             _revenueDescLabel.text = "Revenue";
         }
 
-
         public void SetCollectButtonEnabled(bool isEnabled) =>
             _collectButton.SetEnabled(isEnabled);
 

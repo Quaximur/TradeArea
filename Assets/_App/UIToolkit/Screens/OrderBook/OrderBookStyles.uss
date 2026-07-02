@@ -50,6 +50,7 @@
     padding-bottom: 10px;
     padding-left: 10px;
     margin-right: 14px;
+    margin-left: 14px;
 }
 
 .order-book__book-columns {
@@ -160,7 +161,6 @@
     padding-right: 12px;
     padding-bottom: 12px;
     padding-left: 12px;
-    margin-bottom: 10px;
 }
 
 .order-book__form-title {
@@ -260,4 +260,64 @@
 
 .order-book__button:disabled {
     opacity: 0.4;
+}
+
+.order-book__line {
+    padding: 2px 0;
+    flex-grow: 1;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.order-book__column-bid {
+    color: rgb(239, 83, 80);
+    -unity-font-style: bold;
+    padding-right: 8px;
+    height: 100%;
+    -unity-text-align: middle-left;
+}
+
+.order-book__column-price {
+    color: rgb(224, 224, 224);
+    height: 100%;
+    -unity-text-align: middle-center;
+    width: 150px;
+}
+
+.order-book__bid-container {
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
+.order-book__lot-container {
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
+.order-book__column-lot {
+    color: rgb(38, 166, 154);
+    -unity-font-style: bold;
+    padding-left: 8px;
+    height: 100%;
+    -unity-text-align: middle-right;
+}
+
+.order-book__bg-bid {
+    background-color: rgba(239, 83, 80, 0.15);
+    border-left-width: 1px;
+    border-left-color: rgba(239, 83, 80, 0.4);
+    top: 0;
+    left: 0;
+    bottom: 0;
+    position: absolute;
+}
+
+.order-book__bg-lot {
+    background-color: rgba(38, 166, 154, 0.15);
+    border-right-width: 1px;
+    border-right-color: rgba(38, 166, 154, 0.4);
+    top: 0;
+    right: 0;
+    bottom: 0;
+    position: absolute;
 }

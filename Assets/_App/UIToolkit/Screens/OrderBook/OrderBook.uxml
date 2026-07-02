@@ -5,28 +5,7 @@
             <ui:Label name="ItemName" text="—" class="order-book__item-name"/>
             <ui:Label name="ItemCategory" text="—" class="order-book__item-category"/>
         </ui:VisualElement>
-        <ui:VisualElement class="order-book__body">
-            <ui:VisualElement class="order-book__book">
-                <ui:Label name="LoadingLabel" text="Loading order book…" class="order-book__state-label" style="display: none;"/>
-                <ui:Label name="ErrorLabel" text="" class="order-book__state-label order-book__state-label--error" style="display: none;"/>
-                <ui:VisualElement class="order-book__book-columns">
-                    <ui:VisualElement class="order-book__book-panel">
-                        <ui:VisualElement class="order-book__book-header">
-                            <ui:Label text="Price" class="order-book__book-header-cell"/>
-                            <ui:Label text="Quantity" class="order-book__book-header-cell order-book__book-header-cell--right"/>
-                        </ui:VisualElement>
-                        <ui:ScrollView name="LotsBook" vertical-scroller-visibility="Hidden" class="order-book__book-scroll"/>
-                    </ui:VisualElement>
-                    <ui:VisualElement class="order-book__book-divider"/>
-                    <ui:VisualElement class="order-book__book-panel">
-                        <ui:VisualElement class="order-book__book-header">
-                            <ui:Label text="Price" class="order-book__book-header-cell"/>
-                            <ui:Label text="Quantity" class="order-book__book-header-cell order-book__book-header-cell--right"/>
-                        </ui:VisualElement>
-                        <ui:ScrollView name="BidsBook" vertical-scroller-visibility="Hidden" class="order-book__book-scroll"/>
-                    </ui:VisualElement>
-                </ui:VisualElement>
-            </ui:VisualElement>
+        <ui:VisualElement class="order-book__body" style="width: 1300px; align-self: center; justify-content: center;">
             <ui:VisualElement class="order-book__forms">
                 <ui:VisualElement name="SellPanel" class="order-book__form">
                     <ui:Label text="Place Sell Order" class="order-book__form-title"/>
@@ -37,6 +16,35 @@
                     <ui:Label name="SellTotal" text="Total: —" class="order-book__total-label"/>
                     <ui:Button name="PlaceLotButton" text="Place Lot" class="order-book__button order-book__button--lot"/>
                 </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement class="order-book__book" style="width: 1300px; flex-shrink: 0;">
+                <ui:Label name="LoadingLabel" text="Loading order book…" class="order-book__state-label" style="display: none;"/>
+                <ui:Label name="ErrorLabel" text="" class="order-book__state-label order-book__state-label--error" style="display: none;"/>
+                <ui:VisualElement name="OrderBookContainer" style="flex-grow: 1;">
+                    <TradeArea.UI.Custom.OrderBookLine/>
+                    <TradeArea.UI.Custom.OrderBookLine/>
+                    <TradeArea.UI.Custom.OrderBookLine/>
+                    <TradeArea.UI.Custom.OrderBookLine/>
+                    <TradeArea.UI.Custom.OrderBookLine/>
+                    <TradeArea.UI.Custom.OrderBookLine/>
+                    <TradeArea.UI.Custom.OrderBookLine/>
+                    <TradeArea.UI.Custom.OrderBookLine/>
+                    <TradeArea.UI.Custom.OrderBookLine/>
+                    <TradeArea.UI.Custom.OrderBookLine/>
+                    <TradeArea.UI.Custom.OrderBookLine/>
+                    <TradeArea.UI.Custom.OrderBookLine/>
+                    <TradeArea.UI.Custom.OrderBookLine/>
+                    <TradeArea.UI.Custom.OrderBookLine/>
+                    <TradeArea.UI.Custom.OrderBookLine/>
+                    <TradeArea.UI.Custom.OrderBookLine/>
+                    <TradeArea.UI.Custom.OrderBookLine/>
+                    <TradeArea.UI.Custom.OrderBookLine/>
+                    <TradeArea.UI.Custom.OrderBookLine/>
+                    <TradeArea.UI.Custom.OrderBookLine/>
+                    <TradeArea.UI.Custom.OrderBookLine/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement class="order-book__forms">
                 <ui:VisualElement name="BuyPanel" class="order-book__form">
                     <ui:Label text="Place Buy Order" class="order-book__form-title"/>
                     <ui:Label text="Bid Price" class="order-book__field-label"/>
