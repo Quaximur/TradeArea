@@ -224,6 +224,8 @@ namespace TradeArea.UI.OrderBook
         {
             _streamCts?.Cancel();
             _streamCts?.Dispose();
+            
+            Disposes.ClearDispose(ref _confirmPopUpSubscription);
 
             base.Dispose();
         }
