@@ -134,12 +134,12 @@ namespace TradeArea.UI.OrderBook
 
             _placeBidButton.RegisterCallback<ClickEvent>(_ =>
             {
-                viewModel.CreateBidAsync().Forget();
+                viewModel.CreateBid();
             });
 
             _placeLotButton.RegisterCallback<ClickEvent>(_ =>
             {
-                viewModel.CreateLotAsync().Forget();
+                viewModel.CreateLot();
             });
         }
 

@@ -10,6 +10,8 @@ using MagicOnion;
 using TradeArea.Shared;
 using MagicOnion.Client;
 using Grpc.Core;
+using TradeArea.UI.ConfirmPopUp;
+using DevKit.UI.MVVM;
 
 namespace TradeArea.UI.OrderBook
 {
@@ -47,16 +49,20 @@ namespace TradeArea.UI.OrderBook
         private readonly AuctionModel _auctionModel;
         private readonly OrderHubService _orderHubService;
         private readonly UserModel _userModel;
+        private readonly IViewBinder<ConfirmPopUpViewModel> _popUpBinder;
 
         private CancellationTokenSource _streamCts;
+        private IDisposable _confirmPopUpSubscription;
 
         public OrderBookViewModel(AuctionModel auctionModel,
             UserModel userModel,
-            OrderHubService orderHubService)
+            OrderHubService orderHubService,
+            IViewBinder<ConfirmPopUpViewModel> popUpBinder)
         {
             _auctionModel = auctionModel;
             _userModel = userModel;
             _orderHubService = orderHubService;
+            _popUpBinder = popUpBinder;
         }
 
         /// <summary>
@@ -76,29 +82,27 @@ namespace TradeArea.UI.OrderBook
             StartStreamAsync(itemConfig.Id).Forget();
         }
 
-        public async UniTask CreateBidAsync()
+        public void CreateLot()
         {
-            if (_orderHubService.OrderHub == null)
-            {
-                FLogger.LogWarning<OrderBookViewModel>("Order hub is null");
-                return;
-            }
-
-            try
-            {
-                await _orderHubService.OrderHub.CreateBid(
-                    new CreateBidDto(itemConfigId: _itemConfig.Value.Id,
-                        bidPrice: _buyPrice.Value,
-                        totalQuantity: _buyQuantity.Value)
-                );
-            }
-            catch (Exception ex)
-            {
-                FLogger.LogError<OrderBookViewModel>($"{nameof(CreateBidAsync)}: {ex.Message}");
-            }
+            OpenConfirmPipe(
+                () => CreateLotAsync(new CreateLotDto(itemConfigId: _itemConfig.Value.Id,
+                        unitPrice: _sellPrice.Value,
+                        totalQuantity: _sellQuantity.Value)).Forget(),
+                title: "sell_item",
+                message: $"Wanna sell {_itemConfig.Value.Name} (x{_sellQuantity.Value}) with unit price {_sellPrice.Value} (Total: {_sellQuantity.Value * _sellPrice.Value})?");
         }
 
-        public async UniTask CreateLotAsync()
+        public void CreateBid()
+        {
+            OpenConfirmPipe(
+                () => CreateBidAsync(new CreateBidDto(itemConfigId: _itemConfig.Value.Id,
+                        bidPrice: _buyPrice.Value,
+                        totalQuantity: _buyQuantity.Value)).Forget(),
+                title: "buy_item",
+                message: $"Wanna buy {_itemConfig.Value.Name} (x{_buyQuantity.Value}) with unit price {_buyPrice.Value} (Total: {_buyQuantity.Value * _buyPrice.Value})?");
+        }
+
+        private async UniTask CreateLotAsync(CreateLotDto createLotDto)
         {
             if (_orderHubService.OrderHub == null)
             {
@@ -108,15 +112,29 @@ namespace TradeArea.UI.OrderBook
 
             try
             {
-                await _orderHubService.OrderHub.CreateLot(
-                    new CreateLotDto(itemConfigId: _itemConfig.Value.Id,
-                        unitPrice: _sellPrice.Value,
-                        totalQuantity: _sellQuantity.Value)
-                );
+                await _orderHubService.OrderHub.CreateLot(createLotDto);
             }
             catch (Exception ex)
             {
                 FLogger.LogError<OrderBookViewModel>($"{nameof(CreateLotAsync)}: {ex.Message}");
+            }
+        }
+
+        private async UniTask CreateBidAsync(CreateBidDto createBidDto)
+        {
+            if (_orderHubService.OrderHub == null)
+            {
+                FLogger.LogWarning<OrderBookViewModel>("Order hub is null");
+                return;
+            }
+
+            try
+            {
+                await _orderHubService.OrderHub.CreateBid(createBidDto);
+            }
+            catch (Exception ex)
+            {
+                FLogger.LogError<OrderBookViewModel>($"{nameof(CreateBidAsync)}: {ex.Message}");
             }
         }
 
@@ -167,7 +185,7 @@ namespace TradeArea.UI.OrderBook
                     _orderBook.Value = listing;
                 }
             }
-            catch (RpcException rpce) when ( rpce.StatusCode == StatusCode.Cancelled)
+            catch (RpcException rpce) when (rpce.StatusCode == StatusCode.Cancelled)
             {
                 FLogger.Log<OrderBookViewModel>($"{nameof(StartStreamAsync)}: {rpce.Message}");
             }
@@ -177,6 +195,24 @@ namespace TradeArea.UI.OrderBook
                 _isLoading.Value = false;
                 _error.Value = ex.Message;
             }
+        }
+
+        private void OpenConfirmPipe(
+            Action onConfirm,
+            string title,
+            string message,
+            string confirmText = "confirm",
+            string cancelText = "cancel")
+        {
+            var errorPopUpViewModel = _popUpBinder.Open();
+            errorPopUpViewModel.Setup(
+                title: title,
+                message: message,
+                confirmText: confirmText,
+                cancelText: cancelText
+            );
+
+            _confirmPopUpSubscription = errorPopUpViewModel.OnConfirmed.Take(1).Subscribe(_ => onConfirm());
         }
 
         private Metadata GetAuthHeader()
