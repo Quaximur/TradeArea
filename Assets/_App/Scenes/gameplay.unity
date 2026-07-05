@@ -389,7 +389,7 @@ MonoBehaviour:
   _orderBookViewPrefab: {fileID: 5970873910795333140, guid: 908b79429738a494facc0bab73c09a95, type: 3}
   _devUserState:
     <Name>k__BackingField: MyUser1
-    <Token>k__BackingField: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWMyZjJmNzEtYWEwZi00NmYxLTgzOWYtOTc2NGEzNGI0Zjc2IiwiZXhwIjoxNzgzMDI3MTA5fQ.S9z3V3ZtZpW_YGu7gvE5qwVPrX6jluCmS2zK7Y58lVo
+    <Token>k__BackingField: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWMyZjJmNzEtYWEwZi00NmYxLTgzOWYtOTc2NGEzNGI0Zjc2IiwiZXhwIjoxNzgzMzA1MTg0fQ.kmyEOGRDznolntyB0HaRvrC7o0mNwSakjc0e3DJeEs8
     <UserId>k__BackingField: 1c2f2f71-aa0f-46f1-839f-9764a34b4f76
   _devUserState2:
     <Name>k__BackingField: MyUser2

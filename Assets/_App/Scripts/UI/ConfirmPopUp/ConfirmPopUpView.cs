@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace TradeArea.UI.ConfirmPopUp
 {
-    public class ConfirmPopUpView : AttachableCanvasScreen<ConfirmPopUpViewModel>
+    public class ConfirmPopUpView : AttachableCanvasWindow<ConfirmPopUpViewModel>
     {
         [SerializeField] private TMP_Text _titleLabel;
         [SerializeField] private TMP_Text _messageLabel;
@@ -47,6 +47,11 @@ namespace TradeArea.UI.ConfirmPopUp
             _confirmButton.onClick.AddListener(OnConfirmClicked);
 
             _cancelButton.onClick.AddListener(OnCancelClicked);
+        }
+
+        protected override void OnCloseClicked()
+        {
+            ViewModel.Cancel();
         }
 
         private void SetOptionalLocalizedText(TMP_Text textElement, string text)
