@@ -2,6 +2,7 @@ using Cysharp.Net.Http;
 using Cysharp.Threading.Tasks;
 using Grpc.Net.Client;
 using MagicOnion.Unity;
+using TradeArea.Shared;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -35,10 +36,10 @@ namespace TradeArea.Infrastructure
             {
                 GrpcChannelProviderHost.Initialize(new DefaultGrpcChannelProvider(() => new GrpcChannelOptions()
                 {
-                    HttpHandler = new YetAnotherHttpHandler()
+                    HttpHandler = new SubdirectoryHandler(new YetAnotherHttpHandler()
                     {
                         Http2Only = true,
-                    },
+                    }, "/aucy"),
                     DisposeHttpClient = true,
                 }));
 

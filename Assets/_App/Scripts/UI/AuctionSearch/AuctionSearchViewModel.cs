@@ -27,15 +27,15 @@ namespace TradeArea.UI.AuctionSearch
 
         private CancellationTokenSource _cts = new();
 
-        public AuctionSearchViewModel(AuctionModel auctionModel, 
-            UserModel userModel, 
+        public AuctionSearchViewModel(AuctionModel auctionModel,
+            UserModel userModel,
             IViewBinder<OrderBookViewModel> orderBookBinder)
         {
             _auctionModel = auctionModel;
             _userModel = userModel;
             _orderBookBinder = orderBookBinder;
         }
-        
+
         public void UpdateMarketItems()
         {
             if (_onMarketListChanged.Value.LoadingFlag != LoadingFlag.Loading)
@@ -78,7 +78,7 @@ namespace TradeArea.UI.AuctionSearch
         public void OpenBuyingView(ItemConfigDto itemConfig)
         {
             FLogger.Log<AuctionSearchViewModel>($"Opening {nameof(OrderBookView)} for itemConfigId: {itemConfig.Id}");
-            
+
             var orderBookViewModel = _orderBookBinder.Open();
             orderBookViewModel.StartItemStreaming(itemConfig);
         }
