@@ -20,7 +20,6 @@ using UnityEngine;
 using VContainer;
 using Random = UnityEngine.Random;
 using UnityEngine.InputSystem;
-using R3;
 
 namespace TradeArea.Infrastructure.Installers
 {
@@ -28,8 +27,6 @@ namespace TradeArea.Infrastructure.Installers
     {
         [SerializeField] private AuctionView _auctionViewPrefab;
         [SerializeField] private OrderBookView _orderBookViewPrefab;
-        [SerializeField] private UserState _devUserState;
-        [SerializeField] private UserState _devUserState2;
         [SerializeField] private string _auctionActionName = "GameUI/Auction";
         [SerializeField] private InputActionAsset _inputActionAsset;
 
@@ -54,47 +51,18 @@ namespace TradeArea.Infrastructure.Installers
                 viewModelLifetime: Lifetime.Transient);
             builder.RegisterMVVM<OrderBookView, OrderBookViewModel>(_orderBookViewPrefab,
                 viewModelLifetime: Lifetime.Transient);
-
-            // TODO: take user data from context
-            builder.RegisterInstance(new UserModel(new UserState()
-            {
-                Name = _devUserState.Name,
-                Token = _devUserState.Token,
-                UserId = _devUserState.UserId,
-            }));
         }
 
         protected override async UniTask OnInitialize(CancellationToken token)
         {
             var userModel = Container.Resolve<UserModel>();
-
+            
+#if UNITY_EDITOR
             await CreateInventory(userModel.OnTokenChanged.Value);
-            await CreateInventory(_devUserState2.Token);  // TEST 2nd user
+            // await CreateInventory(_devUserState2.Token);  // TEST 2nd user
+#endif
 
             SubscribeAuctionKey();
-
-#if UNITY_EDITOR
-            // Dev user profiles switcher
-            // TIP: Switch profiles before joining StreamingHub
-
-            Observable.EveryUpdate().Where(_ => Keyboard.current.kKey.wasPressedThisFrame)
-                .Subscribe(_ =>
-                {
-                    userModel.OnUserIdChanged.Value = _devUserState.UserId;
-                    userModel.OnNameChanged.Value = _devUserState.Name;
-                    userModel.OnTokenChanged.Value = _devUserState.Token;
-                    FLogger.Log("USER 1 is used");
-                }).AddTo(_disposables);
-
-            Observable.EveryUpdate().Where(_ => Keyboard.current.lKey.wasPressedThisFrame)
-                .Subscribe(_ =>
-                {
-                    userModel.OnUserIdChanged.Value = _devUserState2.UserId;
-                    userModel.OnNameChanged.Value = _devUserState2.Name;
-                    userModel.OnTokenChanged.Value = _devUserState2.Token;
-                    FLogger.Log("USER 2 is used");
-                }).AddTo(_disposables);
-#endif
         }
 
         private void SubscribeAuctionKey()
