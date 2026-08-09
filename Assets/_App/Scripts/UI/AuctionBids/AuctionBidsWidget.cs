@@ -1,7 +1,7 @@
 using System;
-using Aucy.Contracts.OnionClient;
 using Cysharp.Threading.Tasks;
 using DevKit.UI.MVVM;
+using DevKit.Utils;
 using R3;
 using TradeArea.Data.Items;
 using TradeArea.UI.Custom;
@@ -43,13 +43,49 @@ namespace TradeArea.UI.AuctionBids
                 ownBidRow.style.marginTop = _lotMarginTop;
                 ownBidRow.style.paddingTop = _lotPaddingTop;
 
+                var sourceItem = _loadableList.ListView.itemsSource[i];
+                if (sourceItem == null)
+                {
+                    FLogger.LogWarning<AuctionBidsWidget>($"OwnBid is null at index {i}");
+                    ownBidRow.ItemName = "Unknown";
+                    ownBidRow.ItemIcon = null;
+                    ownBidRow.SetStats(
+                        boughtQuantity: "0",
+                        totalQuantity: "0",
+                        bidPrice: "0",
+                        remainingQuantity: "0",
+                        refund: "0"
+                    );
+                    ownBidRow.SetCollectButtonEnabled(false);
+                    ownBidRow.SetRemoveButtonEnabled(false);
+                    return;
+                }
+
                 var ownBid = (OwnBid)_loadableList.ListView.itemsSource[i];
                 var boughtQuantity = ownBid.BoughtQuantity;
                 var remainingQuantity = ownBid.RemainingQuantity;
                 var refund = remainingQuantity * ownBid.BidPrice;
 
+                if (ownBid.ItemConfig == null)
+                {
+                    FLogger.LogWarning<AuctionBidsWidget>($"ItemConfig is null for OwnBid at index {i}");
+                    ownBidRow.ItemName = "Unknown";
+                    ownBidRow.ItemIcon = null;
+                    ownBidRow.SetStats(
+                        boughtQuantity: boughtQuantity.ToString(),
+                        totalQuantity: ownBid.TotalQuantity.ToString(),
+                        bidPrice: ownBid.BidPrice.ToString(),
+                        remainingQuantity: remainingQuantity.ToString(),
+                        refund: refund.ToString()
+                    );
+                    ownBidRow.SetCollectButtonEnabled(false);
+                    ownBidRow.SetRemoveButtonEnabled(false);
+                    return;
+                }
+            
+
                 ownBidRow.ItemName = ownBid.ItemConfig.Name;
-                // bidRow.ItemIcon = ownBid.ItemConfig.Icon;
+                ownBidRow.ItemIcon = ownBid.ItemConfig.Icon;
 
                 ownBidRow.SetStats(
                     boughtQuantity: boughtQuantity.ToString(),

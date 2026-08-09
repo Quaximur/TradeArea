@@ -1,4 +1,3 @@
-using Aucy.Contracts.OnionClient;
 using Cysharp.Threading.Tasks;
 using DevKit.UI.MVVM;
 using DevKit.Utils;
@@ -46,11 +45,29 @@ namespace TradeArea.UI.AuctionInventory
                 itemRow.style.marginTop = _lotMarginTop;
                 itemRow.style.paddingTop = _lotPaddingTop;
 
+                var sourceItem = _loadableList.ListView.itemsSource[i];
+                if (sourceItem == null)
+                {
+                    FLogger.LogWarning<AuctionInventoryWidget>($"ItemStack is null at index {i}");
+                    itemRow.ItemName = "Unknown";
+                    itemRow.ItemIcon = null;
+                    return;
+                }
+
                 var itemStack = (ItemStack)_loadableList.ListView.itemsSource[i];
+
+                if (itemStack.ItemConfig == null)
+                {
+                    FLogger.LogWarning<AuctionInventoryWidget>($"ItemConfig is null for ItemStack at index {i}");
+                    itemRow.ItemName = "Unknown";
+                    itemRow.ItemIcon = null;
+                    return;
+                }
 
                 e.RegisterCallback<ClickEvent, IItemConfig>(OnItemClicked, itemStack.ItemConfig);
 
                 itemRow.ItemName = $"{itemStack.ItemConfig.Name} {itemStack.Quantity}";
+                itemRow.ItemIcon = itemStack.ItemConfig.Icon;
             };
 
             _loadableList.ListView.unbindItem = (e, i) =>

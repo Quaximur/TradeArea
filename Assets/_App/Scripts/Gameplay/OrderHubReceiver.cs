@@ -30,8 +30,8 @@ namespace TradeArea
                 {
                     FLogger.Log(inventory.ItemStacks[0].ItemConfig.Name);
                     var itemStacks = inventory.ItemStacks
-                    .Where(x => x != null)
-                    .Select(x => new ItemStack(_itemConfigRepository.Get(x.ItemConfig.Id), x.Quantity))
+                        .Where(x => x != null)
+                        .Select(x => new ItemStack(_itemConfigRepository.Get(x.ItemConfig.Id), x.Quantity))
                         .ToList();
                     _auctionModel.OnInventoryChanged.Value = LoadingState.Success(itemStacks);
                 }
@@ -75,15 +75,18 @@ namespace TradeArea
             if (ownBids != null && ownBids.OwnBids != null && ownBids.OwnBids.Count > 0)
             {
                 FLogger.Log(ownBids.OwnBids[0].ItemConfig.Name);
-                var bids = ownBids.OwnBids.Select(x => new OwnBid
-                {
-                    Id = x.Id,
-                    ItemConfig = _itemConfigRepository.Get(x.ItemConfig.Id),
-                    BidPrice = x.BidPrice,
-                    RemainingQuantity = x.RemainingQuantity,
-                    TotalQuantity = x.TotalQuantity,
-                    CreatedAt = x.CreatedAt
-                }).ToList();
+                var bids = ownBids.OwnBids
+                    .Where(x => x != null)
+                    .Select(x => new OwnBid
+                    {
+                        Id = x.Id,
+                        ItemConfig = _itemConfigRepository.Get(x.ItemConfig.Id),
+                        BidPrice = x.BidPrice,
+                        RemainingQuantity = x.RemainingQuantity,
+                        TotalQuantity = x.TotalQuantity,
+                        CreatedAt = x.CreatedAt
+                    })
+                    .ToList();
                 _auctionModel.OnOwnBidsChanged.Value = LoadingState.Success(bids);
             }
             else

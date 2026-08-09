@@ -3,8 +3,6 @@ using UnityEngine.UIElements;
 using R3;
 using DevKit.Utils;
 using TradeArea.UI.Custom;
-using Aucy.Contracts.OnionClient;
-using System;
 using TradeArea.Data.Items;
 
 namespace TradeArea.UI.AuctionSearch
@@ -41,10 +39,19 @@ namespace TradeArea.UI.AuctionSearch
                 itemRow.style.marginTop = _lotMarginTop;
                 itemRow.style.paddingTop = _lotPaddingTop;
 
+                var sourceItem = _loadableList.ListView.itemsSource[i];
+                if (sourceItem == null)
+                {
+                    FLogger.LogWarning<AuctionSearchWidget>($"ItemConfig is null at index {i}");
+                    itemRow.ItemName = "Unknown";
+                    return;
+                }
+
                 var itemConfig = (IItemConfig)_loadableList.ListView.itemsSource[i];
                 e.RegisterCallback<ClickEvent, IItemConfig>(OnItemClicked, itemConfig);
 
                 itemRow.ItemName = itemConfig.Name;
+                itemRow.ItemIcon = itemConfig.Icon;
             };
 
             _loadableList.ListView.unbindItem = (e, i) =>

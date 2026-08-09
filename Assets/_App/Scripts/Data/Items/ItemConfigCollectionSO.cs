@@ -8,6 +8,6 @@ namespace TradeArea.Data.Items
     public class ItemConfigCollectionSO : ScriptableObject, IItemConfigCollection
     {
         public IReadOnlyList<IItemConfig> AllData => _allData;
-        private ItemConfigSO[] _allData;
+        [SerializeField] private ItemConfigSO[] _allData;
     }
 }

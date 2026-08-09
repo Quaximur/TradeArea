@@ -16,7 +16,7 @@ MonoBehaviour:
   <Name>k__BackingField: bread
   <Description>k__BackingField: bread_desc
   <IsUnary>k__BackingField: 0
-  <Icon>k__BackingField: {fileID: 0}
+  <Icon>k__BackingField: {fileID: 21300000, guid: 2b9981d1f5f076041ae219d4a40523a3, type: 3}
   <Weight>k__BackingField: 0.1
   <BaseType>k__BackingField: consumable
   _extra: []
