@@ -22,7 +22,6 @@ namespace TradeArea.UI.AuctionSearch
     {
         public Observable<LoadingState<List<IItemConfig>>> OnMarketListChanged => _onMarketListChanged;
 
-        private readonly AuctionModel _auctionModel;
         private readonly UserModel _userModel;
         private readonly IViewBinder<OrderBookViewModel> _orderBookBinder;
         private readonly IItemConfigRepository _itemConfigRepository;
@@ -30,12 +29,11 @@ namespace TradeArea.UI.AuctionSearch
 
         private CancellationTokenSource _cts = new();
 
-        public AuctionSearchViewModel(AuctionModel auctionModel,
+        public AuctionSearchViewModel(
             UserModel userModel,
             IViewBinder<OrderBookViewModel> orderBookBinder,
             IItemConfigRepository itemConfigRepository)
         {
-            _auctionModel = auctionModel;
             _userModel = userModel;
             _orderBookBinder = orderBookBinder;
             _itemConfigRepository = itemConfigRepository;
@@ -68,8 +66,9 @@ namespace TradeArea.UI.AuctionSearch
 
                     if (configs != null && configs.ItemConfigs != null)
                     {
-                        var itemConfigs = configs.ItemConfigs.Select(itemConfigDto => _itemConfigRepository.Get(itemConfigDto.Id))
+                        var itemConfigs = configs.ItemConfigs
                             .Where(x => x != null)
+                            .Select(itemConfigDto => _itemConfigRepository.Get(itemConfigDto.Id))
                             .ToList();
 
                         _onMarketListChanged.Value = LoadingState.Success(itemConfigs);

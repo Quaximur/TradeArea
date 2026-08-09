@@ -33,7 +33,8 @@ namespace TradeArea.UI.AuctionInventory
 
         private CancellationTokenSource _cts = new();
 
-        public AuctionInventoryViewModel(AuctionModel auctionModel, 
+        public AuctionInventoryViewModel(
+            AuctionModel auctionModel, 
             UserModel userModel, 
             OrderHubService orderHubService, 
             IViewBinder<OrderBookViewModel> orderBookBinder)

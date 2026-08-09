@@ -29,7 +29,9 @@ namespace TradeArea
                 if (inventory.ItemStacks != null && inventory.ItemStacks.Length > 0)
                 {
                     FLogger.Log(inventory.ItemStacks[0].ItemConfig.Name);
-                    var itemStacks = inventory.ItemStacks.Select(x => new ItemStack(_itemConfigRepository.Get(x.ItemConfig.Id), x.Quantity))
+                    var itemStacks = inventory.ItemStacks
+                    .Where(x => x != null)
+                    .Select(x => new ItemStack(_itemConfigRepository.Get(x.ItemConfig.Id), x.Quantity))
                         .ToList();
                     _auctionModel.OnInventoryChanged.Value = LoadingState.Success(itemStacks);
                 }
@@ -49,16 +51,19 @@ namespace TradeArea
             if (ownLots != null && ownLots.Lots != null && ownLots.Lots.Count > 0)
             {
                 FLogger.Log(ownLots.Lots[0].ItemConfig.Name);
-                var lots = ownLots.Lots.Select(x => new OwnLot
-                {
-                    Id = x.Id,
-                    ItemConfig = _itemConfigRepository.Get(x.ItemConfig.Id),
-                    UnitPrice = x.UnitPrice,
-                    RemainingQuantity = x.RemainingQuantity,
-                    TotalQuantity = x.TotalQuantity,
-                    CreatedAt = x.CreatedAt,
-                    ExtraSoldoutMoney = x.ExtraSoldoutMoney
-                }).ToList();
+                var lots = ownLots.Lots
+                    .Where(x => x != null)
+                    .Select(x => new OwnLot
+                    {
+                        Id = x.Id,
+                        ItemConfig = _itemConfigRepository.Get(x.ItemConfig.Id),
+                        UnitPrice = x.UnitPrice,
+                        RemainingQuantity = x.RemainingQuantity,
+                        TotalQuantity = x.TotalQuantity,
+                        CreatedAt = x.CreatedAt,
+                        ExtraSoldoutMoney = x.ExtraSoldoutMoney
+                    })
+                    .ToList();
                 _auctionModel.OnOwnLotsChanged.Value = LoadingState.Success(lots);
             }
             else

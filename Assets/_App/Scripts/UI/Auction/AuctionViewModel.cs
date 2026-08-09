@@ -4,7 +4,6 @@ using TradeArea.UI.AuctionSearch;
 using TradeArea.UI.AuctionOrders;
 using TradeArea.UI.AuctionLots;
 using TradeArea.UI.AuctionBids;
-using TradeArea.Data;
 
 namespace TradeArea.UI.Auction
 {
@@ -16,10 +15,9 @@ namespace TradeArea.UI.Auction
         public AuctionLotsViewModel AuctionLotsViewModel { get; private set; }
         public AuctionBidsViewModel AuctionBidsViewModel { get; private set; }
 
-        private readonly AuctionModel _auctionModel;
         private readonly OrderHubService _orderHubService;
 
-        public AuctionViewModel(AuctionModel auctionModel,
+        public AuctionViewModel(
             OrderHubService orderHubService,
             AuctionSearchViewModel auctionSearchViewModel,
             AuctionInventoryViewModel auctionInventoryViewModel,
@@ -27,7 +25,6 @@ namespace TradeArea.UI.Auction
             AuctionLotsViewModel auctionLotsViewModel,
             AuctionBidsViewModel auctionBidsViewModel)
         {
-            _auctionModel = auctionModel;
             _orderHubService = orderHubService;
 
             AuctionOrdersViewModel = auctionOrdersViewModel;
