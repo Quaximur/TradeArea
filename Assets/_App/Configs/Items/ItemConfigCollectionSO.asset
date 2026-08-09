@@ -13,4 +13,12 @@ MonoBehaviour:
   m_Name: ItemConfigCollectionSO
   m_EditorClassIdentifier: TradeArea.Data::TradeArea.Data.Items.ItemConfigCollectionSO
   _allData:
+  - {fileID: 11400000, guid: a17c57ebb90619d45b81cea6de3bd931, type: 2}
   - {fileID: 11400000, guid: 2809a786333483041b02fa36cf58bf53, type: 2}
+  - {fileID: 11400000, guid: 9b27aae8904a3214abbfd9bb49095547, type: 2}
+  - {fileID: 11400000, guid: 5f5cd76c59fe3f44ca461f2b1eb2a705, type: 2}
+  - {fileID: 11400000, guid: 0a19809a09c843b44be6354e822047cb, type: 2}
+  - {fileID: 11400000, guid: 7d978703e117e1a46bb9ee07632d4947, type: 2}
+  - {fileID: 11400000, guid: 1bd399511f846384cbcbfac0c8310e67, type: 2}
+  - {fileID: 11400000, guid: b5afdbffa73535b46898fcc649d41213, type: 2}
+  - {fileID: 11400000, guid: c0823433b3200654b81cd0d8b9d42f7b, type: 2}
