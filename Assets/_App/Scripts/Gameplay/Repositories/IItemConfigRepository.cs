@@ -1,9 +1,10 @@
+using System;
 using TradeArea.Data.Items;
 
 namespace TradeArea.Repositories
 {
     public interface IItemConfigRepository
     {
-        public IItemConfig Get(string id);
+        public IItemConfig Get(Guid id);
     }
 }

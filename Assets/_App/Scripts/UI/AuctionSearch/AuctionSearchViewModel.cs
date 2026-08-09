@@ -68,7 +68,7 @@ namespace TradeArea.UI.AuctionSearch
 
                     if (configs != null && configs.ItemConfigs != null)
                     {
-                        var itemConfigs = configs.ItemConfigs.Select(itemConfigDto => _itemConfigRepository.Get(itemConfigDto.Id.ToString()))
+                        var itemConfigs = configs.ItemConfigs.Select(itemConfigDto => _itemConfigRepository.Get(itemConfigDto.Id))
                             .Where(x => x != null)
                             .ToList();
 

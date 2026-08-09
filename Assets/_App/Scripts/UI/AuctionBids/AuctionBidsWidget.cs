@@ -3,6 +3,7 @@ using Aucy.Contracts.OnionClient;
 using Cysharp.Threading.Tasks;
 using DevKit.UI.MVVM;
 using R3;
+using TradeArea.Data.Items;
 using TradeArea.UI.Custom;
 using UnityEngine.UIElements;
 
@@ -42,7 +43,7 @@ namespace TradeArea.UI.AuctionBids
                 ownBidRow.style.marginTop = _lotMarginTop;
                 ownBidRow.style.paddingTop = _lotPaddingTop;
 
-                var ownBid = (OwnBidDto)_loadableList.ListView.itemsSource[i];
+                var ownBid = (OwnBid)_loadableList.ListView.itemsSource[i];
                 var boughtQuantity = ownBid.BoughtQuantity;
                 var remainingQuantity = ownBid.RemainingQuantity;
                 var refund = remainingQuantity * ownBid.BidPrice;

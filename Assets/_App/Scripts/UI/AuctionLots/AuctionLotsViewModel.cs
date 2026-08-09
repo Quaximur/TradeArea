@@ -8,13 +8,14 @@ using DevKit.UI.MVVM;
 using DevKit.Utils;
 using R3;
 using TradeArea.Data;
+using TradeArea.Data.Items;
 using TradeArea.Shared;
 
 namespace TradeArea.UI.AuctionLots
 {
     public class AuctionLotsViewModel : BaseViewModel
     {
-        public Observable<LoadingState<List<OwnLotDto>>> OwnLots => _auctionModel.OnOwnLotsChanged;
+        public Observable<LoadingState<List<OwnLot>>> OwnLots => _auctionModel.OnOwnLotsChanged;
 
         private readonly AuctionModel _auctionModel;
         private readonly UserModel _userModel;

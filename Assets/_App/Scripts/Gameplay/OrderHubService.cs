@@ -48,7 +48,7 @@ namespace TradeArea
                         _auctionModel.OnMoneyChanged.Value = LoadingState.Loading<long>();
                         _auctionModel.OnInventoryChanged.Value = LoadingState.Loading<List<ItemStack>>();
                         _auctionModel.OnOwnLotsChanged.Value = LoadingState.Loading<List<OwnLot>>();
-                        _auctionModel.OnOwnBidsChanged.Value = LoadingState.Loading<List<OwnBidDto>>();
+                        _auctionModel.OnOwnBidsChanged.Value = LoadingState.Loading<List<OwnBid>>();
 
                         Disposes.ClearDispose(ref _channel);
                         _channel = GrpcChannelx.ForAddress(Constants.AUCY_URL);
@@ -82,7 +82,7 @@ namespace TradeArea
                         _auctionModel.OnMoneyChanged.Value = LoadingState.Fail<long>();
                         _auctionModel.OnInventoryChanged.Value = LoadingState.Fail<List<ItemStack>>();
                         _auctionModel.OnOwnLotsChanged.Value = LoadingState.Fail<List<OwnLot>>();
-                        _auctionModel.OnOwnBidsChanged.Value = LoadingState.Fail<List<OwnBidDto>>();
+                        _auctionModel.OnOwnBidsChanged.Value = LoadingState.Fail<List<OwnBid>>();
                     }
 
                     // Wait before retrying (won't delay if token is cancelled)

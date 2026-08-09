@@ -11,6 +11,6 @@ namespace TradeArea.Data
         public readonly ReactiveProperty<LoadingState<long>> OnMoneyChanged = new();
         public readonly ReactiveProperty<LoadingState<List<ItemStack>>> OnInventoryChanged = new();
         public readonly ReactiveProperty<LoadingState<List<OwnLot>>> OnOwnLotsChanged = new();
-        public readonly ReactiveProperty<LoadingState<List<OwnBidDto>>> OnOwnBidsChanged = new();
+        public readonly ReactiveProperty<LoadingState<List<OwnBid>>> OnOwnBidsChanged = new();
     }
 }

@@ -80,13 +80,13 @@ namespace TradeArea.UI.OrderBook
             _buyQuantity.Value = 1;
             _buyPrice.Value = itemConfig.MinPrice;
 
-            StartStreamAsync(Guid.Parse(itemConfig.Id)).Forget();
+            StartStreamAsync(itemConfig.Id).Forget();
         }
 
         public void CreateLot()
         {
             OpenConfirmPipe(
-                () => CreateLotAsync(new CreateLotDto(itemConfigId: Guid.Parse(_itemConfig.Value.Id),
+                () => CreateLotAsync(new CreateLotDto(itemConfigId: _itemConfig.Value.Id,
                         unitPrice: _sellPrice.Value,
                         totalQuantity: _sellQuantity.Value)).Forget(),
                 title: "sell_item",
@@ -96,7 +96,7 @@ namespace TradeArea.UI.OrderBook
         public void CreateBid()
         {
             OpenConfirmPipe(
-                () => CreateBidAsync(new CreateBidDto(itemConfigId: Guid.Parse(_itemConfig.Value.Id),
+                () => CreateBidAsync(new CreateBidDto(itemConfigId: _itemConfig.Value.Id,
                         bidPrice: _buyPrice.Value,
                         totalQuantity: _buyQuantity.Value)).Forget(),
                 title: "buy_item",

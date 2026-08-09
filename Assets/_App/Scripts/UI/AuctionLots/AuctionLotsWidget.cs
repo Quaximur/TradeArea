@@ -3,6 +3,7 @@ using Aucy.Contracts.OnionClient;
 using Cysharp.Threading.Tasks;
 using DevKit.UI.MVVM;
 using R3;
+using TradeArea.Data.Items;
 using TradeArea.UI.Custom;
 using UnityEngine.UIElements;
 
@@ -41,7 +42,7 @@ namespace TradeArea.UI.AuctionLots
                 ownLotRow.style.marginTop = _lotMarginTop;
                 ownLotRow.style.paddingTop = _lotPaddingTop;
 
-                var ownLot = (OwnLotDto)_loadableList.ListView.itemsSource[i];
+                var ownLot = (OwnLot)_loadableList.ListView.itemsSource[i];
                 var soldQuantity = ownLot.SoldQuantity;
 
                 ownLotRow.CollectButton.RegisterCallback<ClickEvent, Guid>(OnCollectClicked, ownLot.Id);

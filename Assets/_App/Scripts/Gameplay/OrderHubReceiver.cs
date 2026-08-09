@@ -29,7 +29,7 @@ namespace TradeArea
                 if (inventory.ItemStacks != null && inventory.ItemStacks.Length > 0)
                 {
                     FLogger.Log(inventory.ItemStacks[0].ItemConfig.Name);
-                    var itemStacks = inventory.ItemStacks.Select(x => new ItemStack(_itemConfigRepository.Get(x.ItemConfig.Id.ToString()), x.Quantity))
+                    var itemStacks = inventory.ItemStacks.Select(x => new ItemStack(_itemConfigRepository.Get(x.ItemConfig.Id), x.Quantity))
                         .ToList();
                     _auctionModel.OnInventoryChanged.Value = LoadingState.Success(itemStacks);
                 }
@@ -49,7 +49,16 @@ namespace TradeArea
             if (ownLots != null && ownLots.Lots != null && ownLots.Lots.Count > 0)
             {
                 FLogger.Log(ownLots.Lots[0].ItemConfig.Name);
-                var lots = ownLots.Lots.Select(x => new OwnLot()).ToList(); // TODO: map fields
+                var lots = ownLots.Lots.Select(x => new OwnLot
+                {
+                    Id = x.Id,
+                    ItemConfig = _itemConfigRepository.Get(x.ItemConfig.Id),
+                    UnitPrice = x.UnitPrice,
+                    RemainingQuantity = x.RemainingQuantity,
+                    TotalQuantity = x.TotalQuantity,
+                    CreatedAt = x.CreatedAt,
+                    ExtraSoldoutMoney = x.ExtraSoldoutMoney
+                }).ToList();
                 _auctionModel.OnOwnLotsChanged.Value = LoadingState.Success(lots);
             }
             else
@@ -61,12 +70,21 @@ namespace TradeArea
             if (ownBids != null && ownBids.OwnBids != null && ownBids.OwnBids.Count > 0)
             {
                 FLogger.Log(ownBids.OwnBids[0].ItemConfig.Name);
-                _auctionModel.OnOwnBidsChanged.Value = LoadingState.Success(ownBids.OwnBids);
+                var bids = ownBids.OwnBids.Select(x => new OwnBid
+                {
+                    Id = x.Id,
+                    ItemConfig = _itemConfigRepository.Get(x.ItemConfig.Id),
+                    BidPrice = x.BidPrice,
+                    RemainingQuantity = x.RemainingQuantity,
+                    TotalQuantity = x.TotalQuantity,
+                    CreatedAt = x.CreatedAt
+                }).ToList();
+                _auctionModel.OnOwnBidsChanged.Value = LoadingState.Success(bids);
             }
             else
             {
                 FLogger.Log("Empty own bids");
-                _auctionModel.OnOwnBidsChanged.Value = LoadingState.Success<List<OwnBidDto>>(new());
+                _auctionModel.OnOwnBidsChanged.Value = LoadingState.Success<List<OwnBid>>(new());
             }
         }
 
@@ -75,15 +93,16 @@ namespace TradeArea
         {
             FLogger.LogGood($"Lot created: {lotCreated.LotId} {lotCreated.ItemConfig.Name}");
 
-            _auctionModel.OnOwnLotsChanged.Value.Value.Add(new OwnLotDto(id: lotCreated.LotId,
-                ownerUserId: default,
-                itemConfigId: lotCreated.ItemConfig.Id,
-                unitPrice: lotCreated.UnitPrice,
-                remainingQuantity: lotCreated.TotalQuantity,
-                totalQuantity: lotCreated.TotalQuantity,
-                createdAt: lotCreated.CreatedAt,
-                itemConfig: lotCreated.ItemConfig,
-                extraSoldoutMoney: 0));
+            _auctionModel.OnOwnLotsChanged.Value.Value.Add(new OwnLot
+            {
+                Id = lotCreated.LotId,
+                ItemConfig = _itemConfigRepository.Get(lotCreated.ItemConfig.Id),
+                UnitPrice = lotCreated.UnitPrice,
+                RemainingQuantity = lotCreated.TotalQuantity,
+                TotalQuantity = lotCreated.TotalQuantity,
+                CreatedAt = lotCreated.CreatedAt,
+                ExtraSoldoutMoney = 0
+            });
 
             _auctionModel.OnOwnLotsChanged.OnNext(_auctionModel.OnOwnLotsChanged.Value); // TODO: notify for RefreshItems only
 
@@ -140,9 +159,9 @@ namespace TradeArea
             else
             {
                 // Если стека нет - создаем новый
-                var newStack = new ItemStackDto
+                var newStack = new ItemStack
                 (
-                    itemConfig: lotRemoved.ItemConfig,
+                    itemConfig: _itemConfigRepository.Get(lotRemoved.ItemConfig.Id),
                     quantity: lotRemoved.RemovedQuantity
                 );
                 _auctionModel.OnInventoryChanged.Value.Value.Add(newStack);
@@ -192,14 +211,15 @@ namespace TradeArea
         {
             FLogger.LogGood($"Bid created: {bidCreated.BidId} {bidCreated.ItemConfig.Name}");
 
-            _auctionModel.OnOwnBidsChanged.Value.Value.Add(new OwnBidDto(id: bidCreated.BidId,
-                bidderUserId: default,
-                itemConfigId: bidCreated.ItemConfig.Id,
-                bidPrice: bidCreated.BidPrice,
-                remainingQuantity: bidCreated.TotalQuantity,
-                totalQuantity: bidCreated.TotalQuantity,
-                createdAt: bidCreated.CreatedAt,
-                itemConfig: bidCreated.ItemConfig));
+            _auctionModel.OnOwnBidsChanged.Value.Value.Add(new OwnBid
+            {
+                Id = bidCreated.BidId,
+                ItemConfig = _itemConfigRepository.Get(bidCreated.ItemConfig.Id),
+                BidPrice = bidCreated.BidPrice,
+                RemainingQuantity = bidCreated.TotalQuantity,
+                TotalQuantity = bidCreated.TotalQuantity,
+                CreatedAt = bidCreated.CreatedAt
+            });
 
             _auctionModel.OnOwnBidsChanged.OnNext(_auctionModel.OnOwnBidsChanged.Value); // TODO: notify for RefreshItems only
 
@@ -221,9 +241,9 @@ namespace TradeArea
             else
             {
                 // Если стека нет - создаем новый
-                var newStack = new ItemStackDto
+                var newStack = new ItemStack
                 (
-                    itemConfig: bidCollected.ItemConfig,
+                    itemConfig: _itemConfigRepository.Get(bidCollected.ItemConfig.Id),
                     quantity: bidCollected.CollectedQuantity
                 );
                 _auctionModel.OnInventoryChanged.Value.Value.Add(newStack);

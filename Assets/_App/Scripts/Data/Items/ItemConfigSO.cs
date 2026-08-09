@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ namespace TradeArea.Data.Items
         menuName = "Scriptable Objects/" + nameof(ItemConfigSO))]
     public class ItemConfigSO : ScriptableObject, IItemConfig
     {
-        [field: SerializeField] public string Id { get; private set; }
+        [field: SerializeField] public Guid Id { get; private set; }
         [field: SerializeField] public string Name { get; private set; }
         [field: SerializeField] public string Description { get; private set; }
         [field: SerializeField] public bool IsUnary { get; private set; }
