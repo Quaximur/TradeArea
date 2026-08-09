@@ -8,7 +8,9 @@ namespace TradeArea.Data.Items
         menuName = "Scriptable Objects/" + nameof(ItemConfigSO))]
     public class ItemConfigSO : ScriptableObject, IItemConfig
     {
-        [field: SerializeField] public Guid Id { get; private set; }
+        public Guid Id => Guid.Parse(_id);
+        [SerializeField] private string _id;
+
         [field: SerializeField] public string Name { get; private set; }
         [field: SerializeField] public string Description { get; private set; }
         [field: SerializeField] public bool IsUnary { get; private set; }
@@ -17,8 +19,10 @@ namespace TradeArea.Data.Items
         [field: SerializeField] public int? Rarity { get; private set; }
         [field: SerializeField] public float Weight { get; private set; }
         [field: SerializeField] public string BaseType { get; private set; }
+
         public IList<string> Extra => _extra;
         [SerializeField] private string[] _extra;
+        
         [field: SerializeField] public string CategoryPath { get; private set; }
         [field: SerializeField] public long MinPrice { get; private set; }
         [field: SerializeField] public long MaxPrice { get; private set; }

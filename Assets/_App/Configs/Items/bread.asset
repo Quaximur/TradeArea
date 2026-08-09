@@ -12,15 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43ddc75dfb396284399a1d52b65374c5, type: 3}
   m_Name: bread
   m_EditorClassIdentifier: TradeArea.Data::TradeArea.Data.Items.ItemConfigSO
+  _id: 00000000-0000-0000-0000-000000000001
   <Name>k__BackingField: bread
   <Description>k__BackingField: bread_desc
   <IsUnary>k__BackingField: 0
   <Icon>k__BackingField: {fileID: 0}
-  <Weight>k__BackingField: 0
-  <BaseType>k__BackingField: 
+  <Weight>k__BackingField: 0.1
+  <BaseType>k__BackingField: consumable
   _extra: []
-  <CategoryPath>k__BackingField: 
-  <MinPrice>k__BackingField: 0
-  <MaxPrice>k__BackingField: 0
-  <MaxSellQuantity>k__BackingField: 0
-  <MaxBuyQuantity>k__BackingField: 0
+  <CategoryPath>k__BackingField: food
+  <MinPrice>k__BackingField: 1
+  <MaxPrice>k__BackingField: 11
+  <MaxSellQuantity>k__BackingField: 5000
+  <MaxBuyQuantity>k__BackingField: 5000
