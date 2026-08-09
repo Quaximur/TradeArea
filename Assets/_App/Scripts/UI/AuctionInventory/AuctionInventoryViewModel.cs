@@ -12,6 +12,7 @@ using MagicOnion;
 using MagicOnion.Client;
 using R3;
 using TradeArea.Data;
+using TradeArea.Data.Items;
 using TradeArea.Shared;
 using TradeArea.UI.OrderBook;
 
@@ -22,7 +23,7 @@ namespace TradeArea.UI.AuctionInventory
         /// <summary>
         /// Inventory items. After full collection loading starts diffs streaming.
         /// </summary>
-        public Observable<LoadingState<List<ItemStackDto>>> ItemStacks => _auctionModel.OnInventoryChanged;
+        public Observable<LoadingState<List<ItemStack>>> ItemStacks => _auctionModel.OnInventoryChanged;
         public Observable<LoadingState<long>> OnMoneyChanged => _auctionModel.OnMoneyChanged;
 
         private readonly AuctionModel _auctionModel;
@@ -43,7 +44,7 @@ namespace TradeArea.UI.AuctionInventory
             _orderBookBinder = orderBookBinder;
         }
 
-        public void OpenSellingView(ItemConfigDto itemConfig)
+        public void OpenSellingView(IItemConfig itemConfig)
         {
             FLogger.Log<AuctionInventoryViewModel>($"Opening {nameof(OrderBookView)} for itemConfigId: {itemConfig.Id}");
             

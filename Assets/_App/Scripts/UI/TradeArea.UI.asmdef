@@ -2,17 +2,18 @@
     "name": "TradeArea.UI",
     "rootNamespace": "",
     "references": [
-        "GUID:d97c239f2f13de7499d761d5802afb3c",
-        "GUID:04a88fc4b30c6444294d10e1fa853539",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:f02da9ca564ed54499f6f43d8249d415",
         "GUID:c3bc0afe4a069b54aa23296f3c18a871",
         "GUID:350d0af80fb7b7947a59de66ab477547",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:04a88fc4b30c6444294d10e1fa853539",
+        "GUID:d97c239f2f13de7499d761d5802afb3c",
         "GUID:2773bf1843bf0fa458c3425fa0cec93a",
         "GUID:a63190350b668ee46863abba8e22716b",
-        "GUID:f51ebe6a0ceec4240a699833d6309b23",
         "GUID:78f4dcf4c6c19cd40bc698375e0fb0d5",
         "GUID:8df849c1535de434aac23c92e1f09319",
-        "GUID:6055be8ebefd69e48b49212b09b47b2f",
-        "GUID:f02da9ca564ed54499f6f43d8249d415"
+        "GUID:b476a63202d4381458575ed3424273e5"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

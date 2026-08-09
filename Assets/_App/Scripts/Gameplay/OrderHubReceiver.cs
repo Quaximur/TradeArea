@@ -5,16 +5,20 @@ using System.Collections.Generic;
 using DevKit.Utils;
 using System;
 using System.Linq;
+using TradeArea.Data.Items;
+using TradeArea.Repositories;
 
 namespace TradeArea
 {
     public class OrderHubReceiver : IOrderHubReceiver
     {
         private readonly AuctionModel _auctionModel;
+        private readonly IItemConfigRepository _itemConfigRepository;
 
-        public OrderHubReceiver(AuctionModel auctionModel)
+        public OrderHubReceiver(AuctionModel auctionModel, IItemConfigRepository itemConfigRepository)
         {
             _auctionModel = auctionModel;
+            _itemConfigRepository = itemConfigRepository;
         }
 
         public void OnJoin(OwnLotsDto ownLots, OwnBidsDto ownBids, InventoryDto inventory)
@@ -25,30 +29,33 @@ namespace TradeArea
                 if (inventory.ItemStacks != null && inventory.ItemStacks.Length > 0)
                 {
                     FLogger.Log(inventory.ItemStacks[0].ItemConfig.Name);
-                    _auctionModel.OnInventoryChanged.Value = LoadingState.Success(inventory.ItemStacks.ToList());
+                    var itemStacks = inventory.ItemStacks.Select(x => new ItemStack(_itemConfigRepository.Get(x.ItemConfig.Id.ToString()), x.Quantity))
+                        .ToList();
+                    _auctionModel.OnInventoryChanged.Value = LoadingState.Success(itemStacks);
                 }
                 else
                 {
                     FLogger.Log("Empty Inventory");
-                    _auctionModel.OnInventoryChanged.Value = LoadingState.Success<List<ItemStackDto>>(new());
+                    _auctionModel.OnInventoryChanged.Value = LoadingState.Success<List<ItemStack>>(new());
                 }
             }
             else
             {
                 FLogger.LogWarning("Inventory is null");
                 _auctionModel.OnMoneyChanged.Value = LoadingState.Fail<long>();
-                _auctionModel.OnInventoryChanged.Value = LoadingState.Fail<List<ItemStackDto>>();
+                _auctionModel.OnInventoryChanged.Value = LoadingState.Fail<List<ItemStack>>();
             }
 
             if (ownLots != null && ownLots.Lots != null && ownLots.Lots.Count > 0)
             {
                 FLogger.Log(ownLots.Lots[0].ItemConfig.Name);
-                _auctionModel.OnOwnLotsChanged.Value = LoadingState.Success(ownLots.Lots);
+                var lots = ownLots.Lots.Select(x => new OwnLot()).ToList(); // TODO: map fields
+                _auctionModel.OnOwnLotsChanged.Value = LoadingState.Success(lots);
             }
             else
             {
                 FLogger.Log("Empty own lots");
-                _auctionModel.OnOwnLotsChanged.Value = LoadingState.Success<List<OwnLotDto>>(new());
+                _auctionModel.OnOwnLotsChanged.Value = LoadingState.Success<List<OwnLot>>(new());
             }
 
             if (ownBids != null && ownBids.OwnBids != null && ownBids.OwnBids.Count > 0)

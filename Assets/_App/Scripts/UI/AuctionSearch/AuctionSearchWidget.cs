@@ -5,6 +5,7 @@ using DevKit.Utils;
 using TradeArea.UI.Custom;
 using Aucy.Contracts.OnionClient;
 using System;
+using TradeArea.Data.Items;
 
 namespace TradeArea.UI.AuctionSearch
 {
@@ -40,19 +41,19 @@ namespace TradeArea.UI.AuctionSearch
                 itemRow.style.marginTop = _lotMarginTop;
                 itemRow.style.paddingTop = _lotPaddingTop;
 
-                var itemConfig = (ItemConfigDto)_loadableList.ListView.itemsSource[i];
-                e.RegisterCallback<ClickEvent, ItemConfigDto>(OnItemClicked, itemConfig);
+                var itemConfig = (IItemConfig)_loadableList.ListView.itemsSource[i];
+                e.RegisterCallback<ClickEvent, IItemConfig>(OnItemClicked, itemConfig);
 
                 itemRow.ItemName = itemConfig.Name;
             };
 
             _loadableList.ListView.unbindItem = (e, i) =>
             {
-                e.UnregisterCallback<ClickEvent, ItemConfigDto>(OnItemClicked);
+                e.UnregisterCallback<ClickEvent, IItemConfig>(OnItemClicked);
             };
         }
 
-        private void OnItemClicked(ClickEvent _, ItemConfigDto itemConfig)
+        private void OnItemClicked(ClickEvent _, IItemConfig itemConfig)
         {
             ViewModel.OpenBuyingView(itemConfig);
         }

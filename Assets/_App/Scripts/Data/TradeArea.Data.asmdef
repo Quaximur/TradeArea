@@ -1,0 +1,18 @@
+{
+    "name": "TradeArea.Data",
+    "rootNamespace": "",
+    "references": [
+        "GUID:a63190350b668ee46863abba8e22716b",
+        "GUID:d97c239f2f13de7499d761d5802afb3c",
+        "GUID:8df849c1535de434aac23c92e1f09319"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

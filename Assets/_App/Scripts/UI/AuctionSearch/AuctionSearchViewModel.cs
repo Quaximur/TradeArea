@@ -10,30 +10,35 @@ using MagicOnion;
 using MagicOnion.Client;
 using R3;
 using TradeArea.Data;
+using TradeArea.Repositories;
 using TradeArea.Shared;
 using TradeArea.UI.OrderBook;
+using System.Linq;
+using TradeArea.Data.Items;
 
 namespace TradeArea.UI.AuctionSearch
 {
     public class AuctionSearchViewModel : BaseViewModel
     {
-        public Observable<LoadingState<List<ItemConfigDto>>> OnMarketListChanged => _onMarketListChanged;
+        public Observable<LoadingState<List<IItemConfig>>> OnMarketListChanged => _onMarketListChanged;
 
         private readonly AuctionModel _auctionModel;
         private readonly UserModel _userModel;
         private readonly IViewBinder<OrderBookViewModel> _orderBookBinder;
-
-        private readonly ReactiveProperty<LoadingState<List<ItemConfigDto>>> _onMarketListChanged = new();
+        private readonly IItemConfigRepository _itemConfigRepository;
+        private readonly ReactiveProperty<LoadingState<List<IItemConfig>>> _onMarketListChanged = new();
 
         private CancellationTokenSource _cts = new();
 
         public AuctionSearchViewModel(AuctionModel auctionModel,
             UserModel userModel,
-            IViewBinder<OrderBookViewModel> orderBookBinder)
+            IViewBinder<OrderBookViewModel> orderBookBinder,
+            IItemConfigRepository itemConfigRepository)
         {
             _auctionModel = auctionModel;
             _userModel = userModel;
             _orderBookBinder = orderBookBinder;
+            _itemConfigRepository = itemConfigRepository;
         }
 
         public void UpdateMarketItems()
@@ -43,7 +48,7 @@ namespace TradeArea.UI.AuctionSearch
 
             async UniTaskVoid GetMarketItemsAsync()
             {
-                _onMarketListChanged.Value = LoadingState.Loading<List<ItemConfigDto>>();
+                _onMarketListChanged.Value = LoadingState.Loading<List<IItemConfig>>();
 
                 try
                 {
@@ -62,20 +67,28 @@ namespace TradeArea.UI.AuctionSearch
                         pageSize: 100));
 
                     if (configs != null && configs.ItemConfigs != null)
-                        _onMarketListChanged.Value = LoadingState.Success(configs.ItemConfigs);
+                    {
+                        var itemConfigs = configs.ItemConfigs.Select(itemConfigDto => _itemConfigRepository.Get(itemConfigDto.Id.ToString()))
+                            .Where(x => x != null)
+                            .ToList();
+
+                        _onMarketListChanged.Value = LoadingState.Success(itemConfigs);
+                    }
                     else
-                        _onMarketListChanged.Value = LoadingState.Success<List<ItemConfigDto>>(null);
+                    {
+                        _onMarketListChanged.Value = LoadingState.Success<List<IItemConfig>>(null);
+                    }
                 }
                 catch (Exception ex)
                 {
                     FLogger.LogError<AuctionSearchViewModel>($"{nameof(GetMarketItemsAsync)}: {ex.Message}");
 
-                    _onMarketListChanged.Value = LoadingState.Fail<List<ItemConfigDto>>();
+                    _onMarketListChanged.Value = LoadingState.Fail<List<IItemConfig>>();
                 }
             }
         }
 
-        public void OpenBuyingView(ItemConfigDto itemConfig)
+        public void OpenBuyingView(IItemConfig itemConfig)
         {
             FLogger.Log<AuctionSearchViewModel>($"Opening {nameof(OrderBookView)} for itemConfigId: {itemConfig.Id}");
 

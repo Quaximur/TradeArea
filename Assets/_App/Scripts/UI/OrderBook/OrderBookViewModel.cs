@@ -12,6 +12,7 @@ using MagicOnion.Client;
 using Grpc.Core;
 using TradeArea.UI.ConfirmPopUp;
 using DevKit.UI.MVVM;
+using TradeArea.Data.Items;
 
 namespace TradeArea.UI.OrderBook
 {
@@ -19,7 +20,7 @@ namespace TradeArea.UI.OrderBook
     {
         public Observable<bool> IsLoading => _isLoading;
         public Observable<string> Error => _error;
-        public Observable<ItemConfigDto> ItemConfig => _itemConfig;
+        public Observable<IItemConfig> ItemConfig => _itemConfig;
         public Observable<RawItemListingDto> OrderBook => _orderBook;
 
         public Observable<int> OnSellQuantityChanged => _sellQuantity;
@@ -35,7 +36,7 @@ namespace TradeArea.UI.OrderBook
         private readonly ReactiveProperty<bool> _isLoading = new(false);
 
         // Currently displayed item — set externally before opening the window
-        private readonly ReactiveProperty<ItemConfigDto> _itemConfig = new();
+        private readonly ReactiveProperty<IItemConfig> _itemConfig = new();
 
         // Latest order book snapshot from the stream
         private readonly ReactiveProperty<RawItemListingDto> _orderBook = new();
@@ -69,7 +70,7 @@ namespace TradeArea.UI.OrderBook
         /// Call this before showing the window. Cancels any existing stream and
         /// starts a new one for the supplied item.
         /// </summary>
-        public void StartItemStreaming(ItemConfigDto itemConfig)
+        public void StartItemStreaming(IItemConfig itemConfig)
         {
             _itemConfig.Value = itemConfig;
 
@@ -79,13 +80,13 @@ namespace TradeArea.UI.OrderBook
             _buyQuantity.Value = 1;
             _buyPrice.Value = itemConfig.MinPrice;
 
-            StartStreamAsync(itemConfig.Id).Forget();
+            StartStreamAsync(Guid.Parse(itemConfig.Id)).Forget();
         }
 
         public void CreateLot()
         {
             OpenConfirmPipe(
-                () => CreateLotAsync(new CreateLotDto(itemConfigId: _itemConfig.Value.Id,
+                () => CreateLotAsync(new CreateLotDto(itemConfigId: Guid.Parse(_itemConfig.Value.Id),
                         unitPrice: _sellPrice.Value,
                         totalQuantity: _sellQuantity.Value)).Forget(),
                 title: "sell_item",
@@ -95,7 +96,7 @@ namespace TradeArea.UI.OrderBook
         public void CreateBid()
         {
             OpenConfirmPipe(
-                () => CreateBidAsync(new CreateBidDto(itemConfigId: _itemConfig.Value.Id,
+                () => CreateBidAsync(new CreateBidDto(itemConfigId: Guid.Parse(_itemConfig.Value.Id),
                         bidPrice: _buyPrice.Value,
                         totalQuantity: _buyQuantity.Value)).Forget(),
                 title: "buy_item",

@@ -9,6 +9,8 @@ using Grpc.Core;
 using DevKit.Utils;
 using System.Threading;
 using System;
+using TradeArea.Repositories;
+using TradeArea.Data.Items;
 
 namespace TradeArea
 {
@@ -18,13 +20,16 @@ namespace TradeArea
 
         private readonly AuctionModel _auctionModel;
         private readonly UserModel _userModel;
+        private readonly IItemConfigRepository _itemConfigRepository;
+
         private CancellationTokenSource _cts;
         private GrpcChannelx _channel = null;
 
-        public OrderHubService(AuctionModel auctionModel, UserModel userModel)
+        public OrderHubService(AuctionModel auctionModel, UserModel userModel, IItemConfigRepository itemConfigRepository)
         {
             _auctionModel = auctionModel;
             _userModel = userModel;
+            _itemConfigRepository = itemConfigRepository;
         }
 
         public void StartMessaging()
@@ -41,14 +46,14 @@ namespace TradeArea
                     try
                     {
                         _auctionModel.OnMoneyChanged.Value = LoadingState.Loading<long>();
-                        _auctionModel.OnInventoryChanged.Value = LoadingState.Loading<List<ItemStackDto>>();
-                        _auctionModel.OnOwnLotsChanged.Value = LoadingState.Loading<List<OwnLotDto>>();
+                        _auctionModel.OnInventoryChanged.Value = LoadingState.Loading<List<ItemStack>>();
+                        _auctionModel.OnOwnLotsChanged.Value = LoadingState.Loading<List<OwnLot>>();
                         _auctionModel.OnOwnBidsChanged.Value = LoadingState.Loading<List<OwnBidDto>>();
 
                         Disposes.ClearDispose(ref _channel);
                         _channel = GrpcChannelx.ForAddress(Constants.AUCY_URL);
                         
-                        var receiver = new OrderHubReceiver(_auctionModel);
+                        var receiver = new OrderHubReceiver(_auctionModel, _itemConfigRepository);
                         OrderHub = await StreamingHubClient.ConnectAsync<IOrderHub, IOrderHubReceiver>(
                             _channel, receiver,
                             cancellationToken: _cts.Token,
@@ -75,8 +80,8 @@ namespace TradeArea
                         FLogger.LogError<OrderHubService>($"{nameof(StartMessagingAsync)}: {ex.Message}");
 
                         _auctionModel.OnMoneyChanged.Value = LoadingState.Fail<long>();
-                        _auctionModel.OnInventoryChanged.Value = LoadingState.Fail<List<ItemStackDto>>();
-                        _auctionModel.OnOwnLotsChanged.Value = LoadingState.Fail<List<OwnLotDto>>();
+                        _auctionModel.OnInventoryChanged.Value = LoadingState.Fail<List<ItemStack>>();
+                        _auctionModel.OnOwnLotsChanged.Value = LoadingState.Fail<List<OwnLot>>();
                         _auctionModel.OnOwnBidsChanged.Value = LoadingState.Fail<List<OwnBidDto>>();
                     }
 
