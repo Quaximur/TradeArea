@@ -16,7 +16,7 @@ MonoBehaviour:
   <Name>k__BackingField: silverleaf_herb
   <Description>k__BackingField: silverleaf_herb_desc
   <IsUnary>k__BackingField: 0
-  <Icon>k__BackingField: {fileID: 0}
+  <Icon>k__BackingField: {fileID: 21300000, guid: 4864bcec06dbed74795637858368b0e5, type: 3}
   <Weight>k__BackingField: 0.05
   <BaseType>k__BackingField: silverleaf_herb
   _extra: []

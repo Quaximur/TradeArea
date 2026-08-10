@@ -16,7 +16,7 @@ MonoBehaviour:
   <Name>k__BackingField: ancient_coin
   <Description>k__BackingField: ancient_coin_desc
   <IsUnary>k__BackingField: 0
-  <Icon>k__BackingField: {fileID: 0}
+  <Icon>k__BackingField: {fileID: 21300000, guid: 433e8dde6ba41df48a438cd0e5acfbb5, type: 3}
   <Weight>k__BackingField: 0.02
   <BaseType>k__BackingField: ancient_coin
   _extra: []

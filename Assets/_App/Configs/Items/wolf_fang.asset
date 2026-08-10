@@ -16,7 +16,7 @@ MonoBehaviour:
   <Name>k__BackingField: wolf_fang
   <Description>k__BackingField: wolf_fang_desc
   <IsUnary>k__BackingField: 0
-  <Icon>k__BackingField: {fileID: 0}
+  <Icon>k__BackingField: {fileID: 21300000, guid: a71dd2f1c0813bf47a2b12bbb7a81630, type: 3}
   <Weight>k__BackingField: 0.15
   <BaseType>k__BackingField: wolf_fang
   _extra: []

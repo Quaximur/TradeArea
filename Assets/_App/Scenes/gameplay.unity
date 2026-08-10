@@ -674,7 +674,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: TradeArea.Infrastructure::TradeArea.Infrastructure.Installers.UserInstaller
   _devUserState:
     <Name>k__BackingField: MyUser1
-    <Token>k__BackingField: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWMyZjJmNzEtYWEwZi00NmYxLTgzOWYtOTc2NGEzNGI0Zjc2IiwiZXhwIjoxNzg2MzQzMjE2fQ.PaMOPDx5g2fL18LSZwtHufkgSF7miV5Xc0TSUPfyFhQ
+    <Token>k__BackingField: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWMyZjJmNzEtYWEwZi00NmYxLTgzOWYtOTc2NGEzNGI0Zjc2IiwiZXhwIjoxNzg2Mzk4MDA1fQ.eWHxjWV3IIHIZmKXw5B738kp7O6gohpF5ax7BQ8RxJI
     <UserId>k__BackingField: 1c2f2f71-aa0f-46f1-839f-9764a34b4f76
   _devUserState2:
     <Name>k__BackingField: MyUser2

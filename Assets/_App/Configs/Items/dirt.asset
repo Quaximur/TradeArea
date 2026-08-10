@@ -16,7 +16,7 @@ MonoBehaviour:
   <Name>k__BackingField: dirt
   <Description>k__BackingField: dirt_desc
   <IsUnary>k__BackingField: 0
-  <Icon>k__BackingField: {fileID: 0}
+  <Icon>k__BackingField: {fileID: 21300000, guid: d6ae93f9abd1a654c84f9b974efdffb7, type: 3}
   <Weight>k__BackingField: 0.1
   <BaseType>k__BackingField: dirt
   _extra: []

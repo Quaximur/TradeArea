@@ -16,7 +16,7 @@ MonoBehaviour:
   <Name>k__BackingField: mana_crystal
   <Description>k__BackingField: mana_crystal_desc
   <IsUnary>k__BackingField: 0
-  <Icon>k__BackingField: {fileID: 0}
+  <Icon>k__BackingField: {fileID: 21300000, guid: 9b17e6c44397f29418cfbce311dcfe10, type: 3}
   <Weight>k__BackingField: 0.1
   <BaseType>k__BackingField: mana_crystal
   _extra: []
