@@ -11,8 +11,8 @@ namespace TradeArea.Data.Items
         public string Description { get; }
         public bool IsUnary { get; }
         public Sprite Icon { get; }
-        public int? Grade { get; }
-        public int? Rarity { get; }
+        public int Grade { get; }
+        public int Rarity { get; }
         public float Weight { get; }
         public string BaseType { get; }
         public IList<string> Extra { get; }

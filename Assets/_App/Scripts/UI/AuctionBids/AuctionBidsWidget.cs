@@ -49,6 +49,9 @@ namespace TradeArea.UI.AuctionBids
                     FLogger.LogWarning<AuctionBidsWidget>($"OwnBid is null at index {i}");
                     ownBidRow.ItemName = "Unknown";
                     ownBidRow.ItemIcon = null;
+                    ownBidRow.Rarity = 0;
+                    ownBidRow.Grade = 0;
+
                     ownBidRow.SetStats(
                         boughtQuantity: "0",
                         totalQuantity: "0",
@@ -56,6 +59,7 @@ namespace TradeArea.UI.AuctionBids
                         remainingQuantity: "0",
                         refund: "0"
                     );
+
                     ownBidRow.SetCollectButtonEnabled(false);
                     ownBidRow.SetRemoveButtonEnabled(false);
                     return;
@@ -71,6 +75,9 @@ namespace TradeArea.UI.AuctionBids
                     FLogger.LogWarning<AuctionBidsWidget>($"ItemConfig is null for OwnBid at index {i}");
                     ownBidRow.ItemName = "Unknown";
                     ownBidRow.ItemIcon = null;
+                    ownBidRow.Rarity = 0;
+                    ownBidRow.Grade = 0;
+
                     ownBidRow.SetStats(
                         boughtQuantity: boughtQuantity.ToString(),
                         totalQuantity: ownBid.TotalQuantity.ToString(),
@@ -78,6 +85,7 @@ namespace TradeArea.UI.AuctionBids
                         remainingQuantity: remainingQuantity.ToString(),
                         refund: refund.ToString()
                     );
+
                     ownBidRow.SetCollectButtonEnabled(false);
                     ownBidRow.SetRemoveButtonEnabled(false);
                     return;
@@ -86,6 +94,8 @@ namespace TradeArea.UI.AuctionBids
 
                 ownBidRow.ItemName = ownBid.ItemConfig.Name;
                 ownBidRow.ItemIcon = ownBid.ItemConfig.Icon;
+                ownBidRow.Rarity = ownBid.ItemConfig.Rarity;
+                ownBidRow.Grade = ownBid.ItemConfig.Grade;
 
                 ownBidRow.SetStats(
                     boughtQuantity: boughtQuantity.ToString(),

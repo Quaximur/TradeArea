@@ -15,8 +15,8 @@ namespace TradeArea.Data.Items
         [field: SerializeField] public string Description { get; private set; }
         [field: SerializeField] public bool IsUnary { get; private set; }
         [field: SerializeField] public Sprite Icon { get; private set; }
-        [field: SerializeField] public int? Grade { get; private set; }
-        [field: SerializeField] public int? Rarity { get; private set; }
+        [field: SerializeField] public int Grade { get; private set; }
+        [field: SerializeField] public int Rarity { get; private set; }
         [field: SerializeField] public float Weight { get; private set; }
         [field: SerializeField] public string BaseType { get; private set; }
 

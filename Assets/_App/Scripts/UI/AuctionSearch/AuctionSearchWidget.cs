@@ -44,6 +44,9 @@ namespace TradeArea.UI.AuctionSearch
                 {
                     FLogger.LogWarning<AuctionSearchWidget>($"ItemConfig is null at index {i}");
                     itemRow.ItemName = "Unknown";
+                    itemRow.ItemIcon = null;
+                    itemRow.Rarity = 0;
+                    itemRow.Grade = 0;
                     return;
                 }
 
@@ -52,6 +55,8 @@ namespace TradeArea.UI.AuctionSearch
 
                 itemRow.ItemName = itemConfig.Name;
                 itemRow.ItemIcon = itemConfig.Icon;
+                itemRow.Rarity = itemConfig.Rarity;
+                itemRow.Grade = itemConfig.Grade;
             };
 
             _loadableList.ListView.unbindItem = (e, i) =>

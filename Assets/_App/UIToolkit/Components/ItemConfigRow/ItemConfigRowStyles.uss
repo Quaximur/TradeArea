@@ -38,6 +38,10 @@
     border-bottom-left-radius: 2px;
     -unity-background-scale-mode: scale-to-fit;
     aspect-ratio: 1;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
 }
 
 .item-config-row__name {

@@ -16,7 +16,9 @@ MonoBehaviour:
   <Name>k__BackingField: iron_ore_uncommon
   <Description>k__BackingField: iron_ore_uncommon_desc
   <IsUnary>k__BackingField: 0
-  <Icon>k__BackingField: {fileID: 21300000, guid: 46fad0c2aa1cb20469f546537dbc3541, type: 3}
+  <Icon>k__BackingField: {fileID: 21300000, guid: d79b3882f5a9fdb44ba0bfe62a54fdc6, type: 3}
+  <Grade>k__BackingField: 0
+  <Rarity>k__BackingField: 1
   <Weight>k__BackingField: 1.2
   <BaseType>k__BackingField: iron_ore
   _extra: []

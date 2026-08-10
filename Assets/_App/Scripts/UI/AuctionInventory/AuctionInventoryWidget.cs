@@ -51,6 +51,9 @@ namespace TradeArea.UI.AuctionInventory
                     FLogger.LogWarning<AuctionInventoryWidget>($"ItemStack is null at index {i}");
                     itemRow.ItemName = "Unknown";
                     itemRow.ItemIcon = null;
+                    itemRow.Rarity = 0;
+                    itemRow.Grade = 0;
+
                     return;
                 }
 
@@ -61,6 +64,9 @@ namespace TradeArea.UI.AuctionInventory
                     FLogger.LogWarning<AuctionInventoryWidget>($"ItemConfig is null for ItemStack at index {i}");
                     itemRow.ItemName = "Unknown";
                     itemRow.ItemIcon = null;
+                    itemRow.Rarity = 0;
+                    itemRow.Grade = 0;
+
                     return;
                 }
 
@@ -68,6 +74,8 @@ namespace TradeArea.UI.AuctionInventory
 
                 itemRow.ItemName = $"{itemStack.ItemConfig.Name} {itemStack.Quantity}";
                 itemRow.ItemIcon = itemStack.ItemConfig.Icon;
+                itemRow.Rarity = itemStack.ItemConfig.Rarity;
+                itemRow.Grade = itemStack.ItemConfig.Grade;
             };
 
             _loadableList.ListView.unbindItem = (e, i) =>

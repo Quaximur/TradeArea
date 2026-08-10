@@ -48,6 +48,9 @@ namespace TradeArea.UI.AuctionLots
                     FLogger.LogWarning<AuctionLotsWidget>($"OwnLot is null at index {i}");
                     ownLotRow.ItemName = "Unknown";
                     ownLotRow.ItemIcon = null;
+                    ownLotRow.Rarity = 0;
+                    ownLotRow.Grade = 0;
+                    
                     ownLotRow.SetStats(
                         soldQuantity: "0",
                         totalQuantity: "0",
@@ -55,6 +58,7 @@ namespace TradeArea.UI.AuctionLots
                         extraSoldoutMoney: "0",
                         revenue: "0"
                     );
+
                     ownLotRow.SetCollectButtonEnabled(false);
                     ownLotRow.SetRemoveButtonEnabled(false);
                     return;
@@ -68,6 +72,9 @@ namespace TradeArea.UI.AuctionLots
                     FLogger.LogWarning<AuctionLotsWidget>($"ItemConfig is null for OwnLot at index {i}");
                     ownLotRow.ItemName = "Unknown";
                     ownLotRow.ItemIcon = null;
+                    ownLotRow.Rarity = 0;
+                    ownLotRow.Grade = 0;
+
                     ownLotRow.SetStats(
                         soldQuantity: soldQuantity.ToString(),
                         totalQuantity: ownLot.TotalQuantity.ToString(),
@@ -75,6 +82,7 @@ namespace TradeArea.UI.AuctionLots
                         extraSoldoutMoney: ownLot.ExtraSoldoutMoney.ToString(),
                         revenue: (soldQuantity * ownLot.UnitPrice + ownLot.ExtraSoldoutMoney).ToString()
                     );
+                    
                     ownLotRow.SetCollectButtonEnabled(false);
                     ownLotRow.SetRemoveButtonEnabled(false);
                     return;
@@ -85,6 +93,8 @@ namespace TradeArea.UI.AuctionLots
 
                 ownLotRow.ItemName = ownLot.ItemConfig.Name;
                 ownLotRow.ItemIcon = ownLot.ItemConfig.Icon;
+                ownLotRow.Rarity = ownLot.ItemConfig.Rarity;
+                ownLotRow.Grade = ownLot.ItemConfig.Grade;
 
                 ownLotRow.SetStats(
                     soldQuantity: soldQuantity.ToString(),
