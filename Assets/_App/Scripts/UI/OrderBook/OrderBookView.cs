@@ -151,7 +151,7 @@ namespace TradeArea.UI.OrderBook
                 return;
 
             var levels = listing.Levels
-                .OrderBy(l => l.MinPrice)
+                .OrderByDescending(l => l.MaxPrice)
                 .ToArray();
 
             long maxBid = levels.Max(l => l.BidQuantity);
