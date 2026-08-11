@@ -43,10 +43,8 @@ namespace TradeArea.UI.AuctionSearch
                 if (sourceItem == null)
                 {
                     FLogger.LogWarning<AuctionSearchWidget>($"ItemConfig is null at index {i}");
-                    itemRow.ItemName = "Unknown";
-                    itemRow.ItemIcon = null;
-                    itemRow.Rarity = 0;
-                    itemRow.Grade = 0;
+                    itemRow.SetStub();
+                    
                     return;
                 }
 

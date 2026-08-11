@@ -71,6 +71,14 @@ namespace TradeArea.UI.Custom
             SetGrade(_grade);
         }
 
+        public virtual void SetStub()
+        {
+            ItemName = "Unknown Item";
+            ItemIcon = null;
+            Rarity = 0;
+            Grade = 0;
+        }
+
         private void SetItemIcon(Sprite icon)
         {
             _itemIcon = icon;

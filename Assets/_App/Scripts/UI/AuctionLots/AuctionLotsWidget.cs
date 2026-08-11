@@ -46,21 +46,8 @@ namespace TradeArea.UI.AuctionLots
                 if (sourceItem == null)
                 {
                     FLogger.LogWarning<AuctionLotsWidget>($"OwnLot is null at index {i}");
-                    ownLotRow.ItemName = "Unknown";
-                    ownLotRow.ItemIcon = null;
-                    ownLotRow.Rarity = 0;
-                    ownLotRow.Grade = 0;
-                    
-                    ownLotRow.SetStats(
-                        soldQuantity: "0",
-                        totalQuantity: "0",
-                        unitPrice: "0",
-                        extraSoldoutMoney: "0",
-                        revenue: "0"
-                    );
+                    ownLotRow.SetStub();
 
-                    ownLotRow.SetCollectButtonEnabled(false);
-                    ownLotRow.SetRemoveButtonEnabled(false);
                     return;
                 }
 
@@ -70,10 +57,7 @@ namespace TradeArea.UI.AuctionLots
                 if (ownLot.ItemConfig == null)
                 {
                     FLogger.LogWarning<AuctionLotsWidget>($"ItemConfig is null for OwnLot at index {i}");
-                    ownLotRow.ItemName = "Unknown";
-                    ownLotRow.ItemIcon = null;
-                    ownLotRow.Rarity = 0;
-                    ownLotRow.Grade = 0;
+                    ownLotRow.SetStub();
 
                     ownLotRow.SetStats(
                         soldQuantity: soldQuantity.ToString(),
@@ -82,9 +66,7 @@ namespace TradeArea.UI.AuctionLots
                         extraSoldoutMoney: ownLot.ExtraSoldoutMoney.ToString(),
                         revenue: (soldQuantity * ownLot.UnitPrice + ownLot.ExtraSoldoutMoney).ToString()
                     );
-                    
-                    ownLotRow.SetCollectButtonEnabled(false);
-                    ownLotRow.SetRemoveButtonEnabled(false);
+
                     return;
                 }
 

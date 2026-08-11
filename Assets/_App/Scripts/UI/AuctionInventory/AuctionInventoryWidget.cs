@@ -49,10 +49,7 @@ namespace TradeArea.UI.AuctionInventory
                 if (sourceItem == null)
                 {
                     FLogger.LogWarning<AuctionInventoryWidget>($"ItemStack is null at index {i}");
-                    itemRow.ItemName = "Unknown";
-                    itemRow.ItemIcon = null;
-                    itemRow.Rarity = 0;
-                    itemRow.Grade = 0;
+                    itemRow.SetStub();
 
                     return;
                 }
@@ -62,10 +59,8 @@ namespace TradeArea.UI.AuctionInventory
                 if (itemStack.ItemConfig == null)
                 {
                     FLogger.LogWarning<AuctionInventoryWidget>($"ItemConfig is null for ItemStack at index {i}");
-                    itemRow.ItemName = "Unknown";
-                    itemRow.ItemIcon = null;
-                    itemRow.Rarity = 0;
-                    itemRow.Grade = 0;
+                    itemRow.SetStub();
+                    itemRow.ItemName = $"Unknown {itemStack.Quantity}";
 
                     return;
                 }
@@ -95,7 +90,6 @@ namespace TradeArea.UI.AuctionInventory
 
         private void OnItemClicked(ClickEvent _, IItemConfig itemConfig)
         {
-            // Получаем ViewModel через поле класса или другим способом
             ViewModel.OpenSellingView(itemConfig);
         }
 

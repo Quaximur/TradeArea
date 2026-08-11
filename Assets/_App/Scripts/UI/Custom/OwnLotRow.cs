@@ -8,8 +8,6 @@ namespace TradeArea.UI.Custom
         public Button CollectButton => _collectButton;
         public Button RemoveButton => _removeButton;
 
-        // ── Inspector-editable descriptions ───────────────────────────────────
-
         [UxmlAttribute]
         public string SoldQuantityDescription
         {
@@ -45,15 +43,11 @@ namespace TradeArea.UI.Custom
             set => _revenueDescLabel.text = value;
         }
 
-        // ── Description labels (inspector) ────────────────────────────────────
-
         private readonly Label _soldQuantityDescLabel;
         private readonly Label _totalQuantityDescLabel;
         private readonly Label _unitPriceDescLabel;
         private readonly Label _extraSoldoutMoneyDescLabel;
         private readonly Label _revenueDescLabel;
-
-        // ── Value labels (runtime) ────────────────────────────────────────────
 
         private readonly Label _soldQuantityLabel;
         private readonly Label _totalQuantityLabel;
@@ -65,13 +59,10 @@ namespace TradeArea.UI.Custom
         private readonly Button _collectButton;
         private readonly Button _removeButton;
 
-        // ── Constructor ───────────────────────────────────────────────────────
-
         public OwnLotRow() : base()
         {
             AddToClassList("own-lot-row");
 
-            // Sold / Total inline row (left block, below name)
             var quantityRow = new VisualElement();
             quantityRow.AddToClassList("own-lot-row__quantity-row");
             _startContainer.Add(quantityRow);
@@ -86,17 +77,14 @@ namespace TradeArea.UI.Custom
             (_totalQuantityDescLabel, _totalQuantityLabel) =
                 CreateInlineCell(quantityRow, "own-lot-row__total");
 
-            // Vertical divider
             var divider = new VisualElement();
             divider.AddToClassList("own-lot-row__divider");
             Add(divider);
 
-            // Middle block — fixed width, not flex-grow
             var middleBlock = new VisualElement();
             middleBlock.AddToClassList("own-lot-row__middle");
             Add(middleBlock);
 
-            // Top: Unit Price + Bonus
             var middleTop = new VisualElement();
             middleTop.AddToClassList("own-lot-row__middle-top");
             middleBlock.Add(middleTop);
@@ -135,7 +123,6 @@ namespace TradeArea.UI.Custom
             moneyIcon2.AddToClassList("silver-icon");
             extraMoneyCell.Add(moneyIcon2);
 
-            // Bottom: Revenue formula + emphasized value
             var revenueRow = new VisualElement();
             revenueRow.AddToClassList("own-lot-row__revenue-row");
             middleBlock.Add(revenueRow);
@@ -156,12 +143,10 @@ namespace TradeArea.UI.Custom
             moneyIcon3.AddToClassList("silver-icon");
             revenueRow.Add(moneyIcon3);
 
-            // Spacer — pushes buttons to the right edge
             var spacer = new VisualElement();
             spacer.AddToClassList("own-lot-row__spacer");
             Add(spacer);
 
-            // Buttons
             var buttonGroup = new VisualElement();
             buttonGroup.AddToClassList("own-lot-row__button-group");
             Add(buttonGroup);
@@ -176,12 +161,27 @@ namespace TradeArea.UI.Custom
             _removeButton.AddToClassList("item-config-row__remove-button");
             buttonGroup.Add(_removeButton);
 
-            // Default descriptions — override in inspector
             _soldQuantityDescLabel.text = "Sold";
             _totalQuantityDescLabel.text = "Orders";
             _unitPriceDescLabel.text = "Unit Price";
             _extraSoldoutMoneyDescLabel.text = "Bonus";
             _revenueDescLabel.text = "Revenue";
+        }
+
+        public override void SetStub()
+        {
+            base.SetStub();
+
+            SetStats(
+                soldQuantity: "0",
+                totalQuantity: "0",
+                unitPrice: "0",
+                extraSoldoutMoney: "0",
+                revenue: "0"
+            );
+
+            SetCollectButtonEnabled(false);
+            SetRemoveButtonEnabled(false);
         }
 
         public void SetCollectButtonEnabled(bool isEnabled) =>

@@ -47,21 +47,8 @@ namespace TradeArea.UI.AuctionBids
                 if (sourceItem == null)
                 {
                     FLogger.LogWarning<AuctionBidsWidget>($"OwnBid is null at index {i}");
-                    ownBidRow.ItemName = "Unknown";
-                    ownBidRow.ItemIcon = null;
-                    ownBidRow.Rarity = 0;
-                    ownBidRow.Grade = 0;
+                    ownBidRow.SetStub();
 
-                    ownBidRow.SetStats(
-                        boughtQuantity: "0",
-                        totalQuantity: "0",
-                        bidPrice: "0",
-                        remainingQuantity: "0",
-                        refund: "0"
-                    );
-
-                    ownBidRow.SetCollectButtonEnabled(false);
-                    ownBidRow.SetRemoveButtonEnabled(false);
                     return;
                 }
 
@@ -73,24 +60,17 @@ namespace TradeArea.UI.AuctionBids
                 if (ownBid.ItemConfig == null)
                 {
                     FLogger.LogWarning<AuctionBidsWidget>($"ItemConfig is null for OwnBid at index {i}");
-                    ownBidRow.ItemName = "Unknown";
-                    ownBidRow.ItemIcon = null;
-                    ownBidRow.Rarity = 0;
-                    ownBidRow.Grade = 0;
+                    ownBidRow.SetStub();
 
                     ownBidRow.SetStats(
                         boughtQuantity: boughtQuantity.ToString(),
                         totalQuantity: ownBid.TotalQuantity.ToString(),
                         bidPrice: ownBid.BidPrice.ToString(),
-                        remainingQuantity: remainingQuantity.ToString(),
                         refund: refund.ToString()
                     );
 
-                    ownBidRow.SetCollectButtonEnabled(false);
-                    ownBidRow.SetRemoveButtonEnabled(false);
                     return;
                 }
-            
 
                 ownBidRow.ItemName = ownBid.ItemConfig.Name;
                 ownBidRow.ItemIcon = ownBid.ItemConfig.Icon;
@@ -101,7 +81,6 @@ namespace TradeArea.UI.AuctionBids
                     boughtQuantity: boughtQuantity.ToString(),
                     totalQuantity: ownBid.TotalQuantity.ToString(),
                     bidPrice: ownBid.BidPrice.ToString(),
-                    remainingQuantity: remainingQuantity.ToString(),
                     refund: refund.ToString()
                 );
 
