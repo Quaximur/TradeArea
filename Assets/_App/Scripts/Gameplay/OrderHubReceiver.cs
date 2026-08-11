@@ -26,6 +26,11 @@ namespace TradeArea
             if (inventory != null)
             {
                 _auctionModel.OnMoneyChanged.Value = LoadingState.Success(inventory.Money);
+                _auctionModel.OnUsedWeightChanged.Value = LoadingState.Success(inventory.UsedWeight);
+                _auctionModel.OnWeightLimitChanged.Value = LoadingState.Success(inventory.WeightLimit);
+                _auctionModel.OnUsedCapacityChanged.Value = LoadingState.Success(inventory.UsedCapacity);
+                _auctionModel.OnCapacityLimitChanged.Value = LoadingState.Success(inventory.Capacity);
+
                 if (inventory.ItemStacks != null && inventory.ItemStacks.Length > 0)
                 {
                     FLogger.Log(inventory.ItemStacks[0].ItemConfig.Name);
@@ -101,6 +106,8 @@ namespace TradeArea
         {
             FLogger.LogGood($"Lot created: {lotCreated.LotId} {lotCreated.ItemConfig.Name}");
 
+            _auctionModel.OnUsedWeightChanged.Value = LoadingState.Success(_auctionModel.OnUsedWeightChanged.Value.Value - lotCreated.ItemConfig.Weight * lotCreated.TotalQuantity);
+
             _auctionModel.OnOwnLotsChanged.Value.Value.Add(new OwnLot
             {
                 Id = lotCreated.LotId,
@@ -114,13 +121,19 @@ namespace TradeArea
 
             _auctionModel.OnOwnLotsChanged.OnNext(_auctionModel.OnOwnLotsChanged.Value); // TODO: notify for RefreshItems only
 
-            // TODO: decrease UsedWeight and mb UsedCapacity
             var itemStack = _auctionModel.OnInventoryChanged.Value.Value.FirstOrDefault(x => x.ItemConfig.Id == lotCreated.ItemConfig.Id);
+
             if (itemStack != null)
             {
-                itemStack.Quantity -= lotCreated.TotalQuantity;
-                if (itemStack.Quantity <= 0)
+                if (itemStack.Quantity <= lotCreated.TotalQuantity)
+                {
                     _auctionModel.OnInventoryChanged.Value.Value.Remove(itemStack);
+                    _auctionModel.OnUsedCapacityChanged.Value = LoadingState.Success(_auctionModel.OnUsedCapacityChanged.Value.Value - 1);
+                }
+                else
+                {
+                    itemStack.Quantity -= lotCreated.TotalQuantity;
+                }
 
                 _auctionModel.OnInventoryChanged.OnNext(_auctionModel.OnInventoryChanged.Value); // TODO: notify for RefreshItems only
             }
@@ -155,37 +168,29 @@ namespace TradeArea
         {
             FLogger.Log($"OnLotRemoved: {lotRemoved.LotId} {lotRemoved.ItemConfig?.Name}");
 
-            // 1. Находим существующий стек с таким же ItemConfig в инвентаре
+            _auctionModel.OnUsedWeightChanged.Value = LoadingState.Success(_auctionModel.OnUsedWeightChanged.Value.Value + lotRemoved.ItemConfig.Weight * lotRemoved.RemovedQuantity);
+
             var existingStack = _auctionModel.OnInventoryChanged.Value.Value
                 .FirstOrDefault(x => x.ItemConfig.Id == lotRemoved.ItemConfig.Id);
 
             if (existingStack != null)
             {
-                // Если стек существует - увеличиваем количество
                 existingStack.Quantity += lotRemoved.RemovedQuantity;
             }
             else
             {
-                // Если стека нет - создаем новый
                 var newStack = new ItemStack
                 (
                     itemConfig: _itemConfigRepository.Get(lotRemoved.ItemConfig.Id),
                     quantity: lotRemoved.RemovedQuantity
                 );
+
                 _auctionModel.OnInventoryChanged.Value.Value.Add(newStack);
+                _auctionModel.OnUsedCapacityChanged.Value = LoadingState.Success(_auctionModel.OnUsedCapacityChanged.Value.Value + 1);
             }
 
-            // 2. Обновляем UsedWeight
-            // _auctionModel.OnInventoryChanged.Value.UsedWeight +=
-            //     lotRemoved.ItemConfig.Weight * lotRemoved.RemovedQuantity;
+            _auctionModel.OnInventoryChanged.OnNext(_auctionModel.OnInventoryChanged.Value); // TODO: notify for RefreshItems only
 
-            // 3. Обновляем UsedCapacity (если был создан новый стек)
-            // if (existingStack == null)
-            // {
-            //     _auctionModel.OnInventoryChanged.Value.UsedCapacity += 1;
-            // }
-
-            // 4. Удаляем лот из списка своих лотов
             var ownLot = _auctionModel.OnOwnLotsChanged.Value.Value
                 .FirstOrDefault(x => x.Id == lotRemoved.LotId);
 
@@ -209,8 +214,6 @@ namespace TradeArea
                 FLogger.LogWarning("Lot to remove is not found");
             }
 
-            // 5. Уведомляем об изменении инвентаря
-            _auctionModel.OnInventoryChanged.OnNext(_auctionModel.OnInventoryChanged.Value);
         }
         #endregion
 
@@ -238,28 +241,27 @@ namespace TradeArea
         {
             FLogger.Log($"OnBidCollected");
 
+            _auctionModel.OnUsedWeightChanged.Value = LoadingState.Success(_auctionModel.OnUsedWeightChanged.Value.Value + bidCollected.ItemConfig.Weight * bidCollected.CollectedQuantity);
+
             var existingStack = _auctionModel.OnInventoryChanged.Value.Value
                 .FirstOrDefault(x => x.ItemConfig.Id == bidCollected.ItemConfig.Id);
 
             if (existingStack != null)
             {
-                // Если стек существует - увеличиваем количество
                 existingStack.Quantity += bidCollected.CollectedQuantity;
             }
             else
             {
-                // Если стека нет - создаем новый
                 var newStack = new ItemStack
                 (
                     itemConfig: _itemConfigRepository.Get(bidCollected.ItemConfig.Id),
                     quantity: bidCollected.CollectedQuantity
                 );
                 _auctionModel.OnInventoryChanged.Value.Value.Add(newStack);
+                _auctionModel.OnUsedCapacityChanged.Value = LoadingState.Success(_auctionModel.OnUsedCapacityChanged.Value.Value + 1);
             }
 
             _auctionModel.OnInventoryChanged.OnNext(_auctionModel.OnInventoryChanged.Value); // TODO: notify for RefreshItems only
-
-            // TODO: update UsedWeight
 
             var ownBid = _auctionModel.OnOwnBidsChanged.Value.Value
                 .FirstOrDefault(x => x.Id == bidCollected.BidId);
@@ -288,7 +290,6 @@ namespace TradeArea
         {
             FLogger.LogGood($"Bid removed: {bidRemoved.BidId}. Money returned: {bidRemoved.ReturningMoney}");
 
-            // 1. Удаляем ставку из списка своих лотов
             var ownBid = _auctionModel.OnOwnBidsChanged.Value.Value
                 .FirstOrDefault(x => x.Id == bidRemoved.BidId);
 
@@ -339,7 +340,7 @@ namespace TradeArea
             {
                 FLogger.LogWarning($"{nameof(OnBought)}: bid not found");
             }
-            
+
             AddMoney(extraMoney);
         }
 
@@ -366,13 +367,13 @@ namespace TradeArea
 
         private void AddMoney(long moneyToAdd)
         {
-            _auctionModel.OnMoneyChanged.Value = LoadingState.Success<long>(_auctionModel.OnMoneyChanged.Value.Value 
+            _auctionModel.OnMoneyChanged.Value = LoadingState.Success<long>(_auctionModel.OnMoneyChanged.Value.Value
                 + moneyToAdd);
         }
 
         private void RemoveMoney(long moneyToRemove)
         {
-            _auctionModel.OnMoneyChanged.Value = LoadingState.Success<long>(_auctionModel.OnMoneyChanged.Value.Value 
+            _auctionModel.OnMoneyChanged.Value = LoadingState.Success<long>(_auctionModel.OnMoneyChanged.Value.Value
                 - moneyToRemove);
         }
     }

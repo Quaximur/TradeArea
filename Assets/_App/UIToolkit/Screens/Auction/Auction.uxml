@@ -63,6 +63,24 @@
                                         <ui:VisualElement class="silver-icon"/>
                                         <ui:Label text="0" name="MoneyLabel" class="auction__money-label"/>
                                     </ui:VisualElement>
+                                    <ui:VisualElement class="auction__inventory-stats">
+                                        <ui:VisualElement class="auction__inventory-stat auction__inventory-stat-left" style="flex-grow: 2;">
+                                            <ui:Label text="Weight" class="auction__inventory-stat-label"/>
+                                            <ui:VisualElement class="auction__inventory-stat-value">
+                                                <ui:Label text="0" name="UsedWeightLabel" class="auction__inventory-stat-number"/>
+                                                <ui:Label text="/" class="auction__inventory-stat-separator"/>
+                                                <ui:Label text="0" name="WeightLimitLabel" class="auction__inventory-stat-number"/>
+                                            </ui:VisualElement>
+                                        </ui:VisualElement>
+                                        <ui:VisualElement class="auction__inventory-stat">
+                                            <ui:Label text="Capacity" class="auction__inventory-stat-label"/>
+                                            <ui:VisualElement class="auction__inventory-stat-value">
+                                                <ui:Label text="0" name="UsedCapacityLabel" class="auction__inventory-stat-number"/>
+                                                <ui:Label text="/" class="auction__inventory-stat-separator"/>
+                                                <ui:Label text="0" name="CapacityLimitLabel" class="auction__inventory-stat-number"/>
+                                            </ui:VisualElement>
+                                        </ui:VisualElement>
+                                    </ui:VisualElement>
                                     <ui:Label text="Available Items" class="auction__content-subtitle"/>
                                     <ui:Instance template="LoadableListView" name="LoadableListView" class="auction__panel-main auction__base-list" style="flex-grow: 1; padding-top: 6px; padding-right: 6px; padding-bottom: 6px; padding-left: 6px;"/>
                                 </ui:VisualElement>

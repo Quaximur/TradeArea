@@ -12,11 +12,19 @@ namespace TradeArea.UI.AuctionInventory
     public partial class AuctionInventoryWidget : ToolkitWidget<AuctionInventoryViewModel>
     {
         [UxmlAttribute] private string _moneyLabelName = "MoneyLabel";
+        [UxmlAttribute] private string _usedWeightLabelName = "UsedWeightLabel";
+        [UxmlAttribute] private string _weightLimitLabelName = "WeightLimitLabel";
+        [UxmlAttribute] private string _usedCapacityLabelName = "UsedCapacityLabel";
+        [UxmlAttribute] private string _capacityLimitLabelName = "CapacityLimitLabel";
         [UxmlAttribute] private string _loadableListViewWidgetName = null;
         [UxmlAttribute] private int _lotMarginTop = 4;
         [UxmlAttribute] private int _lotPaddingTop = 4;
 
         private Label _moneyLabel;
+        private Label _usedWeightLabel;
+        private Label _weightLimitLabel;
+        private Label _usedCapacityLabel;
+        private Label _capacityLimitLabel;
         private LoadableListViewWidget _loadableList;
 
         private CompositeDisposable _disposables;
@@ -25,6 +33,12 @@ namespace TradeArea.UI.AuctionInventory
         protected override void OnInit()
         {
             _moneyLabel = Root.Q<Label>(name: _moneyLabelName);
+            
+            _usedWeightLabel = Root.Q<Label>(name: _usedWeightLabelName);
+            _weightLimitLabel = Root.Q<Label>(name: _weightLimitLabelName);
+            _usedCapacityLabel = Root.Q<Label>(name: _usedCapacityLabelName);
+            _capacityLimitLabel = Root.Q<Label>(name: _capacityLimitLabelName);
+
             _loadableList = Root.Q<LoadableListViewWidget>(_loadableListViewWidgetName);
             _loadableList.Init();
         }
@@ -85,6 +99,30 @@ namespace TradeArea.UI.AuctionInventory
             {
                 if (x.LoadingFlag == Shared.LoadingFlag.Success)
                     _moneyLabel.text = x.Value.ToString("N0");
+            }).AddTo(_disposables);
+
+            viewModel.OnUsedWeightChanged.Subscribe(x =>
+            {
+                if (x.LoadingFlag == Shared.LoadingFlag.Success)
+                    _usedWeightLabel.text = x.Value.ToString("F2");
+            }).AddTo(_disposables);
+
+            viewModel.OnWeightLimitChanged.Subscribe(x =>
+            {
+                if (x.LoadingFlag == Shared.LoadingFlag.Success)
+                    _weightLimitLabel.text = x.Value.ToString("F2");
+            }).AddTo(_disposables);
+
+            viewModel.OnUsedCapacityChanged.Subscribe(x =>
+            {
+                if (x.LoadingFlag == Shared.LoadingFlag.Success)
+                    _usedCapacityLabel.text = x.Value.ToString("N0");
+            }).AddTo(_disposables);
+
+            viewModel.OnCapacityLimitChanged.Subscribe(x =>
+            {
+                if (x.LoadingFlag == Shared.LoadingFlag.Success)
+                    _capacityLimitLabel.text = x.Value.ToString("N0");
             }).AddTo(_disposables);
         }
 

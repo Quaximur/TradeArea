@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
-using Aucy.Contracts.OnionClient;
 using Aucy.Contracts.OnionServer;
 using Cysharp.Threading.Tasks;
 using DevKit.UI.MVVM;
@@ -25,6 +23,10 @@ namespace TradeArea.UI.AuctionInventory
         /// </summary>
         public Observable<LoadingState<List<ItemStack>>> ItemStacks => _auctionModel.OnInventoryChanged;
         public Observable<LoadingState<long>> OnMoneyChanged => _auctionModel.OnMoneyChanged;
+        public Observable<LoadingState<float>> OnUsedWeightChanged => _auctionModel.OnUsedWeightChanged;
+        public Observable<LoadingState<float>> OnWeightLimitChanged => _auctionModel.OnWeightLimitChanged;
+        public Observable<LoadingState<int>> OnUsedCapacityChanged => _auctionModel.OnUsedCapacityChanged;
+        public Observable<LoadingState<int>> OnCapacityLimitChanged => _auctionModel.OnCapacityLimitChanged;
 
         private readonly AuctionModel _auctionModel;
         private readonly UserModel _userModel;

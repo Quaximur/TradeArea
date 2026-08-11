@@ -46,6 +46,10 @@ namespace TradeArea
                     try
                     {
                         _auctionModel.OnMoneyChanged.Value = LoadingState.Loading<long>();
+                        _auctionModel.OnUsedWeightChanged.Value = LoadingState.Loading<float>();
+                        _auctionModel.OnWeightLimitChanged.Value = LoadingState.Loading<float>();
+                        _auctionModel.OnUsedCapacityChanged.Value = LoadingState.Loading<int>();
+                        _auctionModel.OnCapacityLimitChanged.Value = LoadingState.Loading<int>();
                         _auctionModel.OnInventoryChanged.Value = LoadingState.Loading<List<ItemStack>>();
                         _auctionModel.OnOwnLotsChanged.Value = LoadingState.Loading<List<OwnLot>>();
                         _auctionModel.OnOwnBidsChanged.Value = LoadingState.Loading<List<OwnBid>>();
@@ -83,6 +87,10 @@ namespace TradeArea
                         _auctionModel.OnInventoryChanged.Value = LoadingState.Fail<List<ItemStack>>();
                         _auctionModel.OnOwnLotsChanged.Value = LoadingState.Fail<List<OwnLot>>();
                         _auctionModel.OnOwnBidsChanged.Value = LoadingState.Fail<List<OwnBid>>();
+                        _auctionModel.OnUsedWeightChanged.Value = LoadingState.Fail<float>();
+                        _auctionModel.OnWeightLimitChanged.Value = LoadingState.Fail<float>();
+                        _auctionModel.OnUsedCapacityChanged.Value = LoadingState.Fail<int>();
+                        _auctionModel.OnCapacityLimitChanged.Value = LoadingState.Fail<int>();
                     }
 
                     // Wait before retrying (won't delay if token is cancelled)
