@@ -310,13 +310,8 @@ namespace TradeArea
             }
             else
             {
-                FLogger.LogWarning("Bid to collect is not found");
+                FLogger.LogWarning("Bid to remove is not found");
             }
-
-            if (_auctionModel.OnOwnBidsChanged.Value.Value.TryRemoveFirstWhere(x => x.Id == bidRemoved.BidId))
-                _auctionModel.OnOwnBidsChanged.OnNext(_auctionModel.OnOwnBidsChanged.Value);
-            else
-                FLogger.LogWarning("Bid for removing not found");
 
             AddMoney(bidRemoved.ReturningMoney);
         }
