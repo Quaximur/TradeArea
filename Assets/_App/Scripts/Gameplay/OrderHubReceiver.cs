@@ -33,10 +33,10 @@ namespace TradeArea
 
                 if (inventory.ItemStacks != null && inventory.ItemStacks.Length > 0)
                 {
-                    FLogger.Log(inventory.ItemStacks[0].ItemConfig.Name);
+                    FLogger.Log(inventory.ItemStacks[0].ItemConfigId.ToString());
                     var itemStacks = inventory.ItemStacks
                         .Where(x => x != null)
-                        .Select(x => new ItemStack(_itemConfigRepository.Get(x.ItemConfig.Id), x.Quantity))
+                        .Select(x => new ItemStack(_itemConfigRepository.Get(x.ItemConfigId), x.Quantity))
                         .ToList();
                     _auctionModel.OnInventoryChanged.Value = LoadingState.Success(itemStacks);
                 }
@@ -55,13 +55,13 @@ namespace TradeArea
 
             if (ownLots != null && ownLots.Lots != null && ownLots.Lots.Count > 0)
             {
-                FLogger.Log(ownLots.Lots[0].ItemConfig.Name);
+                FLogger.Log(ownLots.Lots[0].ItemConfigId.ToString());
                 var lots = ownLots.Lots
                     .Where(x => x != null)
                     .Select(x => new OwnLot
                     {
                         Id = x.Id,
-                        ItemConfig = _itemConfigRepository.Get(x.ItemConfig.Id),
+                        ItemConfig = _itemConfigRepository.Get(x.ItemConfigId),
                         UnitPrice = x.UnitPrice,
                         RemainingQuantity = x.RemainingQuantity,
                         TotalQuantity = x.TotalQuantity,
@@ -79,13 +79,13 @@ namespace TradeArea
 
             if (ownBids != null && ownBids.OwnBids != null && ownBids.OwnBids.Count > 0)
             {
-                FLogger.Log(ownBids.OwnBids[0].ItemConfig.Name);
+                FLogger.Log(ownBids.OwnBids[0].ItemConfigId.ToString());
                 var bids = ownBids.OwnBids
                     .Where(x => x != null)
                     .Select(x => new OwnBid
                     {
                         Id = x.Id,
-                        ItemConfig = _itemConfigRepository.Get(x.ItemConfig.Id),
+                        ItemConfig = _itemConfigRepository.Get(x.ItemConfigId),
                         BidPrice = x.BidPrice,
                         RemainingQuantity = x.RemainingQuantity,
                         TotalQuantity = x.TotalQuantity,
@@ -104,14 +104,14 @@ namespace TradeArea
         #region Lots
         public void OnLotCreated(LotCreatedDto lotCreated)
         {
-            FLogger.LogGood($"Lot created: {lotCreated.LotId} {lotCreated.ItemConfig.Name}");
+            FLogger.LogGood($"Lot created: {lotCreated.LotId} x{lotCreated.TotalQuantity}");
 
-            _auctionModel.OnUsedWeightChanged.Value = LoadingState.Success(_auctionModel.OnUsedWeightChanged.Value.Value - lotCreated.ItemConfig.Weight * lotCreated.TotalQuantity);
+            _auctionModel.OnUsedWeightChanged.Value = LoadingState.Success(_auctionModel.OnUsedWeightChanged.Value.Value + lotCreated.WeightDiff);
 
             _auctionModel.OnOwnLotsChanged.Value.Value.Add(new OwnLot
             {
                 Id = lotCreated.LotId,
-                ItemConfig = _itemConfigRepository.Get(lotCreated.ItemConfig.Id),
+                ItemConfig = _itemConfigRepository.Get(lotCreated.ItemConfigId),
                 UnitPrice = lotCreated.UnitPrice,
                 RemainingQuantity = lotCreated.TotalQuantity,
                 TotalQuantity = lotCreated.TotalQuantity,
@@ -121,7 +121,8 @@ namespace TradeArea
 
             _auctionModel.OnOwnLotsChanged.OnNext(_auctionModel.OnOwnLotsChanged.Value); // TODO: notify for RefreshItems only
 
-            var itemStack = _auctionModel.OnInventoryChanged.Value.Value.FirstOrDefault(x => x.ItemConfig.Id == lotCreated.ItemConfig.Id);
+            var itemStack = _auctionModel.OnInventoryChanged.Value.Value.FirstOrDefault(x => 
+                x.ItemConfig.Id == lotCreated.ItemConfigId);
 
             if (itemStack != null)
             {
@@ -166,12 +167,12 @@ namespace TradeArea
 
         public void OnLotRemoved(LotRemovedDto lotRemoved)
         {
-            FLogger.Log($"OnLotRemoved: {lotRemoved.LotId} {lotRemoved.ItemConfig?.Name}");
+            FLogger.Log($"OnLotRemoved: {lotRemoved.LotId} x{lotRemoved.RemovedQuantity}");
 
-            _auctionModel.OnUsedWeightChanged.Value = LoadingState.Success(_auctionModel.OnUsedWeightChanged.Value.Value + lotRemoved.ItemConfig.Weight * lotRemoved.RemovedQuantity);
+            _auctionModel.OnUsedWeightChanged.Value = LoadingState.Success(_auctionModel.OnUsedWeightChanged.Value.Value + lotRemoved.WeightDiff);
 
             var existingStack = _auctionModel.OnInventoryChanged.Value.Value
-                .FirstOrDefault(x => x.ItemConfig.Id == lotRemoved.ItemConfig.Id);
+                .FirstOrDefault(x => x.ItemConfig.Id == lotRemoved.ItemConfigId);
 
             if (existingStack != null)
             {
@@ -181,7 +182,7 @@ namespace TradeArea
             {
                 var newStack = new ItemStack
                 (
-                    itemConfig: _itemConfigRepository.Get(lotRemoved.ItemConfig.Id),
+                    itemConfig: _itemConfigRepository.Get(lotRemoved.ItemConfigId),
                     quantity: lotRemoved.RemovedQuantity
                 );
 
@@ -220,12 +221,12 @@ namespace TradeArea
         #region Bids
         public void OnBidCreated(BidCreatedDto bidCreated)
         {
-            FLogger.LogGood($"Bid created: {bidCreated.BidId} {bidCreated.ItemConfig.Name}");
+            FLogger.LogGood($"Bid created: {bidCreated.BidId} x{bidCreated.TotalQuantity}");
 
             _auctionModel.OnOwnBidsChanged.Value.Value.Add(new OwnBid
             {
                 Id = bidCreated.BidId,
-                ItemConfig = _itemConfigRepository.Get(bidCreated.ItemConfig.Id),
+                ItemConfig = _itemConfigRepository.Get(bidCreated.ItemConfigId),
                 BidPrice = bidCreated.BidPrice,
                 RemainingQuantity = bidCreated.TotalQuantity,
                 TotalQuantity = bidCreated.TotalQuantity,
@@ -241,10 +242,10 @@ namespace TradeArea
         {
             FLogger.Log($"OnBidCollected");
 
-            _auctionModel.OnUsedWeightChanged.Value = LoadingState.Success(_auctionModel.OnUsedWeightChanged.Value.Value + bidCollected.ItemConfig.Weight * bidCollected.CollectedQuantity);
+            _auctionModel.OnUsedWeightChanged.Value = LoadingState.Success(_auctionModel.OnUsedWeightChanged.Value.Value + bidCollected.WeightDiff);
 
             var existingStack = _auctionModel.OnInventoryChanged.Value.Value
-                .FirstOrDefault(x => x.ItemConfig.Id == bidCollected.ItemConfig.Id);
+                .FirstOrDefault(x => x.ItemConfig.Id == bidCollected.ItemConfigId);
 
             if (existingStack != null)
             {
@@ -254,7 +255,7 @@ namespace TradeArea
             {
                 var newStack = new ItemStack
                 (
-                    itemConfig: _itemConfigRepository.Get(bidCollected.ItemConfig.Id),
+                    itemConfig: _itemConfigRepository.Get(bidCollected.ItemConfigId),
                     quantity: bidCollected.CollectedQuantity
                 );
                 _auctionModel.OnInventoryChanged.Value.Value.Add(newStack);
