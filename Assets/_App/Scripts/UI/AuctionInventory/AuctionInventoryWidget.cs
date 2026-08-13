@@ -100,17 +100,17 @@ namespace TradeArea.UI.AuctionInventory
                 if (x.LoadingFlag == Shared.LoadingFlag.Success)
                     _moneyLabel.text = x.Value.ToString("N0");
             }).AddTo(_disposables);
-
+            
             viewModel.OnUsedWeightChanged.Subscribe(x =>
             {
                 if (x.LoadingFlag == Shared.LoadingFlag.Success)
-                    _usedWeightLabel.text = x.Value.ToString("F2");
+                    _usedWeightLabel.text = x.Value.ToString("# ##0.00");
             }).AddTo(_disposables);
 
             viewModel.OnWeightLimitChanged.Subscribe(x =>
             {
                 if (x.LoadingFlag == Shared.LoadingFlag.Success)
-                    _weightLimitLabel.text = x.Value.ToString("F2");
+                    _weightLimitLabel.text = x.Value.ToString("# ##0.00");
             }).AddTo(_disposables);
 
             viewModel.OnUsedCapacityChanged.Subscribe(x =>
