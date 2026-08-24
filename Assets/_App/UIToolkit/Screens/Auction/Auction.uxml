@@ -16,7 +16,7 @@
                     <ui:Tab label="Market" name="SearchTab" class="auction__tab">
                         <TradeArea.UI.AuctionSearch.AuctionSearchWidget _loadable-list-view-widget-name="LoadableListView" _lot-margin-top="0" _lot-padding-top="0" class="auction__search-panel">
                             <ui:VisualElement name="CategoriesPanel" class="auction__panel-main" style="width: 400px; background-color: rgb(17, 21, 28); margin-right: 12px;"/>
-                            <ui:VisualElement name="MarketPanel" style="flex-grow: 1; height: 400px;">
+                            <ui:VisualElement name="MarketPanel" style="flex-grow: 1;">
                                 <ui:VisualElement name="SearchHeader" class="auction__market-header">
                                     <ui:Label text="ItemConfig Items For Sale" class="auction__user-title"/>
                                     <ui:Button name="RefreshMarket" text="Refresh" class="auction__button auction__button-primary" style="position: absolute; right: 0; top: 0;"/>
