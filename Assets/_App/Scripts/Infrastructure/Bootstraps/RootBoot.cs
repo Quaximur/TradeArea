@@ -1,4 +1,6 @@
 using DevKit.UI.MVVM;
+using MagicOnion;
+using TradeArea.Shared;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -20,6 +22,9 @@ namespace TradeArea.Infrastructure.Bootstraps
             DontDestroyOnLoad(_rootUIBinder);
 
             builder.RegisterInstance<IRootUIBinder>(_rootUIBinder);
+
+            builder.Register<GrpcChannelx>(x => GrpcChannelx.ForAddress(Constants.AUCY_URL), 
+                Lifetime.Singleton);
 
             //
 

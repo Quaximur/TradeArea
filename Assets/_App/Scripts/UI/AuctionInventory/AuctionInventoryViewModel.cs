@@ -32,18 +32,21 @@ namespace TradeArea.UI.AuctionInventory
         private readonly UserModel _userModel;
         private readonly OrderHubService _orderHubService;
         private readonly IViewBinder<OrderBookViewModel> _orderBookBinder;
+        private readonly GrpcChannelx _channel;
 
         private CancellationTokenSource _cts = new();
 
         public AuctionInventoryViewModel(
             AuctionModel auctionModel, 
             UserModel userModel, 
-            OrderHubService orderHubService, 
+            OrderHubService orderHubService,
+            GrpcChannelx channel,
             IViewBinder<OrderBookViewModel> orderBookBinder)
         {
             _auctionModel = auctionModel;
             _userModel = userModel;
             _orderHubService = orderHubService;
+            _channel = channel;
             _orderBookBinder = orderBookBinder;
         }
 
@@ -65,8 +68,7 @@ namespace TradeArea.UI.AuctionInventory
 
             try
             {
-                using var channel = GrpcChannelx.ForAddress(Constants.AUCY_URL);
-                var inventoryClient = MagicOnionClient.Create<IInventoryService>(channel)
+                var inventoryClient = MagicOnionClient.Create<IInventoryService>(_channel)
                     .WithHeaders(GetAuthHeader())
                     .WithCancellationToken(_cts.Token);
 
@@ -89,8 +91,7 @@ namespace TradeArea.UI.AuctionInventory
 
             try
             {
-                using var channel = GrpcChannelx.ForAddress(Constants.AUCY_URL);
-                var inventoryClient = MagicOnionClient.Create<IInventoryService>(channel)
+                var inventoryClient = MagicOnionClient.Create<IInventoryService>(_channel)
                     .WithHeaders(GetAuthHeader())
                     .WithCancellationToken(_cts.Token);
 

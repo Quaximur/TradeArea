@@ -21,15 +21,19 @@ namespace TradeArea
         private readonly AuctionModel _auctionModel;
         private readonly UserModel _userModel;
         private readonly IItemConfigRepository _itemConfigRepository;
+        private readonly GrpcChannelx _channel;
 
         private CancellationTokenSource _cts;
-        private GrpcChannelx _channel = null;
 
-        public OrderHubService(AuctionModel auctionModel, UserModel userModel, IItemConfigRepository itemConfigRepository)
+        public OrderHubService(AuctionModel auctionModel,
+            UserModel userModel,
+            IItemConfigRepository itemConfigRepository,
+            GrpcChannelx channel)
         {
             _auctionModel = auctionModel;
             _userModel = userModel;
             _itemConfigRepository = itemConfigRepository;
+            _channel = channel;
         }
 
         public void StartMessaging()
@@ -54,14 +58,13 @@ namespace TradeArea
                         _auctionModel.OnOwnLotsChanged.Value = LoadingState.Loading<List<OwnLot>>();
                         _auctionModel.OnOwnBidsChanged.Value = LoadingState.Loading<List<OwnBid>>();
 
-                        Disposes.ClearDispose(ref _channel);
-                        _channel = GrpcChannelx.ForAddress(Constants.AUCY_URL);
-                        
                         var receiver = new OrderHubReceiver(_auctionModel, _itemConfigRepository);
                         OrderHub = await StreamingHubClient.ConnectAsync<IOrderHub, IOrderHubReceiver>(
-                            _channel, receiver,
+                            _channel, 
+                            receiver,
                             cancellationToken: _cts.Token,
-                            option: new CallOptions().WithHeaders(GetAuthHeader())).AsUniTask();
+                            option: new CallOptions().WithHeaders(GetAuthHeader())
+                        ).AsUniTask();
 
                         var disconnect = await OrderHub.WaitForDisconnectAsync()
                             .AsUniTask()
@@ -109,7 +112,6 @@ namespace TradeArea
         public void Dispose()
         {
             Disposes.ClearDispose(ref _cts);
-            Disposes.ClearDispose(ref _channel);
         }
     }
 }

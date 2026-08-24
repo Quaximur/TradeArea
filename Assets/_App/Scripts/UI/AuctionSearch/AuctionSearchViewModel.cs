@@ -26,17 +26,20 @@ namespace TradeArea.UI.AuctionSearch
         private readonly IViewBinder<OrderBookViewModel> _orderBookBinder;
         private readonly IItemConfigRepository _itemConfigRepository;
         private readonly ReactiveProperty<LoadingState<List<IItemConfig>>> _onMarketListChanged = new();
+        private readonly GrpcChannelx _channel;
 
         private CancellationTokenSource _cts = new();
 
         public AuctionSearchViewModel(
             UserModel userModel,
             IViewBinder<OrderBookViewModel> orderBookBinder,
-            IItemConfigRepository itemConfigRepository)
+            IItemConfigRepository itemConfigRepository,
+            GrpcChannelx channel)
         {
             _userModel = userModel;
             _orderBookBinder = orderBookBinder;
             _itemConfigRepository = itemConfigRepository;
+            _channel = channel;
         }
 
         public void UpdateMarketItems()
@@ -57,8 +60,7 @@ namespace TradeArea.UI.AuctionSearch
 
                 try
                 {
-                    using var channel = GrpcChannelx.ForAddress(Constants.AUCY_URL);
-                    var searchClient = MagicOnionClient.Create<IItemSearchService>(channel)
+                    var searchClient = MagicOnionClient.Create<IItemSearchService>(_channel)
                         .WithHeaders(GetAuthHeader())
                         .WithCancellationToken(currentSearchToken);
 
@@ -88,6 +90,9 @@ namespace TradeArea.UI.AuctionSearch
                     {
                         _onMarketListChanged.Value = LoadingState.Success<List<IItemConfig>>(null);
                     }
+
+                    // Success. Exiting
+                    return;
                 }
                 catch (OperationCanceledException)
                 {

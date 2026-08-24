@@ -58,7 +58,8 @@ namespace TradeArea.Infrastructure.Installers
             var userModel = Container.Resolve<UserModel>();
             
 #if UNITY_EDITOR
-            await CreateInventory(userModel.OnTokenChanged.Value);
+            var channel = Container.Resolve<GrpcChannelx>();
+            await CreateInventory(channel, userModel.OnTokenChanged.Value);
             // await CreateInventory(_devUserState2.Token);  // TEST 2nd user
 #endif
 
@@ -98,11 +99,10 @@ namespace TradeArea.Infrastructure.Installers
                 _auctionActionRef.started -= ToggleAuctionView;
         }
 
-        private async UniTask CreateInventory(string token)
+        private async UniTask CreateInventory(GrpcChannelx channel, string token)
         {
             try
             {
-                using var channel = GrpcChannelx.ForAddress(Constants.AUCY_URL);
                 var inventoryClient = MagicOnionClient.Create<IInventoryService>(channel)
                     .WithHeaders(new Metadata { { "authorization", $"Bearer {token}" } })
                     .WithCancellationToken(_cts.Token);

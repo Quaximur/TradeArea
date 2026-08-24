@@ -50,6 +50,7 @@ namespace TradeArea.UI.OrderBook
         private readonly AuctionModel _auctionModel;
         private readonly OrderHubService _orderHubService;
         private readonly UserModel _userModel;
+        private readonly GrpcChannelx _channel;
         private readonly IViewBinder<ConfirmPopUpViewModel> _popUpBinder;
 
         private CancellationTokenSource _streamCts;
@@ -58,11 +59,13 @@ namespace TradeArea.UI.OrderBook
         public OrderBookViewModel(AuctionModel auctionModel,
             UserModel userModel,
             OrderHubService orderHubService,
+            GrpcChannelx channel,
             IViewBinder<ConfirmPopUpViewModel> popUpBinder)
         {
             _auctionModel = auctionModel;
             _userModel = userModel;
             _orderHubService = orderHubService;
+            _channel = channel;
             _popUpBinder = popUpBinder;
         }
 
@@ -162,10 +165,8 @@ namespace TradeArea.UI.OrderBook
         private async UniTaskVoid StartStreamAsync(Guid itemConfigId)
         {
             // Cancel previous stream
-            _streamCts?.Cancel();
-            _streamCts?.Dispose();
-            _streamCts = new CancellationTokenSource();
-            var ct = _streamCts.Token;
+            Disposes.ResetCts(ref _streamCts);
+            var cancelToken = _streamCts.Token;
 
             _isLoading.Value = true;
             _error.Value = null;
@@ -173,15 +174,14 @@ namespace TradeArea.UI.OrderBook
 
             try
             {
-                using var channel = GrpcChannelx.ForAddress(Constants.AUCY_URL);
-                var itemListingClient = MagicOnionClient.Create<IItemListingService>(channel)
+                var itemListingClient = MagicOnionClient.Create<IItemListingService>(_channel)
                     .WithHeaders(GetAuthHeader())
-                    .WithCancellationToken(_streamCts.Token);
+                    .WithCancellationToken(cancelToken);
 
                 var stream = await itemListingClient.GetItemListingStream(itemConfigId);
                 _isLoading.Value = false;
 
-                await foreach (var listing in stream.ResponseStream.ReadAllAsync(ct))
+                await foreach (var listing in stream.ResponseStream.ReadAllAsync(cancelToken))
                 {
                     _orderBook.Value = listing;
                 }
@@ -223,9 +223,7 @@ namespace TradeArea.UI.OrderBook
 
         public override void Dispose()
         {
-            _streamCts?.Cancel();
-            _streamCts?.Dispose();
-            
+            Disposes.ClearDispose(ref _streamCts);
             Disposes.ClearDispose(ref _confirmPopUpSubscription);
 
             base.Dispose();
