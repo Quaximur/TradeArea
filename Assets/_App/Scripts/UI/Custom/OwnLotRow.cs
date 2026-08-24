@@ -79,11 +79,11 @@ namespace TradeArea.UI.Custom
 
             var divider = new VisualElement();
             divider.AddToClassList("own-lot-row__divider");
-            Add(divider);
+            _container.Add(divider);
 
             var middleBlock = new VisualElement();
             middleBlock.AddToClassList("own-lot-row__middle");
-            Add(middleBlock);
+            _container.Add(middleBlock);
 
             var middleTop = new VisualElement();
             middleTop.AddToClassList("own-lot-row__middle-top");
@@ -145,11 +145,11 @@ namespace TradeArea.UI.Custom
 
             var spacer = new VisualElement();
             spacer.AddToClassList("own-lot-row__spacer");
-            Add(spacer);
+            _container.Add(spacer);
 
             var buttonGroup = new VisualElement();
             buttonGroup.AddToClassList("own-lot-row__button-group");
-            Add(buttonGroup);
+            _container.Add(buttonGroup);
 
             _collectButton = new Button { text = "Collect" };
             _collectButton.AddToClassList("item-config-row__control-button");

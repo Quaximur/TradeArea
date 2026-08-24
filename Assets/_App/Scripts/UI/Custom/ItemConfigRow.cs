@@ -45,6 +45,7 @@ namespace TradeArea.UI.Custom
         private int _rarity;
         private int _grade;
 
+        protected readonly VisualElement _container;
         private readonly Label _nameLabel;
         protected readonly VisualElement _startContainer;
         private readonly VisualElement _iconElement;
@@ -53,19 +54,22 @@ namespace TradeArea.UI.Custom
         {
             AddToClassList("item-config-row");
 
+            _container = new VisualElement();
+            _container.AddToClassList("item-config-row__container");
+            Add(_container);
+
             _iconElement = new VisualElement();
             SetItemIcon(_itemIcon);
             _iconElement.AddToClassList("item-config-row__icon");
-            Add(_iconElement);
+            _container.Add(_iconElement);
 
             _startContainer = new VisualElement();
             _startContainer.AddToClassList("item-config-row__start-container");
-            Add(_startContainer);
+            _container.Add(_startContainer);
 
             _nameLabel = new Label(_itemName);
             _nameLabel.AddToClassList("item-config-row__name");
             _startContainer.Add(_nameLabel);
-
 
             SetRarity(_rarity);
             SetGrade(_grade);

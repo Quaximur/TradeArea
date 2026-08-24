@@ -13,8 +13,6 @@ namespace TradeArea.UI.AuctionLots
     public partial class AuctionLotsWidget : ToolkitWidget<AuctionLotsViewModel>
     {
         [UxmlAttribute] private string _loadableListViewWidgetName = null;
-        [UxmlAttribute] private int _lotMarginTop = 4;
-        [UxmlAttribute] private int _lotPaddingTop = 4;
 
         private LoadableListViewWidget _loadableList;
 
@@ -39,8 +37,6 @@ namespace TradeArea.UI.AuctionLots
             _loadableList.ListView.bindItem = (e, i) =>
             {
                 var ownLotRow = (OwnLotRow)e;
-                ownLotRow.style.marginTop = _lotMarginTop;
-                ownLotRow.style.paddingTop = _lotPaddingTop;
 
                 var sourceItem = _loadableList.ListView.itemsSource[i];
                 if (sourceItem == null)

@@ -17,8 +17,6 @@ namespace TradeArea.UI.AuctionInventory
         [UxmlAttribute] private string _usedCapacityLabelName = "UsedCapacityLabel";
         [UxmlAttribute] private string _capacityLimitLabelName = "CapacityLimitLabel";
         [UxmlAttribute] private string _loadableListViewWidgetName = null;
-        [UxmlAttribute] private int _lotMarginTop = 4;
-        [UxmlAttribute] private int _lotPaddingTop = 4;
 
         private Label _moneyLabel;
         private Label _usedWeightLabel;
@@ -28,7 +26,6 @@ namespace TradeArea.UI.AuctionInventory
         private LoadableListViewWidget _loadableList;
 
         private CompositeDisposable _disposables;
-
 
         protected override void OnInit()
         {
@@ -56,8 +53,6 @@ namespace TradeArea.UI.AuctionInventory
             _loadableList.ListView.bindItem = (e, i) =>
             {
                 var itemRow = (ItemConfigRow)e; // TODO: Replace with Element for ItemStack
-                itemRow.style.marginTop = _lotMarginTop;
-                itemRow.style.paddingTop = _lotPaddingTop;
 
                 var sourceItem = _loadableList.ListView.itemsSource[i];
                 if (sourceItem == null)

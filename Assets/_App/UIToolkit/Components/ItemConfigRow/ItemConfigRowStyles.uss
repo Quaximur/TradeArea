@@ -1,7 +1,20 @@
 .item-config-row {
-    flex-direction: row;
-    align-items: center;
     height: 72px;
+    padding-top: 4px;
+    padding-right: 4px;
+    padding-bottom: 4px;
+    padding-left: 4px;
+}
+
+.item-config-row:hover {
+    background-color: rgba(0, 0, 0, 0);
+    border-color: rgba(0, 0, 0, 0);
+}
+
+.item-config-row__container {
+    flex-direction: row;
+    flex-grow: 1;
+    align-items: center;
     background-color: rgb(27, 33, 43);
     border-width: 1px;
     border-color: rgb(49, 58, 73);
@@ -13,15 +26,11 @@
     padding-right: 4px;
     padding-bottom: 4px;
     padding-left: 4px;
-    margin-top: 4px;
-    margin-bottom: 4px;
-    margin-right: 4px;
-    margin-left: 4px;
     transition-property: background-color, border-color;
     transition-duration: 0.12s;
 }
 
-.item-config-row:hover {
+.item-config-row:hover .item-config-row__container{
     background-color: rgb(34, 42, 55);
     border-color: rgb(80, 95, 115);
 }

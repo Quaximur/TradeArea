@@ -14,9 +14,9 @@
             <ui:VisualElement name="AuctionBody" class="auction__body">
                 <ui:TabView name="AuctionTabView" class="auction__tab-view" style="flex-grow: 1;">
                     <ui:Tab label="Market" name="SearchTab" class="auction__tab">
-                        <TradeArea.UI.AuctionSearch.AuctionSearchWidget _loadable-list-view-widget-name="LoadableListView" class="auction__search-panel">
+                        <TradeArea.UI.AuctionSearch.AuctionSearchWidget _loadable-list-view-widget-name="LoadableListView" _lot-margin-top="0" _lot-padding-top="0" class="auction__search-panel">
                             <ui:VisualElement name="CategoriesPanel" class="auction__panel-main" style="width: 400px; background-color: rgb(17, 21, 28); margin-right: 12px;"/>
-                            <ui:VisualElement name="MarketPanel" style="flex-grow: 1;">
+                            <ui:VisualElement name="MarketPanel" style="flex-grow: 1; height: 400px;">
                                 <ui:VisualElement name="SearchHeader" class="auction__market-header">
                                     <ui:Label text="ItemConfig Items For Sale" class="auction__user-title"/>
                                     <ui:Button name="RefreshMarket" text="Refresh" class="auction__button auction__button-primary" style="position: absolute; right: 0; top: 0;"/>
@@ -35,7 +35,7 @@
                                                 <ui:Label text="Active Buy Orders" name="BidsTabTitle" class="auction__content-title"/>
                                                 <ui:Label text="Items you are bidding for" name="BidsDesc" class="auction__content-subtitle"/>
                                             </ui:VisualElement>
-                                            <ui:Instance template="LoadableListView" name="LoadableListView" class="auction__panel-main auction__base-list" style="flex-grow: 1;">
+                                            <ui:Instance template="LoadableListView" name="LoadableListView" class="auction__panel-main auction__base-list" style="flex-grow: 1; padding-top: 4px;">
                                                 <AttributeOverrides element-name="NoItemsLabel" text="No Bids found."/>
                                             </ui:Instance>
                                         </TradeArea.UI.AuctionBids.AuctionBidsWidget>
@@ -46,7 +46,7 @@
                                                 <ui:Label text="Active Sell Orders" name="LotsTitle" class="auction__content-title"/>
                                                 <ui:Label text="Items currently listed on the market" name="LotsDesc" class="auction__content-subtitle"/>
                                             </ui:VisualElement>
-                                            <ui:Instance template="LoadableListView" name="LoadableListView" class="auction__panel-main" style="flex-grow: 1;">
+                                            <ui:Instance template="LoadableListView" name="LoadableListView" class="auction__panel-main" style="flex-grow: 1; padding-top: 4px;">
                                                 <AttributeOverrides element-name="NoItemsLabel" text="No Lots found."/>
                                             </ui:Instance>
                                         </TradeArea.UI.AuctionLots.AuctionLotsWidget>
@@ -82,7 +82,7 @@
                                         </ui:VisualElement>
                                     </ui:VisualElement>
                                     <ui:Label text="Available Items" class="auction__content-subtitle"/>
-                                    <ui:Instance template="LoadableListView" name="LoadableListView" class="auction__panel-main auction__base-list" style="flex-grow: 1; padding-top: 6px; padding-right: 6px; padding-bottom: 6px; padding-left: 6px;"/>
+                                    <ui:Instance template="LoadableListView" name="LoadableListView" class="auction__panel-main auction__base-list" style="flex-grow: 1; padding-top: 4px; padding-right: 0; padding-bottom: 0; padding-left: 0;"/>
                                 </ui:VisualElement>
                             </TradeArea.UI.AuctionInventory.AuctionInventoryWidget>
                         </ui:VisualElement>

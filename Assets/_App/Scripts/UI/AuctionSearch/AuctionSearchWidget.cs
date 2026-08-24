@@ -12,8 +12,6 @@ namespace TradeArea.UI.AuctionSearch
     {
         [UxmlAttribute] private string _refreshMarketButtonName = "RefreshMarket";
         [UxmlAttribute] private string _loadableListViewWidgetName = "MarketList";
-        [UxmlAttribute] private int _lotMarginTop = 4;
-        [UxmlAttribute] private int _lotPaddingTop = 4;
 
         private Button _refreshMarketButton;
         private LoadableListViewWidget _loadableList;
@@ -36,8 +34,6 @@ namespace TradeArea.UI.AuctionSearch
             _loadableList.ListView.bindItem = (e, i) =>
             {
                 var itemRow = (ItemConfigRow)e;
-                itemRow.style.marginTop = _lotMarginTop;
-                itemRow.style.paddingTop = _lotPaddingTop;
 
                 var sourceItem = _loadableList.ListView.itemsSource[i];
                 if (sourceItem == null)
