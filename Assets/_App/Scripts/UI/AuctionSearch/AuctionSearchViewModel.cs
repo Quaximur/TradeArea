@@ -41,10 +41,17 @@ namespace TradeArea.UI.AuctionSearch
 
         public void UpdateMarketItems()
         {
-            if (_onMarketListChanged.Value.LoadingFlag != LoadingFlag.Loading)
-                GetMarketItemsAsync().Forget();
+            // TODO: request dto and search refreshing.
+            // + if currentDto equals newDto then return
+            // else Cancel old request and send the new one.
 
-            async UniTaskVoid GetMarketItemsAsync()
+            Disposes.ResetCts(ref _cts);
+            GetMarketItemsAsync(_cts.Token).Forget();
+        }
+
+        private async UniTaskVoid GetMarketItemsAsync(CancellationToken currentSearchToken)
+        {
+            while (!currentSearchToken.IsCancellationRequested)
             {
                 _onMarketListChanged.Value = LoadingState.Loading<List<IItemConfig>>();
 
@@ -53,7 +60,7 @@ namespace TradeArea.UI.AuctionSearch
                     using var channel = GrpcChannelx.ForAddress(Constants.AUCY_URL);
                     var searchClient = MagicOnionClient.Create<IItemSearchService>(channel)
                         .WithHeaders(GetAuthHeader())
-                        .WithCancellationToken(_cts.Token);
+                        .WithCancellationToken(currentSearchToken);
 
                     var configs = await searchClient.GetItemConfigs(new GetItemConfigsDto(
                         categoryPathFilter: null,
@@ -63,6 +70,10 @@ namespace TradeArea.UI.AuctionSearch
                         maxGrade: null,
                         page: 1,
                         pageSize: 100));
+
+                    // operation was cancelled. Guard from late responses
+                    if (currentSearchToken.IsCancellationRequested)
+                        return;
 
                     if (configs != null && configs.ItemConfigs != null)
                     {
@@ -78,12 +89,25 @@ namespace TradeArea.UI.AuctionSearch
                         _onMarketListChanged.Value = LoadingState.Success<List<IItemConfig>>(null);
                     }
                 }
+                catch (OperationCanceledException)
+                {
+                    return; // token was cancelled, exit cleanly
+                }
                 catch (Exception ex)
                 {
                     FLogger.LogError<AuctionSearchViewModel>($"{nameof(GetMarketItemsAsync)}: {ex.Message}");
-
+                    
+                    // operation was cancelled. Guard from late responses
+                    if (currentSearchToken.IsCancellationRequested)
+                        return;
+                    
                     _onMarketListChanged.Value = LoadingState.Fail<List<IItemConfig>>();
                 }
+
+                // Wait before retrying (won't delay if token is cancelled)
+                if (!currentSearchToken.IsCancellationRequested)
+                    await UniTask.Delay(TimeSpan.FromSeconds(3), cancellationToken: currentSearchToken)
+                        .SuppressCancellationThrow();
             }
         }
 
