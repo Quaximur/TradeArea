@@ -45,11 +45,11 @@
       "hash": "4a144e6b7409d001211b2682cab7691562a693d6"
     },
     "com.quaximur.devkit.ui": {
-      "version": "https://github.com/Quaximur/DevKit.UI.git#0.1.2",
+      "version": "https://github.com/Quaximur/DevKit.UI.git#0.1.5",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "32580c1e007b9db3200dd27558516e9085ac9b02"
+      "hash": "6196d75d860689e55765ebc8ec97add915ec509c"
     },
     "com.unity.ai.navigation": {
       "version": "2.0.12",
