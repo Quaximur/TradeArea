@@ -27,6 +27,12 @@ namespace TradeArea.UI.AuctionInventory
 
         private CompositeDisposable _disposables;
 
+        public override void Show()
+        {
+            base.Show();
+            _loadableList?.ListView.ScrollToItem(0);
+        }
+
         protected override void OnInit()
         {
             _moneyLabel = Root.Q<Label>(name: _moneyLabelName);

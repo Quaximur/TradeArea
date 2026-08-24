@@ -4,6 +4,7 @@ using DevKit.UI.MVVM;
 using DevKit.Utils;
 using R3;
 using TradeArea.Data.Items;
+using TradeArea.Shared;
 using TradeArea.UI.Custom;
 using UnityEngine.UIElements;
 
@@ -18,6 +19,12 @@ namespace TradeArea.UI.AuctionBids
 
         private CompositeDisposable _disposables;
 
+        public override void Show()
+        {
+            base.Show();
+            _loadableList?.ListView.ScrollToItem(0);
+        }
+
         protected override void OnInit()
         {
             _loadableList = Root.Q<LoadableListViewWidget>(_loadableListViewWidgetName);
@@ -27,6 +34,11 @@ namespace TradeArea.UI.AuctionBids
         protected override void OnBind(AuctionBidsViewModel viewModel)
         {
             _disposables = new();
+
+            Root.RegisterCallback<DisplayViewEvent>(_ => {
+                FLogger.Log<AuctionBidsWidget>("DisplayViewEvent catched");
+                _loadableList.ListView.ScrollToItem(0);
+            }, TrickleDown.TrickleDown);
 
             _loadableList.ListView.makeItem = () =>
             {

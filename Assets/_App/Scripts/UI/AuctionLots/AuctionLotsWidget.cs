@@ -18,6 +18,12 @@ namespace TradeArea.UI.AuctionLots
 
         private CompositeDisposable _disposables;
 
+        public override void Show()
+        {
+            base.Show();
+            _loadableList?.ListView.ScrollToItem(0);
+        }
+
         protected override void OnInit()
         {
             _loadableList = Root.Q<LoadableListViewWidget>(_loadableListViewWidgetName);

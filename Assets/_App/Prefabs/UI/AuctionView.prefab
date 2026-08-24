@@ -48,5 +48,7 @@ MonoBehaviour:
   _layer: 0
   _closeButtonName: CloseButton
   _closeBackgroundName: CloseBackground
-  _statusLabelName: StatusLabel
-  _refreshAllButtonName: RefreshAllButton
+  _searchTabName: SearchTab
+  _ordersTabName: OrdersTab
+  _bidsTabName: BidsTab
+  _lotsTabName: LotsTab
