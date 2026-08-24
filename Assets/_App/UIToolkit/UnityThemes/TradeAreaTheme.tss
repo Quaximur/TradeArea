@@ -1,0 +1,5 @@
+@import url("UnityDefaultRuntimeTheme.tss");
+
+@import url("/Assets/_App/UIToolkit/SharedStyles/GlobalStyles.uss");
+
+VisualElement {}

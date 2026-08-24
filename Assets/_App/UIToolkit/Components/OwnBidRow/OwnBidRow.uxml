@@ -1,5 +1,5 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/_App/UIToolkit/Components/ItemConfigRow/ItemConfigRowStyles.uss?fileID=7433441132597879392&amp;guid=827830abc29ad854187e50730af72bfc&amp;type=3#ItemConfigRowStyles"/>
     <Style src="project://database/Assets/_App/UIToolkit/Components/OwnBidRow/OwnBidRowStyles.uss?fileID=7433441132597879392&amp;guid=236c3f1b6a8b1e44dabceb42911b59ca&amp;type=3#OwnBidRowStyles"/>
-    <TradeArea.UI.Custom.OwnBidRow/>
+    <TradeArea.UI.Custom.OwnBidRow item-name="ITEM"/>
 </ui:UXML>

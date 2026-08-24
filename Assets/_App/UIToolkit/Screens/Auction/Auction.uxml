@@ -60,7 +60,7 @@
                                     </ui:VisualElement>
                                     <ui:Label text="Silver" class="auction__content-subtitle"/>
                                     <ui:VisualElement class="auction__wallet-panel" style="flex-direction: row;">
-                                        <ui:VisualElement class="silver-icon"/>
+                                        <ui:VisualElement class="silver-icon" style="height: 36px;"/>
                                         <ui:Label text="0" name="MoneyLabel" class="auction__money-label"/>
                                     </ui:VisualElement>
                                     <ui:VisualElement class="auction__inventory-stats">

@@ -23,12 +23,27 @@
     font-size: 14px;
     margin-right: 3px;
     -unity-text-align: lower-left;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
 }
 
 .own-lot-row__inline-value {
     color: rgb(241, 245, 250);
     font-size: 16px;
     -unity-text-align: lower-left;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
 }
 
 .own-lot-row__slash {
@@ -48,9 +63,13 @@
 }
 
 .own-lot-row__middle {
-    flex-grow: 1;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
+    flex-grow: 1;
+    height: 100%;
+    align-self: auto;
+    align-content: flex-start;
+    align-items: stretch;
 }
 
 .own-lot-row__middle-top {
@@ -62,19 +81,35 @@
     flex-direction: row;
     justify-content: center;
     margin-right: 24px;
+    align-items: flex-end;
 }
 
 .own-lot-row__stat-desc {
     color: rgb(153, 166, 184);
     font-size: 14px;
     -unity-text-align: lower-left;
-    margin-bottom: 1px;
+    margin-top: 0;
+    margin-right: 3px;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
 }
 
 .own-lot-row__stat-value {
     color: rgb(241, 245, 250);
     font-size: 16px;
     -unity-text-align: lower-left;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
 }
 
 .own-lot-row__revenue-row {
@@ -87,6 +122,13 @@
     font-size: 16px;
     -unity-text-align: lower-left;
     margin-right: 5px;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
 }
 
 .own-lot-row__revenue-value {
@@ -94,6 +136,14 @@
     font-size: 18px;
     -unity-font-style: bold;
     -unity-text-align: lower-left;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 1px;
+    margin-left: 0;
 }
 
 .own-lot-row__button-group {
@@ -101,4 +151,5 @@
     justify-content: center;
     align-items: flex-end;
     margin-left: 10px;
+    height: 100%;
 }
