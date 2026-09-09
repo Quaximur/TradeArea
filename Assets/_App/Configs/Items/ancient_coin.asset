@@ -23,7 +23,7 @@ MonoBehaviour:
   <BaseType>k__BackingField: ancient_coin
   _extra: []
   <CategoryPath>k__BackingField: treasure
-  <MinPrice>k__BackingField: 1
-  <MaxPrice>k__BackingField: 555
+  <MinPrice>k__BackingField: 50
+  <MaxPrice>k__BackingField: 1000
   <MaxSellQuantity>k__BackingField: 100
   <MaxBuyQuantity>k__BackingField: 100

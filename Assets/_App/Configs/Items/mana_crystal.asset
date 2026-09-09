@@ -23,7 +23,7 @@ MonoBehaviour:
   <BaseType>k__BackingField: mana_crystal
   _extra: []
   <CategoryPath>k__BackingField: materials/magic
-  <MinPrice>k__BackingField: 1000
-  <MaxPrice>k__BackingField: 3355
+  <MinPrice>k__BackingField: 50
+  <MaxPrice>k__BackingField: 1000
   <MaxSellQuantity>k__BackingField: 10
   <MaxBuyQuantity>k__BackingField: 10

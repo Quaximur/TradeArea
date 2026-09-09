@@ -151,7 +151,7 @@ namespace TradeArea.UI.OrderBook
                 return;
 
             var levels = listing.Levels
-                .OrderByDescending(l => l.MaxPrice)
+                .OrderByDescending(l => l.Price)
                 .ToArray();
 
             long maxBid = levels.Max(l => l.BidQuantity);
@@ -170,8 +170,7 @@ namespace TradeArea.UI.OrderBook
                     lotFillRatio = (float)level.LotQuantity / maxLot;
 
                 row.Setup(
-                    minPrice: level.MinPrice,
-                    maxPrice: level.MaxPrice,
+                    price: level.Price,
                     bidQuantity: level.BidQuantity,
                     lotQuantity: level.LotQuantity,
                     bidFillRatio: bidFillRatio,

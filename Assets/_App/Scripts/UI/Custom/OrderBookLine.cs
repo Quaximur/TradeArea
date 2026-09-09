@@ -46,9 +46,9 @@ namespace TradeArea.UI.Custom
             bidContainer.Add(_bidLabel);
         }
 
-        public void Setup(long minPrice, long maxPrice, long bidQuantity, long lotQuantity, float bidFillRatio, float lotFillRatio)
+        public void Setup(long price, long bidQuantity, long lotQuantity, float bidFillRatio, float lotFillRatio)
         {
-            _priceLabel.text = minPrice == maxPrice ? minPrice.ToString() : $"{minPrice}-{maxPrice}";
+            _priceLabel.text = price.ToString();
 
             _bidLabel.text = bidQuantity > 0 ? bidQuantity.ToString() : string.Empty;
             _lotLabel.text = lotQuantity > 0 ? lotQuantity.ToString() : string.Empty;

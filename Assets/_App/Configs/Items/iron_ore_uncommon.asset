@@ -23,7 +23,7 @@ MonoBehaviour:
   <BaseType>k__BackingField: iron_ore
   _extra: []
   <CategoryPath>k__BackingField: materials/ore
-  <MinPrice>k__BackingField: 30
-  <MaxPrice>k__BackingField: 92
+  <MinPrice>k__BackingField: 50
+  <MaxPrice>k__BackingField: 1000
   <MaxSellQuantity>k__BackingField: 5000
   <MaxBuyQuantity>k__BackingField: 5000

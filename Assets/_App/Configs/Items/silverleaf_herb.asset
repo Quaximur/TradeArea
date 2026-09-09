@@ -23,7 +23,7 @@ MonoBehaviour:
   <BaseType>k__BackingField: silverleaf_herb
   _extra: []
   <CategoryPath>k__BackingField: materials/herbs
-  <MinPrice>k__BackingField: 100
-  <MaxPrice>k__BackingField: 550
+  <MinPrice>k__BackingField: 50
+  <MaxPrice>k__BackingField: 1000
   <MaxSellQuantity>k__BackingField: 1000
   <MaxBuyQuantity>k__BackingField: 1000

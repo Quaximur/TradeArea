@@ -17,11 +17,13 @@ MonoBehaviour:
   <Description>k__BackingField: wolf_fang_desc
   <IsUnary>k__BackingField: 0
   <Icon>k__BackingField: {fileID: 21300000, guid: a71dd2f1c0813bf47a2b12bbb7a81630, type: 3}
+  <Grade>k__BackingField: 0
+  <Rarity>k__BackingField: 0
   <Weight>k__BackingField: 0.15
   <BaseType>k__BackingField: wolf_fang
   _extra: []
   <CategoryPath>k__BackingField: loot/beast
-  <MinPrice>k__BackingField: 60
-  <MaxPrice>k__BackingField: 188
+  <MinPrice>k__BackingField: 50
+  <MaxPrice>k__BackingField: 1000
   <MaxSellQuantity>k__BackingField: 5000
   <MaxBuyQuantity>k__BackingField: 5000
