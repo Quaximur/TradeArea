@@ -60,7 +60,7 @@ namespace TradeArea.Infrastructure.Installers
 #if UNITY_EDITOR
             var channel = Container.Resolve<GrpcChannelx>();
             await CreateInventory(channel, userModel.OnTokenChanged.Value);
-            // await CreateInventory(_devUserState2.Token);  // TEST 2nd user
+            // await CreateInventory(channel, "");  // TEST 2nd user
 #endif
 
             SubscribeAuctionKey();

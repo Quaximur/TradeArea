@@ -674,11 +674,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: TradeArea.Infrastructure::TradeArea.Infrastructure.Installers.UserInstaller
   _devUserState:
     <Name>k__BackingField: MyUser1
-    <Token>k__BackingField: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWMyZjJmNzEtYWEwZi00NmYxLTgzOWYtOTc2NGEzNGI0Zjc2IiwiZXhwIjoxNzg5MDAyNTM5fQ.3Fe-dIQAFIjpZ_HxYxAiW9j4uTzohwx7lhMkfiYqYS0
+    <Token>k__BackingField: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWMyZjJmNzEtYWEwZi00NmYxLTgzOWYtOTc2NGEzNGI0Zjc2IiwiZXhwIjoxNzg5Mjc4NTU0fQ.SkuSP8wf6E3-m2Wi_-nx-MHc3P48cuiwSmReqc2bp84
     <UserId>k__BackingField: 1c2f2f71-aa0f-46f1-839f-9764a34b4f76
   _devUserState2:
     <Name>k__BackingField: MyUser2
-    <Token>k__BackingField: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMmMyZjJmNzEtYWEwZi00NmYxLTgzOWYtOTc2NGEzNGI0Zjc2IiwiZXhwIjoxNzg3NjAzODE2fQ.e4pLreDzU06iuP64dGK7-qjrWHq42ChToQm9v2t7b0g
+    <Token>k__BackingField: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMmMyZjJmNzEtYWEwZi00NmYxLTgzOWYtOTc2NGEzNGI0Zjc2IiwiZXhwIjoxNzg5Mjc4OTMzfQ.h1XgGtVOY0GXYBzm-OAX_V1hR8Iz2xzq3Y3QEfA7v68
     <UserId>k__BackingField: 2c2f2f71-aa0f-46f1-839f-9764a34b4f76
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

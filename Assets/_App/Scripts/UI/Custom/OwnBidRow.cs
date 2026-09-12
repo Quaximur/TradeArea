@@ -44,7 +44,6 @@ namespace TradeArea.UI.Custom
         private readonly Label _boughtQuantityLabel;
         private readonly Label _totalQuantityLabel;
         private readonly Label _bidPriceLabel;
-        private readonly Label _refundFormulaLabel;
         private readonly Label _refundValueLabel;
 
         private readonly Button _collectButton;
@@ -104,10 +103,6 @@ namespace TradeArea.UI.Custom
             _refundDescLabel = new Label("Refund");
             _refundDescLabel.AddToClassList("own-bid-row__stat-desc");
             refundRow.Add(_refundDescLabel);
-
-            _refundFormulaLabel = new Label();
-            _refundFormulaLabel.AddToClassList("own-bid-row__refund-formula");
-            refundRow.Add(_refundFormulaLabel);
 
             _refundValueLabel = new Label();
             _refundValueLabel.AddToClassList("own-bid-row__refund-value");
@@ -169,7 +164,6 @@ namespace TradeArea.UI.Custom
             _totalQuantityLabel.text = totalQuantity;
             _bidPriceLabel.text = bidPrice;
 
-            _refundFormulaLabel.text = $"({totalQuantity} - {boughtQuantity}) * {bidPrice} = ";
             _refundValueLabel.text = refund;
         }
 
