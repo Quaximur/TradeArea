@@ -95,6 +95,21 @@ namespace TradeArea
                         _auctionModel.OnUsedCapacityChanged.Value = LoadingState.Fail<int>();
                         _auctionModel.OnCapacityLimitChanged.Value = LoadingState.Fail<int>();
                     }
+                    finally
+                    {
+                        if (OrderHub != null)
+                        {
+                            try
+                            {
+                                await OrderHub.DisposeAsync().AsUniTask();
+                            }
+                            catch (Exception ex)
+                            {
+                                FLogger.LogWarning<OrderHubService>($"Error disposing OrderHub: {ex.Message}");
+                            }
+                            OrderHub = null;
+                        }
+                    }
 
                     // Wait before retrying (won't delay if token is cancelled)
                     if (_cts != null)
