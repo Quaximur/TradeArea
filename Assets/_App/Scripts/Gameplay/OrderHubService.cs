@@ -99,15 +99,17 @@ namespace TradeArea
                     {
                         if (OrderHub != null)
                         {
+                            var hubToDispose = OrderHub;
+                            OrderHub = null;
+
                             try
                             {
-                                await OrderHub.DisposeAsync().AsUniTask();
+                                await hubToDispose.DisposeAsync().AsUniTask();
                             }
                             catch (Exception ex)
                             {
                                 FLogger.LogWarning<OrderHubService>($"Error disposing OrderHub: {ex.Message}");
                             }
-                            OrderHub = null;
                         }
                     }
 

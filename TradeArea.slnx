@@ -7,5 +7,6 @@
   <Project Path="TradeArea.Gameplay.csproj" />
   <Project Path="TradeArea.Editor.csproj" />
   <Project Path="TradeArea.Shared.csproj" />
+  <Project Path="TradeArea.Tests.csproj" />
   <Project Path="TradeArea.Editor.Internals.csproj" />
 </Solution>

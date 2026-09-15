@@ -1,0 +1,25 @@
+{
+    "name": "TradeArea.Tests",
+    "rootNamespace": "",
+    "references": [
+        "GUID:27619889b8ba8c24980f49ee34dbb44a",
+        "GUID:0acc523941302664db1f4e527237feb3",
+        "GUID:350d0af80fb7b7947a59de66ab477547",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:a63190350b668ee46863abba8e22716b",
+        "GUID:8df849c1535de434aac23c92e1f09319",
+        "GUID:0229e43dbe81c6248b53333c6b307183",
+        "GUID:b476a63202d4381458575ed3424273e5",
+        "GUID:78f4dcf4c6c19cd40bc698375e0fb0d5",
+        "GUID:bb20bf276543ec54fbbdee4bd3bc61e4"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
