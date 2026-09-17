@@ -53,12 +53,34 @@ namespace TradeArea.UI.Auth
         {
             // TODO: Validation
 
+            if (!TryValidateFields())
+                return;
+
             LoginAsync().Forget();
+        }
+
+        private bool TryValidateFields()
+        {
+            if (string.IsNullOrEmpty(_nameInput))
+            {
+                _errorMessage.Value = "invalid_name_error";
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(_passwordInput))
+            {
+                _errorMessage.Value = "invalid_password_error";
+                return false;
+            }
+
+            _errorMessage.Value = null;
+            return true;
         }
 
         private async UniTask LoginAsync()
         {
             _isInputEnabled.Value = false;
+            _errorMessage.Value = null;
 
             try
             {
@@ -76,10 +98,17 @@ namespace TradeArea.UI.Auth
                 _userModel.OnTokenChanged.Value = loginResponse.Token;
 
                 _enterSignal.OnNext(Unit.Default);
+                return;
+            }
+            catch (OperationCanceledException)
+            {
+                FLogger.Log<AuthViewModel>($"{nameof(LoginAsync)}: cancelled");
+                return;
             }
             catch (Exception ex)
             {
                 FLogger.LogError<AuthViewModel>($"{nameof(LoginAsync)}: {ex.Message}");
+                _errorMessage.Value = ex.Message;
             }
 
             _isInputEnabled.Value = true;
