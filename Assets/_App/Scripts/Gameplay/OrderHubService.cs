@@ -60,7 +60,7 @@ namespace TradeArea
 
                         var receiver = new OrderHubReceiver(_auctionModel, _itemConfigRepository);
                         OrderHub = await StreamingHubClient.ConnectAsync<IOrderHub, IOrderHubReceiver>(
-                            _channel, 
+                            _channel,
                             receiver,
                             cancellationToken: _cts.Token,
                             option: new CallOptions().WithHeaders(GetAuthHeader())
@@ -97,20 +97,7 @@ namespace TradeArea
                     }
                     finally
                     {
-                        if (OrderHub != null)
-                        {
-                            var hubToDispose = OrderHub;
-                            OrderHub = null;
-
-                            try
-                            {
-                                await hubToDispose.DisposeAsync().AsUniTask();
-                            }
-                            catch (Exception ex)
-                            {
-                                FLogger.LogWarning<OrderHubService>($"Error disposing OrderHub: {ex.Message}");
-                            }
-                        }
+                        await DisposeHubAsync();
                     }
 
                     // Wait before retrying (won't delay if token is cancelled)
@@ -126,8 +113,27 @@ namespace TradeArea
             return new Metadata { { "authorization", $"Bearer {_userModel.OnTokenChanged.Value}" } };
         }
 
+        private async UniTask DisposeHubAsync()
+        {
+            if (OrderHub == null)
+                return;
+
+            var hubToDispose = OrderHub;
+            OrderHub = null;
+
+            try
+            {
+                await hubToDispose.DisposeAsync().AsUniTask();
+            }
+            catch (Exception ex)
+            {
+                FLogger.LogWarning<OrderHubService>($"Error disposing OrderHub: {ex.Message}");
+            }
+        }
+
         public void Dispose()
         {
+            DisposeHubAsync().Forget();
             Disposes.ClearDispose(ref _cts);
         }
     }
