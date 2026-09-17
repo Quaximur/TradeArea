@@ -1,28 +1,22 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/_App/UIToolkit/Screens/Auth/AuthStyles.uss?fileID=7433441132597879392&amp;guid=903e4c5b9c8058741941e6793e2bdffe&amp;type=3#AuthStyles"/>
-
     <ui:VisualElement name="Root" class="auth__root">
-        <ui:VisualElement class="auth__background" />
-
+        <ui:VisualElement class="auth__background"/>
         <ui:VisualElement class="auth__panel">
             <ui:VisualElement class="auth__header">
-                <ui:Label text="TradeArea" class="auth__title" />
-                <ui:Label text="Sign in to continue" class="auth__subtitle" />
+                <ui:Label text="TradeArea" class="auth__title"/>
+                <ui:Label text="Sign in to continue" class="auth__subtitle"/>
             </ui:VisualElement>
-
             <ui:VisualElement class="auth__tabs">
-                <ui:Button name="LoginTab" text="Login" class="auth__tab auth__tab--active" />
-                <ui:Button name="RegisterTab" text="Register" class="auth__tab" />
+                <ui:Button name="LoginTab" text="Login" class="auth__tab auth__tab--active"/>
+                <ui:Button name="RegisterTab" text="Register" class="auth__tab"/>
             </ui:VisualElement>
-
             <ui:VisualElement class="auth__form">
-                <ui:TextField name="UsernameField" label="Username" class="auth__input" />
-                <ui:TextField name="EmailField" label="Email" class="auth__input auth__input--secondary" style="display: none;" />
-                <ui:TextField name="PasswordField" label="Password" password="true" class="auth__input" />
-                <ui:TextField name="ConfirmPasswordField" label="Confirm password" password="true" class="auth__input auth__input--secondary" style="display: none;" />
-
-                <ui:Button name="SubmitButton" text="Login" class="auth__primary-button" />
-                <ui:Button name="SecondaryActionButton" text="Continue as guest" class="auth__secondary-button" />
+                <ui:TextField name="UsernameField" label="Username" class="auth__input"/>
+                <ui:TextField name="EmailField" label="Email" class="auth__input auth__input--secondary" style="display: none;"/>
+                <ui:TextField name="PasswordField" label="Password" password="true" class="auth__input"/>
+                <ui:TextField name="ConfirmPasswordField" label="Confirm password" password="true" class="auth__input auth__input--secondary" style="display: none;"/>
+                <ui:Button name="SubmitButton" text="Login" class="auth__primary-button" style="margin-top: 16px;"/>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
