@@ -1,5 +1,6 @@
 using DevKit.UI.MVVM;
 using MagicOnion;
+using TradeArea.Data;
 using TradeArea.Shared;
 using UnityEngine;
 using VContainer;
@@ -25,6 +26,8 @@ namespace TradeArea.Infrastructure.Bootstraps
 
             builder.Register<GrpcChannelx>(x => GrpcChannelx.ForAddress(Constants.AUCY_URL), 
                 Lifetime.Singleton);
+
+            builder.RegisterInstance<UserModel>(new UserModel(new UserState()));
 
             //
 
