@@ -16,6 +16,11 @@
                 <ui:TextField name="EmailField" label="Email" class="auth__input auth__input--secondary" style="display: none;"/>
                 <ui:TextField name="PasswordField" label="Password" password="true" class="auth__input"/>
                 <ui:TextField name="ConfirmPasswordField" label="Confirm password" password="true" class="auth__input auth__input--secondary" style="display: none;"/>
+
+                <ui:VisualElement name="ErrorPanel" class="auth__error-panel" style="display: none;">
+                    <ui:Label name="ErrorLabel" text="" class="auth__error-label"/>
+                </ui:VisualElement>
+
                 <ui:Button name="SubmitButton" text="Login" class="auth__primary-button" style="margin-top: 16px;"/>
             </ui:VisualElement>
         </ui:VisualElement>
