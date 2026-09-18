@@ -7,7 +7,6 @@ using R3;
 using Aucy.Contracts.OnionClient;
 using DevKit.Utils;
 using MagicOnion;
-using TradeArea.Shared;
 using MagicOnion.Client;
 using Grpc.Core;
 using TradeArea.UI.ConfirmPopUp;
@@ -223,7 +222,7 @@ namespace TradeArea.UI.OrderBook
 
         public override void Dispose()
         {
-            Disposes.ClearDispose(ref _streamCts);
+            Disposes.ClearCts(ref _streamCts);
             Disposes.ClearDispose(ref _confirmPopUpSubscription);
 
             base.Dispose();

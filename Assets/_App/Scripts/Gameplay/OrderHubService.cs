@@ -38,8 +38,7 @@ namespace TradeArea
 
         public void StartMessaging()
         {
-            Disposes.ClearCts(ref _cts);
-            _cts = new();
+            Disposes.ResetCts(ref _cts);
 
             StartMessagingAsync().Forget();
 
@@ -80,6 +79,7 @@ namespace TradeArea
                     }
                     catch (OperationCanceledException)
                     {
+                        FLogger.Log<OrderHubService>("Auction messaging has been cancelled by client");
                         return; // _cts was cancelled, exit cleanly
                     }
                     catch (Exception ex)
@@ -134,7 +134,7 @@ namespace TradeArea
         public void Dispose()
         {
             DisposeHubAsync().Forget();
-            Disposes.ClearDispose(ref _cts);
+            Disposes.ClearCts(ref _cts);
         }
     }
 }
