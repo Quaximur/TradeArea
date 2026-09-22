@@ -117,6 +117,11 @@ namespace TradeArea.UI.OrderBook
             {
                 await _orderHubService.OrderHub.CreateLot(createLotDto);
             }
+            catch (RpcException ex) // TODO: catch RpcExceptions in other places too
+            {
+                FLogger.LogError<OrderBookViewModel>(
+                    $"{nameof(CreateLotAsync)}: Code={ex.StatusCode}, Detail={ex.Status.Detail}");
+            }
             catch (Exception ex)
             {
                 FLogger.LogError<OrderBookViewModel>($"{nameof(CreateLotAsync)}: {ex.Message}");
