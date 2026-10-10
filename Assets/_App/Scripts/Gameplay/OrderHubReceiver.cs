@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using TradeArea.Data.Items;
 using TradeArea.Repositories;
+using TradeArea.Shared.Notifications;
 
 namespace TradeArea
 {
@@ -14,11 +15,16 @@ namespace TradeArea
     {
         private readonly AuctionModel _auctionModel;
         private readonly IItemConfigRepository _itemConfigRepository;
+        private readonly INotificationService _notificationService;
 
-        public OrderHubReceiver(AuctionModel auctionModel, IItemConfigRepository itemConfigRepository)
+        public OrderHubReceiver(
+            AuctionModel auctionModel,
+            IItemConfigRepository itemConfigRepository,
+            INotificationService notificationService)
         {
             _auctionModel = auctionModel;
             _itemConfigRepository = itemConfigRepository;
+            _notificationService = notificationService;
         }
 
         public void OnJoin(OwnLotsDto ownLots, OwnBidsDto ownBids, InventoryDto inventory)
@@ -105,6 +111,9 @@ namespace TradeArea
         public void OnLotCreated(LotCreatedDto lotCreated)
         {
             FLogger.LogGood($"Lot created: {lotCreated.LotId} x{lotCreated.TotalQuantity}");
+            _notificationService.Show(
+                $"Sell order created: {_itemConfigRepository.Get(lotCreated.ItemConfigId).Name} x{lotCreated.TotalQuantity}.",
+                NotificationType.Success);
 
             _auctionModel.OnUsedWeightChanged.Value = LoadingState.Success(_auctionModel.OnUsedWeightChanged.Value.Value + lotCreated.WeightDiff);
 
@@ -143,6 +152,9 @@ namespace TradeArea
         public void OnLotCollected(LotCollectedDto lotCollected)
         {
             FLogger.Log($"OnLotCollected");
+            _notificationService.Show(
+                $"Sale proceeds collected: {lotCollected.ReturningMoney}.",
+                NotificationType.Success);
 
             var ownLot = _auctionModel.OnOwnLotsChanged.Value.Value
                 .FirstOrDefault(x => x.Id == lotCollected.LotId);
@@ -168,6 +180,9 @@ namespace TradeArea
         public void OnLotRemoved(LotRemovedDto lotRemoved)
         {
             FLogger.Log($"OnLotRemoved: {lotRemoved.LotId} x{lotRemoved.RemovedQuantity}");
+            _notificationService.Show(
+                $"Sell order removed: {_itemConfigRepository.Get(lotRemoved.ItemConfigId).Name} x{lotRemoved.RemovedQuantity}.",
+                NotificationType.Info);
 
             _auctionModel.OnUsedWeightChanged.Value = LoadingState.Success(_auctionModel.OnUsedWeightChanged.Value.Value + lotRemoved.WeightDiff);
 
@@ -222,6 +237,9 @@ namespace TradeArea
         public void OnBidCreated(BidCreatedDto bidCreated)
         {
             FLogger.LogGood($"Bid created: {bidCreated.BidId} x{bidCreated.TotalQuantity}");
+            _notificationService.Show(
+                $"Buy order created: {_itemConfigRepository.Get(bidCreated.ItemConfigId).Name} x{bidCreated.TotalQuantity}.",
+                NotificationType.Success);
 
             _auctionModel.OnOwnBidsChanged.Value.Value.Add(new OwnBid
             {
@@ -241,6 +259,9 @@ namespace TradeArea
         public void OnBidCollected(BidCollectedDto bidCollected)
         {
             FLogger.Log($"OnBidCollected");
+            _notificationService.Show(
+                $"Items collected: {_itemConfigRepository.Get(bidCollected.ItemConfigId).Name} x{bidCollected.CollectedQuantity}.",
+                NotificationType.Success);
 
             _auctionModel.OnUsedWeightChanged.Value = LoadingState.Success(_auctionModel.OnUsedWeightChanged.Value.Value + bidCollected.WeightDiff);
 
@@ -290,6 +311,9 @@ namespace TradeArea
         public void OnBidRemoved(BidRemovedDto bidRemoved)
         {
             FLogger.LogGood($"Bid removed: {bidRemoved.BidId}. Money returned: {bidRemoved.ReturningMoney}");
+            _notificationService.Show(
+                $"Buy order removed. Refunded: {bidRemoved.ReturningMoney}.",
+                NotificationType.Info);
 
             var ownBid = _auctionModel.OnOwnBidsChanged.Value.Value
                 .FirstOrDefault(x => x.Id == bidRemoved.BidId);
@@ -329,6 +353,9 @@ namespace TradeArea
 
             if (ownBid != null)
             {
+                _notificationService.Show(
+                    $"Bought: {ownBid.ItemConfig.Name} x{boughtQuantity}.",
+                    NotificationType.Success);
                 ownBid.RemainingQuantity -= boughtQuantity;
                 _auctionModel.OnOwnBidsChanged.OnNext(_auctionModel.OnOwnBidsChanged.Value); // TODO: notify for RefreshItems only
             }
@@ -350,6 +377,9 @@ namespace TradeArea
 
             if (ownLot != null)
             {
+                _notificationService.Show(
+                    $"Sold: {ownLot.ItemConfig.Name} x{soldQuantity}.",
+                    NotificationType.Success);
                 ownLot.RemainingQuantity -= soldQuantity;
                 ownLot.ExtraSoldoutMoney += extraMoney;
                 _auctionModel.OnOwnLotsChanged.OnNext(_auctionModel.OnOwnLotsChanged.Value); // TODO: notify for RefreshItems only

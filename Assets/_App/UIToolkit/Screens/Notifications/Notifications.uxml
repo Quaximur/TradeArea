@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Style src="Notifications.uss" />
+    <ui:VisualElement name="Root" class="notification__root" picking-mode="Ignore">
+        <ui:VisualElement name="NotificationContainer" class="notification__container" picking-mode="Ignore" />
+    </ui:VisualElement>
+</ui:UXML>

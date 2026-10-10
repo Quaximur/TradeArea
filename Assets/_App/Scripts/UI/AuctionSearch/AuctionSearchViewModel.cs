@@ -15,6 +15,7 @@ using TradeArea.Shared;
 using TradeArea.UI.OrderBook;
 using System.Linq;
 using TradeArea.Data.Items;
+using TradeArea.Shared.Notifications;
 
 namespace TradeArea.UI.AuctionSearch
 {
@@ -25,6 +26,7 @@ namespace TradeArea.UI.AuctionSearch
         private readonly UserModel _userModel;
         private readonly IViewBinder<OrderBookViewModel> _orderBookBinder;
         private readonly IItemConfigRepository _itemConfigRepository;
+        private readonly INotificationService _notificationService;
         private readonly ReactiveProperty<LoadingState<List<IItemConfig>>> _onMarketListChanged = new();
         private readonly GrpcChannelx _channel;
 
@@ -34,11 +36,13 @@ namespace TradeArea.UI.AuctionSearch
             UserModel userModel,
             IViewBinder<OrderBookViewModel> orderBookBinder,
             IItemConfigRepository itemConfigRepository,
+            INotificationService notificationService,
             GrpcChannelx channel)
         {
             _userModel = userModel;
             _orderBookBinder = orderBookBinder;
             _itemConfigRepository = itemConfigRepository;
+            _notificationService = notificationService;
             _channel = channel;
         }
 
@@ -105,6 +109,8 @@ namespace TradeArea.UI.AuctionSearch
                     // operation was cancelled. Guard from late responses
                     if (currentSearchToken.IsCancellationRequested)
                         return;
+
+                    _notificationService.ShowError(ex);
                     
                     _onMarketListChanged.Value = LoadingState.Fail<List<IItemConfig>>();
                 }

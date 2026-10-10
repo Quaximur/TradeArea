@@ -11,6 +11,7 @@ using System.Threading;
 using System;
 using TradeArea.Repositories;
 using TradeArea.Data.Items;
+using TradeArea.Shared.Notifications;
 
 namespace TradeArea
 {
@@ -22,18 +23,21 @@ namespace TradeArea
         private readonly UserModel _userModel;
         private readonly IItemConfigRepository _itemConfigRepository;
         private readonly GrpcChannelx _channel;
+        private readonly INotificationService _notificationService;
 
         private CancellationTokenSource _cts;
 
         public OrderHubService(AuctionModel auctionModel,
             UserModel userModel,
             IItemConfigRepository itemConfigRepository,
-            GrpcChannelx channel)
+            GrpcChannelx channel,
+            INotificationService notificationService)
         {
             _auctionModel = auctionModel;
             _userModel = userModel;
             _itemConfigRepository = itemConfigRepository;
             _channel = channel;
+            _notificationService = notificationService;
         }
 
         public void StartMessaging()
@@ -57,7 +61,10 @@ namespace TradeArea
                         _auctionModel.OnOwnLotsChanged.Value = LoadingState.Loading<List<OwnLot>>();
                         _auctionModel.OnOwnBidsChanged.Value = LoadingState.Loading<List<OwnBid>>();
 
-                        var receiver = new OrderHubReceiver(_auctionModel, _itemConfigRepository);
+                        var receiver = new OrderHubReceiver(
+                            _auctionModel,
+                            _itemConfigRepository,
+                            _notificationService);
                         OrderHub = await StreamingHubClient.ConnectAsync<IOrderHub, IOrderHubReceiver>(
                             _channel,
                             receiver,
@@ -85,6 +92,7 @@ namespace TradeArea
                     catch (Exception ex)
                     {
                         FLogger.LogError<OrderHubService>($"{nameof(StartMessagingAsync)}: {ex.Message}");
+                        _notificationService.ShowError(ex);
 
                         _auctionModel.OnMoneyChanged.Value = LoadingState.Fail<long>();
                         _auctionModel.OnInventoryChanged.Value = LoadingState.Fail<List<ItemStack>>();

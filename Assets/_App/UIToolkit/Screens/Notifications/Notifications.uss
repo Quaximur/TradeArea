@@ -1,0 +1,45 @@
+.notification__root {
+    flex-grow: 1;
+    align-items: center;
+    padding-top: 48px;
+}
+
+.notification__container {
+    width: 620px;
+    max-width: 70%;
+    align-items: stretch;
+    flex-direction: column-reverse;
+}
+
+.notification__item {
+    min-height: 42px;
+    margin-bottom: 8px;
+    padding-top: 10px;
+    padding-right: 14px;
+    padding-bottom: 10px;
+    padding-left: 14px;
+    border-width: 1px;
+    border-radius: 8px;
+    background-color: rgba(20, 24, 32, 0.88);
+    justify-content: center;
+}
+
+.notification__item--info {
+    border-color: rgba(91, 149, 235, 0.72);
+}
+
+.notification__item--success {
+    border-color: rgba(82, 190, 126, 0.78);
+}
+
+.notification__item--error {
+    border-color: rgba(224, 91, 91, 0.82);
+    background-color: rgba(71, 25, 29, 0.9);
+}
+
+.notification__text {
+    color: rgb(240, 244, 250);
+    font-size: 14px;
+    -unity-text-align: middle-center;
+    white-space: normal;
+}

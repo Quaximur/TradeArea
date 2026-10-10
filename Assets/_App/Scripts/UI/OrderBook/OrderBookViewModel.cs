@@ -12,6 +12,7 @@ using Grpc.Core;
 using TradeArea.UI.ConfirmPopUp;
 using DevKit.UI.MVVM;
 using TradeArea.Data.Items;
+using TradeArea.Shared.Notifications;
 
 namespace TradeArea.UI.OrderBook
 {
@@ -51,6 +52,7 @@ namespace TradeArea.UI.OrderBook
         private readonly UserModel _userModel;
         private readonly GrpcChannelx _channel;
         private readonly IViewBinder<ConfirmPopUpViewModel> _popUpBinder;
+        private readonly INotificationService _notificationService;
 
         private CancellationTokenSource _streamCts;
         private IDisposable _confirmPopUpSubscription;
@@ -59,13 +61,15 @@ namespace TradeArea.UI.OrderBook
             UserModel userModel,
             OrderHubService orderHubService,
             GrpcChannelx channel,
-            IViewBinder<ConfirmPopUpViewModel> popUpBinder)
+            IViewBinder<ConfirmPopUpViewModel> popUpBinder,
+            INotificationService notificationService)
         {
             _auctionModel = auctionModel;
             _userModel = userModel;
             _orderHubService = orderHubService;
             _channel = channel;
             _popUpBinder = popUpBinder;
+            _notificationService = notificationService;
         }
 
         /// <summary>
@@ -110,6 +114,7 @@ namespace TradeArea.UI.OrderBook
             if (_orderHubService.OrderHub == null)
             {
                 FLogger.LogWarning<OrderBookViewModel>("Order hub is null");
+                _notificationService.Show("Order service is unavailable.", NotificationType.Error);
                 return;
             }
 
@@ -121,10 +126,12 @@ namespace TradeArea.UI.OrderBook
             {
                 FLogger.LogError<OrderBookViewModel>(
                     $"{nameof(CreateLotAsync)}: Code={ex.StatusCode}, Detail={ex.Status.Detail}");
+                _notificationService.ShowError(ex);
             }
             catch (Exception ex)
             {
                 FLogger.LogError<OrderBookViewModel>($"{nameof(CreateLotAsync)}: {ex.Message}");
+                _notificationService.ShowError(ex);
             }
         }
 
@@ -133,6 +140,7 @@ namespace TradeArea.UI.OrderBook
             if (_orderHubService.OrderHub == null)
             {
                 FLogger.LogWarning<OrderBookViewModel>("Order hub is null");
+                _notificationService.Show("Order service is unavailable.", NotificationType.Error);
                 return;
             }
 
@@ -143,6 +151,7 @@ namespace TradeArea.UI.OrderBook
             catch (Exception ex)
             {
                 FLogger.LogError<OrderBookViewModel>($"{nameof(CreateBidAsync)}: {ex.Message}");
+                _notificationService.ShowError(ex);
             }
         }
 

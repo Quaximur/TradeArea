@@ -10,6 +10,7 @@ using R3;
 using TradeArea.Data;
 using TradeArea.Data.Items;
 using TradeArea.Shared;
+using TradeArea.Shared.Notifications;
 
 namespace TradeArea.UI.AuctionLots
 {
@@ -20,15 +21,18 @@ namespace TradeArea.UI.AuctionLots
         private readonly AuctionModel _auctionModel;
         private readonly UserModel _userModel;
         private readonly OrderHubService _orderHubService;
+        private readonly INotificationService _notificationService;
 
         private CancellationTokenSource _cts = new();
 
         public AuctionLotsViewModel(UserModel userModel, AuctionModel auctionModel,
-            OrderHubService orderHubService)
+            OrderHubService orderHubService,
+            INotificationService notificationService)
         {
             _userModel = userModel;
             _auctionModel = auctionModel;
             _orderHubService = orderHubService;
+            _notificationService = notificationService;
         }
 
         public async UniTask RemoveLotAsync(Guid lotId)
@@ -36,6 +40,7 @@ namespace TradeArea.UI.AuctionLots
             if (_orderHubService.OrderHub == null)
             {
                 FLogger.LogWarning<AuctionLotsViewModel>("Order hub is null");
+                _notificationService.Show("Order service is unavailable.", NotificationType.Error);
                 return;
             }
 
@@ -45,9 +50,14 @@ namespace TradeArea.UI.AuctionLots
                     .AsUniTask()
                     .AttachExternalCancellation(_cts.Token);
             }
+            catch (OperationCanceledException)
+            {
+                return;
+            }
             catch (Exception ex)
             {
                 FLogger.LogWarning<AuctionLotsViewModel>($"Failed to test remove lot: {ex.Message} {ex.InnerException?.Message}");
+                _notificationService.ShowError(ex);
             }
         }
 
@@ -56,6 +66,7 @@ namespace TradeArea.UI.AuctionLots
             if (_orderHubService.OrderHub == null)
             {
                 FLogger.LogWarning<AuctionLotsViewModel>("Order hub is null");
+                _notificationService.Show("Order service is unavailable.", NotificationType.Error);
                 return;
             }
 
@@ -69,9 +80,14 @@ namespace TradeArea.UI.AuctionLots
                     .AsUniTask()
                     .AttachExternalCancellation(_cts.Token);
             }
+            catch (OperationCanceledException)
+            {
+                return;
+            }
             catch (Exception ex)
             {
                 FLogger.LogWarning<AuctionLotsViewModel>($"Failed to test remove lot: {ex.Message} {ex.InnerException?.Message}");
+                _notificationService.ShowError(ex);
             }
         }
 
