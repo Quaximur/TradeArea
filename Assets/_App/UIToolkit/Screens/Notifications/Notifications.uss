@@ -1,14 +1,15 @@
 .notification__root {
     flex-grow: 1;
     align-items: center;
-    padding-top: 48px;
+    padding-bottom: 800px;
+    justify-content: flex-end;
 }
 
 .notification__container {
     width: 620px;
     max-width: 70%;
     align-items: stretch;
-    flex-direction: column-reverse;
+    flex-direction: column;
 }
 
 .notification__item {
