@@ -23,6 +23,7 @@ namespace TradeArea.UI.Notifications
         {
             base.OnInit();
             _notificationContainer = Root.Q<VisualElement>(_notificationContainerName);
+            _notificationContainer.Clear();
         }
 
         protected override void OnBind(NotificationViewModel viewModel)

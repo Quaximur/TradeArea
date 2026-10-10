@@ -1,6 +1,10 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements">
-    <ui:Style src="Notifications.uss" />
-    <ui:VisualElement name="Root" class="notification__root" picking-mode="Ignore">
-        <ui:VisualElement name="NotificationContainer" class="notification__container" picking-mode="Ignore" />
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/_App/UIToolkit/Screens/Notifications/Notifications.uss?fileID=7433441132597879392&amp;guid=6219bf1094a84af68e0527aff9c6be33&amp;type=3#Notifications"/>
+    <ui:VisualElement name="Root" picking-mode="Ignore" class="notification__root">
+        <ui:VisualElement name="NotificationContainer" picking-mode="Ignore" class="notification__container">
+            <ui:VisualElement class="notification__item notification__item--success">
+                <ui:Label text="Label" class="notification__text"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
