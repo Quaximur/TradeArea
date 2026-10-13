@@ -8,18 +8,18 @@ Built as the client-side part of the [Aucy](https://github.com/Quaximur/Aucy) mi
 
 ## 🛠️ Tech Stack
 
-[![Unity](https://img.shields.io/badge/Unity-6.3-000000?style=for-the-badge&logo=unity&logoColor=white)](https://github.com/Unity-Technologies/UnityCsReference)
-[![URP](https://img.shields.io/badge/URP-17-000000?style=for-the-badge&logo=unity&logoColor=white)](https://github.com/Unity-Technologies/Graphics)
-[![Input System](https://img.shields.io/badge/Input_System-1.19-000000?style=for-the-badge&logo=unity&logoColor=white)](https://github.com/Unity-Technologies/InputSystem)
+[![Unity](https://img.shields.io/badge/Unity_(6000.3.15f1)-000000?style=plastic&logo=unity)](https://unity.com)
+[![MagicOnion](https://img.shields.io/badge/MagicOnion-512BD4?style=plastic&logo=dotnet&logoColor=white)](https://github.com/Cysharp/MagicOnion)
+[![R3](https://img.shields.io/badge/R3-512BD4?style=plastic&logo=github)](https://github.com/Cysharp/R3)
+[![UniTask](https://img.shields.io/badge/UniTask-3178C6?style=plastic&logo=github)](https://github.com/Cysharp/UniTask)
+[![VContainer](https://img.shields.io/badge/VContainer-4A4A55?style=plastic&logo=github)](https://github.com/hadashiA/VContainer)
+[![YetAnotherHttpHandler](https://img.shields.io/badge/YetAnotherHttpHandler-009688?style=plastic&logo=github)](https://github.com/Cysharp/YetAnotherHttpHandler)
 
-[![MagicOnion](https://img.shields.io/badge/MagicOnion-7.10-512BD4?style=for-the-badge)](https://github.com/Cysharp/MagicOnion)
-[![R3](https://img.shields.io/badge/R3-Reactive-512BD4?style=for-the-badge)](https://github.com/Cysharp/R3)
-[![UniTask](https://img.shields.io/badge/UniTask-Async-512BD4?style=for-the-badge)](https://github.com/Cysharp/UniTask)
-[![VContainer](https://img.shields.io/badge/VContainer-DI-4B4B4B?style=for-the-badge)](https://github.com/hadashiA/VContainer)
-[![YetAnotherHttpHandler](https://img.shields.io/badge/YAHH-HTTP%2F2-244C5A?style=for-the-badge)](https://github.com/Cysharp/YetAnotherHttpHandler)
+[![Input System](https://img.shields.io/badge/Input_System-EE4C2C?style=plastic&logo=unity)](https://docs.unity3d.com/Packages/com.unity.inputsystem@latest)
+[![URP](https://img.shields.io/badge/URP-5CC2F1?style=plastic&logo=unity)](https://github.com/Unity-Technologies/Graphics)
 
-[![DevKit](https://img.shields.io/badge/DevKit-Quaximur-222222?style=for-the-badge)](https://github.com/Quaximur/DevKit)
-[![DevKit.UI](https://img.shields.io/badge/DevKit.UI-MVVM-222222?style=for-the-badge)](https://github.com/Quaximur/DevKit.UI)
+[![DevKit](https://img.shields.io/badge/DevKit-6366F1?style=plastic&logo=github)](https://github.com/Quaximur/DevKit)
+[![DevKit.UI](https://img.shields.io/badge/DevKit.UI-8B5CF6?style=plastic&logo=github)](https://github.com/Quaximur/DevKit.UI)
 
 ## ⚡ What's Inside
 
