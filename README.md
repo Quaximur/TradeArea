@@ -1,5 +1,5 @@
 # TradeArea 🛒
-A Unity client for my real-time game auction backend.
+A Unity client for the real-time game auction backend.
 
 Log in. Browse the market. Place an order. Watch the backend push the result back.
 
