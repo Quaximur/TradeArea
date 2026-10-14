@@ -1,10 +1,11 @@
 # TradeArea 🛒
-
 A Unity client for my real-time game auction backend.
 
 Log in. Browse the market. Place an order. Watch the backend push the result back.
 
 Built as the client-side part of the [Aucy](https://github.com/Quaximur/Aucy) microservice ecosystem.
+
+<img width="2412" height="1271" alt="trade_area_ui" src="https://github.com/user-attachments/assets/b410ff45-df46-4674-88ca-5d007bd4b02f" />
 
 ## 🛠️ Tech Stack
 
